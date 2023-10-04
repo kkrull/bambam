@@ -22,7 +22,7 @@
     "format:check": "prettier --ignore-unknown --list-different .",
     "lint": "eslint features src",
     "lint:fix": "eslint --fix features src",
-    "test": "cucumber-js",
+    "test": "cucumber-js -c features/cucumber.cjs",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json"
   },
   "version": "0.0.1"
