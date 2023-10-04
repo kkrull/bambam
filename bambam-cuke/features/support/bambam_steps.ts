@@ -1,21 +1,21 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 
-import MidiFile from '@/src/midi/MidiFile';
+import MidiTrack from '@/src/midi/MidiTrack';
 
-let ezdrummerMidi: MidiFile;
-let generalMidi: MidiFile;
+let ezdrummerTrack: MidiTrack;
+let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  ezdrummerMidi = new MidiFile(120);
+  ezdrummerTrack = new MidiTrack(120);
 });
 
 When('I ask BamBam to convert that track to General MIDI', () => {
-  generalMidi = ezdrummerMidi.toGeneralMidi();
+  gmTrack = ezdrummerTrack.toGeneralMidi();
 });
 
 Then('BamBam should create a track that plays back at the same tempo', () => {
-  expect(generalMidi.beatsPerMinute).to.eql(ezdrummerMidi.beatsPerMinute);
+  expect(gmTrack.beatsPerMinute).to.eql(ezdrummerTrack.beatsPerMinute);
 });
 
 Then(
