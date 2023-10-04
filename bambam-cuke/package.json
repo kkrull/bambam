@@ -15,7 +15,8 @@
   "main": "index.js",
   "name": "cucumberjs-8",
   "scripts": {
-    "format": "prettier --write .",
+    "format": "prettier --ignore-unknown --write .",
+    "format:check": "prettier --ignore-unknown --list-different .",
     "test": "cucumber-js",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json"
   },
