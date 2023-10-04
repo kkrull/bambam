@@ -1,34 +1,14 @@
-# cucumber.js 8
+# Bam Bam
 
-Try out Cucumber.js 8 with TypeScript.
+Converts a MIDI drum track from one drum sample map to another.
 
 ## Run it
 
 ```shell
 npm test
-npx cucumber-js #alternative
 ```
-
-## Try out
-
-- [NPM page](https://www.npmjs.com/package/@cucumber/cucumber)
-- [Cucumber.js with TypeScript](https://www.elliotdenolf.com/blog/cucumberjs-with-typescript)
 
 ## Intended Use
-
-```gherkin
-Feature: Convert EZDrummer 2 track to General MIDI
-  As a musician
-  I want to convert EZDrummer 2 tracks back and forth with General MIDI
-  So that I can maintain flow when moving drum tracks to MuseScore
-
-  Scenario: BamBam should convert EZDrummer 2 tracks to General MIDI
-  Given I have exported an EZDrummer 2 track from my DAW, as MIDI
-  When I ask BamBam to convert that track to General MIDI
-  Then BamBam should create a track that plays back at the same tempo
-  And the General MIDI track should play the same drum pattern as the original
-  And non-standard notes should be changed to their equivalent in General MIDI
-```
 
 Start in the middle (domain model) and test outwards (UI), via a different driver.
 Push scenarios down to unit tests and extract libraries for stable parts.
