@@ -7,7 +7,7 @@ let ezdrummerMidi: MidiFile;
 let generalMidi: MidiFile;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  ezdrummerMidi = new MidiFile();
+  ezdrummerMidi = new MidiFile(120);
 });
 
 When('I ask BamBam to convert that track to General MIDI', () => {
