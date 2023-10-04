@@ -20,8 +20,8 @@
   "scripts": {
     "format": "prettier --ignore-unknown --write .",
     "format:check": "prettier --ignore-unknown --list-different .",
-    "lint": "eslint features src",
-    "lint:fix": "eslint --fix features src",
+    "lint": "eslint features features/**/*.cjs src",
+    "lint:fix": "eslint --fix features features/**/*.cjs src",
     "test": "cucumber-js -c features/cucumber.cjs",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json"
   },
