@@ -7,4 +7,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   root: true,
+  rules: {
+    'max-len': [1, { code: 100 }],
+  },
 };

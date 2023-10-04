@@ -8,6 +8,8 @@ Converts a MIDI drum track from one drum sample map to another.
 npm test
 ```
 
+TODO KDK: Consider adding pre-commit hook <https://prettier.io/docs/en/precommit>
+
 ## Intended Use
 
 Start in the middle (domain model) and test outwards (UI), via a different driver.
