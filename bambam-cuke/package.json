@@ -6,6 +6,9 @@
     "@cucumber/pretty-formatter": "^1.0.0",
     "@tsconfig/node18": "^18.2.2",
     "@types/node": "^20.8.2",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "eslint": "^8.50.0",
     "prettier": "3.0.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
@@ -17,6 +20,7 @@
   "scripts": {
     "format": "prettier --ignore-unknown --write .",
     "format:check": "prettier --ignore-unknown --list-different .",
+    "lint": "eslint features src",
     "test": "cucumber-js",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json"
   },
