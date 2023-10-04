@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { Given, Then, When } from '@cucumber/cucumber';
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
