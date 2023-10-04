@@ -1,15 +1,29 @@
 import { Given, Then, When } from '@cucumber/cucumber';
+import { expect } from 'chai';
+
+class MidiFile {
+  beatsPerMinute(): number {
+    return 120;
+  }
+
+  toGeneralMidi(): MidiFile {
+    return new MidiFile();
+  }
+}
+
+let ezdrummerMidi: MidiFile;
+let generalMidi: MidiFile;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  return 'pending';
+  ezdrummerMidi = new MidiFile();
 });
 
 When('I ask BamBam to convert that track to General MIDI', () => {
-  return 'pending';
+  generalMidi = ezdrummerMidi.toGeneralMidi();
 });
 
 Then('BamBam should create a track that plays back at the same tempo', () => {
-  return 'pending';
+  expect(generalMidi.beatsPerMinute).to.eql(ezdrummerMidi.beatsPerMinute);
 });
 
 Then(
