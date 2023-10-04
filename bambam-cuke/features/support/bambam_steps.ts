@@ -1,15 +1,7 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 
-class MidiFile {
-  beatsPerMinute(): number {
-    return 120;
-  }
-
-  toGeneralMidi(): MidiFile {
-    return new MidiFile();
-  }
-}
+import MidiFile from '@/src/midi/MidiFile';
 
 let ezdrummerMidi: MidiFile;
 let generalMidi: MidiFile;
