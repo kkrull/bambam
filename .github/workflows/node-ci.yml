@@ -31,6 +31,8 @@ jobs:
   documentation:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - name: Lint Markdownn
         uses: DavidAnson/markdownlint-cli2-action@v13
         with:
