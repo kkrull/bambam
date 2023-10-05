@@ -16,6 +16,55 @@ Prefer over-simplification over using terminology from the solution domain.
 npm test
 ```
 
+## Tools
+
+There are a lot of tools that are used for development. Here are the packages
+that provide them and where to look for configuration:
+
+- Cucumber runs BDD tests with Gherkin syntax.
+  - `@cucumber/*` provides cucumber and formatters, which make the output on
+    the command line look nice.
+  - `ts-node` adds TypeScript support to `cucumber-js`.
+  - `tsconfig-paths` allows TypeScript sources in `features/` to use path
+    aliases to production code sources.
+- `direnv` integrates environment management with your shell (e.g. bash or zsh).
+  - `.envrc`: configuration script
+  - Homebrew installation: `brew install direnv`
+    - Note: Follow instructions about updating `.bashrc` or `.zshrc`
+- EditorConfig defines basic parameters for formatting source files.
+  - `.editorconfig`: configuration file
+- ESLint performs static analysis and style checks.
+  - `eslint`: main package
+  - `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` add
+    support for TypeScript.
+  - `.eslintrc.cjs`: configuration file
+- Husky adds a Git pre-commit hook that runs checks on staged files, before
+  committing to the repository.
+  - `husky`: main package
+  - `.husky/pre-commit`: The actual pre-commit script
+  - `package.json` also has a `prepare` script that installs the Git hook.
+- `lint-staged` runs the actual checks on source files staged for the next Git
+  commit.
+  - `lint-staged`: main package
+  - `.lintstagedrc.cjs`: configuration file
+- Node.js is the runtime platform.
+  - `package.json`: package properties, dependencies, and task automation (e.g.
+    scripts)
+- Node Version Manager (`nvm`) installs a known version of Node.js and
+  configures your shell to use it.
+  - `.nvmrc`: configuration file
+- Prettier formats source files.
+  - `prettier`: main package
+  - `.prettierignore`: which files should be skipped, while formatting
+  - `.prettierrc.json`: configuration file
+- TypeScript adds static typing to JavaScript.
+  - `typescript`: main package
+  - `@tsconfig/node18`: base configuration for the version of node.js we're
+    using here
+  - `@types/*`: type definitions for all the other packages we're using
+  - `tsconfig.json` - configuration file for sources in `src/`
+  - `features/tsconfig.json` - configuration file for sources in `features/`
+
 ## Reference
 
 ### General MIDI Percussion key map
