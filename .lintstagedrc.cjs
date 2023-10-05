@@ -1,10 +1,10 @@
 //https://github.com/okonet/lint-staged#configuration
 module.exports = {
-  '*.cjs': ['eslint --cache --fix', 'prettier --write'],
-  '*.md': ['prettier --write'],
+  '*.cjs': ['prettier --write', 'eslint --cache --fix'],
+  '*.md': ['prettier --write', 'markdownlint-cli2 .markdownlint.json'],
   '*.ts': [
-    'eslint --cache --fix',
     'prettier --write',
+    'eslint --cache --fix',
     'tsc --noEmit -p tsconfig.json',
   ],
 };
