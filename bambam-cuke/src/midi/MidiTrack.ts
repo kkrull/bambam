@@ -25,13 +25,17 @@ export default class MidiTrack {
   }
 
   remap(mapper: MidiMap): MidiTrack {
-    const remapped = new MidiTrack(this.bpm);
-    remapped.addEvents(this._noteEvents);
-    return remapped;
+    const remappedTrack = new MidiTrack(this.bpm);
+    this._noteEvents.forEach((event) => {
+      const remappedEvent = mapper.remap(event);
+      remappedTrack.addEvent(remappedEvent);
+    });
+
+    return remappedTrack;
   }
 
-  private addEvents(events: NoteEvent[]): void {
-    this._noteEvents.push(...events);
+  private addEvent(event: NoteEvent): void {
+    this._noteEvents.push(event);
   }
 }
 

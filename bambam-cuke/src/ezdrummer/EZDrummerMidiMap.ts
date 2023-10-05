@@ -6,7 +6,13 @@ export default class EZDrummerMidiMap implements MidiMap {
     return new EZDrummerMidiMap();
   }
 
-  remap(event: NoteEvent): NoteEvent {
-    throw new Error('Method not implemented.');
+  remap(event: Readonly<NoteEvent>): NoteEvent {
+    //TODO KDK: Implement
+    // return event.withNoteNumber(42);
+    return {
+      when: event.when,
+      noteNumber: 42,
+      how: event.how,
+    };
   }
 }
