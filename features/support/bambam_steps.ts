@@ -9,6 +9,8 @@ let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
   //C0 24 (Hats Open 1): No GM mapping
+  //TODO KDK: Add a note that doesn't have to be re-mapped
+  //TODO KDK: Add the other notes that have to be re-mapped?
   ezdrummerTrack = new MidiTrack(120);
   ezdrummerTrack.addNote({ measure: 1, beat: 1, tick: 0 }, 24, {
     velocity: 100,
