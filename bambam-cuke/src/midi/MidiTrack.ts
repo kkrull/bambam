@@ -1,3 +1,4 @@
+//A stream of timed, musical events for the same instrument.
 class MidiTrack {
   private readonly _noteEvents: NoteEvent[];
 
@@ -5,7 +6,7 @@ class MidiTrack {
     this._noteEvents = [];
   }
 
-  addNote(noteNumber: number, when: EventTime, how: EventProperties) {
+  addNote(when: EventTime, noteNumber: number, how: EventProperties) {
     this._noteEvents.push({ noteNumber, time: when, velocity: how.velocity });
   }
 

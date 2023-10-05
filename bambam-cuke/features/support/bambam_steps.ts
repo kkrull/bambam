@@ -7,13 +7,11 @@ let ezdrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  //C1 24 (Hats Open 1): No GM mapping
+  //C0 24 (Hats Open 1): No GM mapping
   ezdrummerTrack = new MidiTrack(120);
-  ezdrummerTrack.addNote(
-    24,
-    { measure: 1, beat: 1, tick: 0 },
-    { velocity: 100 },
-  );
+  ezdrummerTrack.addNote({ measure: 1, beat: 1, tick: 0 }, 24, {
+    velocity: 100,
+  });
 });
 
 When('I ask BamBam to convert that track to General MIDI', () => {
