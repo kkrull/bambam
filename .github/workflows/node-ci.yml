@@ -11,19 +11,42 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  code:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.15
           cache: 'npm'
+          node-version: 18.15
+
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+
+  code-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          node-version: 18.15
 
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint
       - run: npm run types:check
-      - run: npm run build --if-present
-      - run: npm test
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Lint Markdownn
+        uses: DavidAnson/markdownlint-cli2-action@v13
+        with:
+          config: .markdownlint.json
+          globs: '**/*.md'
