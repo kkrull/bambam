@@ -27,6 +27,9 @@ that provide them and where to look for configuration:
   - `ts-node` adds TypeScript support to `cucumber-js`.
   - `tsconfig-paths` allows TypeScript sources in `features/` to use path
     aliases to production code sources.
+  - `features/cucumber.cjs`: configuration file for where to find tests and
+    support code
+  - `features/tsconfig.json`: TypeScript configuration
 - `direnv` integrates environment management with your shell (e.g. bash or zsh).
   - `.envrc`: configuration script
   - Homebrew installation: `brew install direnv`
