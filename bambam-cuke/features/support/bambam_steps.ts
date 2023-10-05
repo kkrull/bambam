@@ -1,6 +1,7 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 
+import EZDrummerMidiMap from '@/src/ezdrummer/EZDrummerMidiMap';
 import MidiTrack from '@/src/midi/MidiTrack';
 
 let ezdrummerTrack: MidiTrack;
@@ -15,7 +16,8 @@ Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
 });
 
 When('I ask BamBam to remap that track to General MIDI Percussion', () => {
-  gmTrack = ezdrummerTrack.remap();
+  const midiMap = EZDrummerMidiMap.version2Map();
+  gmTrack = ezdrummerTrack.remap(midiMap);
 });
 
 Then('BamBam should create a track that plays back at the same tempo', () => {

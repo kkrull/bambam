@@ -1,5 +1,7 @@
+import { EventTime, NoteEvent, NoteProperties } from './events';
+
 //A stream of timed, musical events for the same instrument.
-class MidiTrack {
+export default class MidiTrack {
   private readonly _noteEvents: NoteEvent[];
 
   constructor(private readonly bpm: number) {
@@ -22,7 +24,7 @@ class MidiTrack {
     return this._noteEvents.map((event) => event.when);
   }
 
-  remap(): MidiTrack {
+  remap(mapper: MidiMap): MidiTrack {
     const remapped = new MidiTrack(this.bpm);
     remapped.addEvents(this._noteEvents);
     return remapped;
@@ -33,20 +35,6 @@ class MidiTrack {
   }
 }
 
-export default MidiTrack;
-
-type EventTime = {
-  readonly measure: number;
-  readonly beat: number;
-  readonly tick: number;
-};
-
-type NoteEvent = {
-  readonly when: EventTime;
-  readonly noteNumber: number;
-  readonly how: NoteProperties;
-};
-
-type NoteProperties = {
-  velocity: number;
-};
+export interface MidiMap {
+  remap(event: Readonly<NoteEvent>): NoteEvent;
+}
