@@ -1,5 +1,6 @@
 //https://github.com/okonet/lint-staged#configuration
 module.exports = {
-  '*.{cjs,js,ts}': 'eslint --cache --fix',
-  '*.{cjs,css,js,md,ts}': 'prettier --write',
+  '*.cjs': ['eslint --cache --fix', 'prettier --write'],
+  '*.md': ['prettier --write'],
+  '*.ts': ['eslint --cache --fix', 'prettier --write'],
 };
