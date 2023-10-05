@@ -6,6 +6,6 @@ module.exports = {
   '*.ts': [
     'prettier --write',
     'eslint --cache --fix',
-    'tsc --noEmit -p tsconfig.json',
+    () => 'tsc --noEmit -p tsconfig.json -p features/tsconfig.json',
   ],
 };
