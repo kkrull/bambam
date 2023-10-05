@@ -2,6 +2,7 @@ import {
   EventTime,
   EventTimeParams,
   NoteEvent,
+  NoteEventParams,
   NoteProperties,
 } from './events';
 
@@ -14,11 +15,13 @@ export default class MidiTrack {
   }
 
   addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
-    this._noteEvents.push({
+    const eventParams: NoteEventParams = {
       when: EventTime.of(when),
       noteNumber,
       how,
-    });
+    };
+
+    this._noteEvents.push(NoteEvent.of(eventParams));
   }
 
   beatsPerMinute(): number {

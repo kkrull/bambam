@@ -1,4 +1,16 @@
-export type NoteEvent = {
+export class NoteEvent {
+  public static of({ when, noteNumber, how }: NoteEventParams): NoteEvent {
+    return new NoteEvent(when, noteNumber, how);
+  }
+
+  constructor(
+    readonly when: EventTime,
+    readonly noteNumber: number,
+    readonly how: NoteProperties,
+  ) {}
+}
+
+export type NoteEventParams = {
   when: EventTime;
   noteNumber: number;
   how: NoteProperties;
