@@ -1,16 +1,16 @@
 class MidiTrack {
-  constructor(private readonly bpm: number) {}
+  private readonly _noteEvents: NoteEvent[];
 
-  addNote(
-    noteNumber: number,
-    when: { measure: number; beat: number; tick: number },
-    how: { velocity: number },
-  ) {
-    throw new Error('Method not implemented.');
+  constructor(private readonly bpm: number) {
+    this._noteEvents = [];
+  }
+
+  addNote(noteNumber: number, when: EventTime, how: EventProperties) {
+    this._noteEvents.push({ noteNumber, time: when, velocity: how.velocity });
   }
 
   beatsPerMinute(): number {
-    return 120;
+    return this.bpm;
   }
 
   toGeneralMidi(): MidiTrack {
@@ -19,3 +19,19 @@ class MidiTrack {
 }
 
 export default MidiTrack;
+
+type EventTime = {
+  measure: number;
+  beat: number;
+  tick: number;
+};
+
+type EventProperties = {
+  velocity: number;
+};
+
+type NoteEvent = {
+  noteNumber: number;
+  time: EventTime;
+  velocity: number;
+};
