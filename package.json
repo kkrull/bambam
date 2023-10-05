@@ -11,6 +11,8 @@
     "@typescript-eslint/parser": "^6.7.4",
     "chai": "^4.3.10",
     "eslint": "^8.50.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
     "prettier": "3.0.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
@@ -26,7 +28,12 @@
     "lint:fix": "eslint --fix features features/**/*.cjs src",
     "test": "cucumber-js -c features/cucumber.cjs",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
-    "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json"
+    "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json",
+    "prepare": "husky install"
   },
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
 }
