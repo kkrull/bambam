@@ -38,6 +38,8 @@ that provide them and where to look for configuration:
   - `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` add
     support for TypeScript.
   - `.eslintrc.cjs`: configuration file
+- GitHub actions perform Continuous Integration / Continuous Deployment (CI/CD)
+  - `.github/workflows`: Workflow definitions
 - Husky adds a Git pre-commit hook that runs checks on staged files, before
   committing to the repository.
   - `husky`: main package
