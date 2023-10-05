@@ -1,6 +1,6 @@
 {
   "author": "Kyle Krull",
-  "description": "Try out Cucumber.js 8 with TypeScript.",
+  "description": "Remaps notes in MIDI tracks",
   "devDependencies": {
     "@cucumber/cucumber": "^9.5.1",
     "@cucumber/pretty-formatter": "^1.0.0",
@@ -19,6 +19,10 @@
     "typescript": "^5.2.2"
   },
   "license": "MIT",
+  "lint-staged": {
+    "*.{cjs,js,ts}": "eslint --cache --fix",
+    "*.{cjs,css,js,md,ts}": "prettier --write"
+  },
   "main": "index.js",
   "name": "cucumberjs-8",
   "scripts": {
@@ -26,14 +30,10 @@
     "format:check": "prettier --ignore-unknown --list-different .",
     "lint": "eslint features features/**/*.cjs src",
     "lint:fix": "eslint --fix features features/**/*.cjs src",
+    "prepare": "husky install",
     "test": "cucumber-js -c features/cucumber.cjs",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
-    "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json",
-    "prepare": "husky install"
+    "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json"
   },
-  "version": "0.0.1",
-  "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
-  }
+  "version": "0.0.1"
 }
