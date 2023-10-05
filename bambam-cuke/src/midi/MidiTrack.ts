@@ -1,10 +1,5 @@
-import {
-  EventTime,
-  EventTimeParams,
-  NoteEvent,
-  NoteEventParams,
-  NoteProperties,
-} from './events';
+import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
+import { EventTime, EventTimeParams } from './EventTime';
 
 //A stream of timed, musical events for the same instrument.
 export default class MidiTrack {
