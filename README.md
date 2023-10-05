@@ -21,6 +21,10 @@ npm test
 There are a lot of tools that are used for development. Here are the packages
 that provide them and where to look for configuration:
 
+- Code Spell Checker:
+  - `cspell.json`: configuration file and dictionary
+  - Documentation: <https://github.com/streetsidesoftware/vscode-spell-checker>
+  - VS Code extension: <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
 - Cucumber runs BDD tests with Gherkin syntax.
   - `@cucumber/*` provides cucumber and formatters, which make the output on
     the command line look nice.
@@ -52,6 +56,12 @@ that provide them and where to look for configuration:
   commit.
   - `lint-staged`: main package
   - `.lintstagedrc.cjs`: configuration file
+- Markdownlint
+  - `.markdownlint.json`: configuration file
+  - Documentation: <https://github.com/DavidAnson/markdownlint>
+  - Documentation (rules): <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>
+  - Usage: `markdownlint-cli2 .markdownlint.json <markdown file> [...markdown files]`
+  - VS Code extension: <https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint>
 - Node.js is the runtime platform.
   - `package.json`: package properties, dependencies, and task automation (e.g.
     scripts)

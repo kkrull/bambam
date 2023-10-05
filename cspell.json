@@ -1,0 +1,14 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "corepack",
+    "direnv",
+    "envrc",
+    "markdownlint",
+    "transpiles",
+    "tsbuildinfo",
+    "visualstudio"
+  ],
+  "flagWords": []
+}
