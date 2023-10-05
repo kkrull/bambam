@@ -7,7 +7,10 @@ import MidiTrack from '@/src/midi/MidiTrack';
 let ezdrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
+//TODO KDK: Fix error TS5042: Option 'project' cannot be mixed with source files on a command line.
+
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
+  //TODO KDK: Add some more notes to cover each scenario: direct mapping
   //C0 24 (Hats Open 1): No GM mapping
   ezdrummerTrack = new MidiTrack(120);
   ezdrummerTrack.addNote({ measure: 1, beat: 1, tick: 0 }, 24, {
