@@ -14,8 +14,8 @@ Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
   });
 });
 
-When('I ask BamBam to convert that track to General MIDI', () => {
-  gmTrack = ezdrummerTrack.toGeneralMidi();
+When('I ask BamBam to remap that track to General MIDI Percussion', () => {
+  gmTrack = ezdrummerTrack.remap();
 });
 
 Then('BamBam should create a track that plays back at the same tempo', () => {

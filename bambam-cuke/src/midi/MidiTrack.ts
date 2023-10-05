@@ -22,10 +22,10 @@ class MidiTrack {
     return this._noteEvents.map((event) => event.when);
   }
 
-  toGeneralMidi(): MidiTrack {
-    const gmTrack = new MidiTrack(this.bpm);
-    gmTrack.addEvents(this._noteEvents);
-    return gmTrack;
+  remap(): MidiTrack {
+    const remapped = new MidiTrack(this.bpm);
+    remapped.addEvents(this._noteEvents);
+    return remapped;
   }
 
   private addEvents(events: NoteEvent[]): void {
