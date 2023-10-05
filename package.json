@@ -19,10 +19,6 @@
     "typescript": "^5.2.2"
   },
   "license": "MIT",
-  "lint-staged": {
-    "*.{cjs,js,ts}": "eslint --cache --fix",
-    "*.{cjs,css,js,md,ts}": "prettier --write"
-  },
   "main": "index.js",
   "name": "cucumberjs-8",
   "scripts": {
