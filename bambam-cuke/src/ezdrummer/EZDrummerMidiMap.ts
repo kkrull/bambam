@@ -13,12 +13,6 @@ export default class EZDrummerMidiMap implements MidiMap {
 
   remap(event: Readonly<NoteEvent>): NoteEvent {
     const newNoteNumber = this._noteNumberMap[event.noteNumber];
-    //TODO KDK: Implement
-    // return event.withNoteNumber(42);
-    return {
-      when: event.when,
-      noteNumber: newNoteNumber,
-      how: event.how,
-    };
+    return event.withNoteNumber(newNoteNumber);
   }
 }

@@ -8,6 +8,10 @@ export class NoteEvent {
     readonly noteNumber: number,
     readonly how: NoteProperties,
   ) {}
+
+  withNoteNumber(otherNoteNumber: number): NoteEvent {
+    return new NoteEvent(this.when, otherNoteNumber, this.how);
+  }
 }
 
 export type NoteEventParams = {
