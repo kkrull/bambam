@@ -1,4 +1,9 @@
-import { EventTime, NoteEvent, NoteProperties } from './events';
+import {
+  EventTime,
+  EventTimeParams,
+  NoteEvent,
+  NoteProperties,
+} from './events';
 
 //A stream of timed, musical events for the same instrument.
 export default class MidiTrack {
@@ -8,9 +13,9 @@ export default class MidiTrack {
     this._noteEvents = [];
   }
 
-  addNote(when: EventTime, noteNumber: number, how: NoteProperties) {
+  addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
     this._noteEvents.push({
-      when,
+      when: EventTime.of(when),
       noteNumber,
       how,
     });
@@ -18,6 +23,12 @@ export default class MidiTrack {
 
   beatsPerMinute(): number {
     return this.bpm;
+  }
+
+  noteNumbersAt(when: EventTimeParams): number[] {
+    return this._noteEvents
+      .filter((event) => event.when.isSameAs(when))
+      .map((event) => event.noteNumber);
   }
 
   noteTimes(): EventTime[] {

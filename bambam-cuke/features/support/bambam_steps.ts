@@ -34,8 +34,9 @@ Then(
 Then(
   'non-standard notes should be changed to their equivalent in General MIDI',
   () => {
-    return 'pending';
     //42 F#1 (Closed Hi Hat)
-    // expect(generalMidi.noteAt({ measure: 1, beat: 1, tick: 0 })).to.eql(42);
+    expect(gmTrack.noteNumbersAt({ measure: 1, beat: 1, tick: 0 })).to.eql([
+      42,
+    ]);
   },
 );
