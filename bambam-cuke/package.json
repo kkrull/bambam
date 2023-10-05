@@ -25,7 +25,8 @@
     "lint": "eslint features features/**/*.cjs src",
     "lint:fix": "eslint --fix features features/**/*.cjs src",
     "test": "cucumber-js -c features/cucumber.cjs",
-    "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json"
+    "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
+    "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json"
   },
   "version": "0.0.1"
 }
