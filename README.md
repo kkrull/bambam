@@ -2,18 +2,19 @@
 
 Converts a MIDI drum track from one drum sample map to another.
 
-## Run it
+## Development
+
+Start in the middle (domain model) and test outwards (UI), via a different
+driver. Push scenarios down to unit tests and extract libraries for stable
+parts.
+
+Prefer over-simplification over using terminology from the solution domain.
+
+### Test code
 
 ```shell
 npm test
 ```
-
-TODO KDK: Consider adding pre-commit hook <https://prettier.io/docs/en/precommit>
-
-## Intended Use
-
-Start in the middle (domain model) and test outwards (UI), via a different driver.
-Push scenarios down to unit tests and extract libraries for stable parts.
 
 ## Reference
 
@@ -25,7 +26,7 @@ Push scenarios down to unit tests and extract libraries for stable parts.
 > may even have additional "kits" with variations of these sounds, only
 > these sounds are supported by General MIDI Level 1 devices.
 
-```
+```text
 Key# Note Drum Sound        Key# Note Drum Sound
 35 B0 Acoustic Bass Drum    59 B2 Ride Cymbal 2
 36 C1 Bass Drum 1           60 C3 Hi Bongo
@@ -54,7 +55,3 @@ Key# Note Drum Sound        Key# Note Drum Sound
 ```
 
 Source: <https://musescore.org/sites/musescore.org/files/General%20MIDI%20Standard%20Percussion%20Set%20Key%20Map.pdf>
-
-## Notes
-
-- Prefer over-simplification over using terminology from the solution domain.
