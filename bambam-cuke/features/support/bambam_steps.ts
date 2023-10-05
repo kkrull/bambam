@@ -25,8 +25,7 @@ Then('BamBam should create a track that plays back at the same tempo', () => {
 Then(
   'the General MIDI track should play the same drum pattern as the original',
   () => {
-    return 'pending';
-    // expect(generalMidi.noteTimes).to.eql(ezdrummerMidi.noteTimes);
+    expect(gmTrack.noteTimes()).to.eql(ezdrummerTrack.noteTimes());
   },
 );
 

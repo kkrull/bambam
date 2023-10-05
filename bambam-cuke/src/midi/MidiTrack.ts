@@ -6,33 +6,47 @@ class MidiTrack {
     this._noteEvents = [];
   }
 
-  addNote(when: EventTime, noteNumber: number, how: EventProperties) {
-    this._noteEvents.push({ noteNumber, time: when, velocity: how.velocity });
+  addNote(when: EventTime, noteNumber: number, how: NoteProperties) {
+    this._noteEvents.push({
+      when,
+      noteNumber,
+      how,
+    });
   }
 
   beatsPerMinute(): number {
     return this.bpm;
   }
 
+  noteTimes(): EventTime[] {
+    return this._noteEvents.map((event) => event.when);
+  }
+
   toGeneralMidi(): MidiTrack {
-    return new MidiTrack(this.bpm);
+    const gmTrack = new MidiTrack(this.bpm);
+    gmTrack.addEvents(this._noteEvents);
+    return gmTrack;
+  }
+
+  private addEvents(events: NoteEvent[]): void {
+    this._noteEvents.push(...events);
   }
 }
 
 export default MidiTrack;
 
 type EventTime = {
-  measure: number;
-  beat: number;
-  tick: number;
-};
-
-type EventProperties = {
-  velocity: number;
+  readonly measure: number;
+  readonly beat: number;
+  readonly tick: number;
 };
 
 type NoteEvent = {
-  noteNumber: number;
-  time: EventTime;
+  readonly when: EventTime;
+  readonly noteNumber: number;
+  readonly how: NoteProperties;
+};
+
+type NoteProperties = {
   velocity: number;
 };
