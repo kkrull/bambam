@@ -29,6 +29,7 @@
     "lint:fix": "eslint --fix features features/**/*.cjs src",
     "prepare": "husky install",
     "test": "cucumber-js -c features/cucumber.cjs",
+    "test:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
     "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json"
   },
