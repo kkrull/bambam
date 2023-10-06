@@ -10,10 +10,12 @@ export default class MidiTrack {
   endTime?: EventTime;
   private readonly _noteEvents: NoteEvent[];
   private _tempoMap: TempoMap;
+  private _timeSignatureMap: TimeSignatureMap;
 
   private constructor(readonly division: TickDivision) {
     this._noteEvents = [];
     this._tempoMap = [];
+    this._timeSignatureMap = [];
   }
 
   addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
@@ -44,6 +46,7 @@ export default class MidiTrack {
     const remappedTrack = new MidiTrack(this.division);
     remappedTrack.endTime = this.endTime;
     remappedTrack._tempoMap = this.tempoMap();
+    remappedTrack._timeSignatureMap = this.timeSignatureMap();
 
     this._noteEvents.forEach((event) => {
       const remappedEvent = mapper.remap(event);
@@ -58,8 +61,20 @@ export default class MidiTrack {
     this._tempoMap.push(event);
   }
 
+  setTimeSignature(signature: TimeSignatureParams, when: EventTimeParams) {
+    const event = new SetTimeSignatureEvent(
+      TimeSignature.from(signature),
+      EventTime.of(when),
+    );
+    this._timeSignatureMap.push(event);
+  }
+
   tempoMap(): TempoMap {
     return this._tempoMap.slice();
+  }
+
+  timeSignatureMap(): TimeSignatureMap {
+    return this._timeSignatureMap.slice();
   }
 
   private addEvent(event: NoteEvent): void {
@@ -67,10 +82,21 @@ export default class MidiTrack {
   }
 }
 
+/* Division */
+
+//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header
+class TickDivision {
+  constructor(readonly ticksPerQuarterNote: number) {}
+}
+
+/* Re-mapping */
+
 //Maps MIDI note events one at a time from one note or articulation to another
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
 }
+
+/* Tempo */
 
 //An ordered sequence of the initial tempo followed by any changes in tempo
 export type TempoMap = SetTempoEvent[];
@@ -88,7 +114,32 @@ export type SetTempoEventParams = {
   when: EventTime;
 };
 
-//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header
-class TickDivision {
-  constructor(readonly ticksPerQuarterNote: number) {}
+/* Time signature */
+
+//How a measure is broken up into divisions and sub-divisions
+class TimeSignature {
+  static from(signature: TimeSignatureParams): TimeSignature {
+    return new TimeSignature(signature.numDivisions, signature.divisionNote);
+  }
+
+  private constructor(
+    readonly numDivisions: number,
+    readonly divisionNote: number,
+  ) {}
 }
+
+//A Set Time Signature event, that starts a new time signature at a certain time
+export class SetTimeSignatureEvent {
+  constructor(
+    readonly signature: TimeSignature,
+    readonly when: EventTime,
+  ) {}
+}
+
+//An ordered sequence of the initial time signature followed by any changes
+export type TimeSignatureMap = SetTimeSignatureEvent[];
+
+export type TimeSignatureParams = {
+  numDivisions: number;
+  divisionNote: number;
+};

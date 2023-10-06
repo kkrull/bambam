@@ -9,7 +9,6 @@ Feature: Convert EZDrummer 2 track to General MIDI
     When I ask BamBam to remap that track to General MIDI Percussion
     Then the re-mapped track should be a valid MIDI track that others can read
 
-  @focus
   Scenario: BamBam should copy timing information from the original track
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI
     When I ask BamBam to remap that track to General MIDI Percussion

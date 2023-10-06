@@ -10,6 +10,10 @@ let gmTrack: MidiTrack;
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
   ezDrummerTrack = MidiTrack.withTicksDivision(960);
   ezDrummerTrack.setTempo(120, { measure: 1, beat: 1, tick: 0 });
+  ezDrummerTrack.setTimeSignature(
+    { numDivisions: 4, divisionNote: 4 },
+    { measure: 1, beat: 1, tick: 0 },
+  );
 
   //35 B0 Acoustic Bass Drum (GM)
   ezDrummerTrack.addNote({ measure: 1, beat: 1, tick: 0 }, 35, {
@@ -52,7 +56,7 @@ Then('the re-mapped track should have the same tempo map as the original', () =>
 });
 
 Then('the re-mapped track should have the same time signatures as the original', () => {
-  return 'pending';
+  expect(gmTrack.timeSignatureMap()).to.deep.equal(ezDrummerTrack.timeSignatureMap());
 });
 
 /* All about notes */
