@@ -41,6 +41,18 @@ Then('the re-mapped track should play the same drum pattern as the original', ()
   expect(gmTrack.noteTimes()).to.eql(ezDrummerTrack.noteTimes());
 });
 
+Then('the re-mapped track should have the same resolution as the original', () => {
+  return 'pending';
+});
+
+Then('the re-mapped track should have the same tempo map as the original', () => {
+  return 'pending';
+});
+
+Then('the re-mapped track should have the same time signatures as the original', () => {
+  return 'pending';
+});
+
 /* All about notes */
 
 Then('non-standard notes should be changed to their equivalent in General MIDI', () => {
