@@ -2,12 +2,18 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "Agogo",
+    "Cabasa",
+    "Claves",
     "corepack",
+    "Cuica",
     "direnv",
     "envrc",
+    "lintstagedrc",
     "markdownlint",
     "transpiles",
     "tsbuildinfo",
+    "Vibraslap",
     "visualstudio"
   ],
   "flagWords": []
