@@ -42,7 +42,8 @@ Then('the re-mapped track should play the same drum pattern as the original', ()
 });
 
 Then('the re-mapped track should have the same resolution as the original', () => {
-  return 'pending';
+  expect(gmTrack.division).to.exist;
+  expect(gmTrack.division).to.eql(ezDrummerTrack.division);
 });
 
 Then('the re-mapped track should have the same tempo map as the original', () => {
