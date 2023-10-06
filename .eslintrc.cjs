@@ -10,6 +10,10 @@ const allowUnusedIgnoreVariables = {
   ],
 };
 
+const youTryWritingStepDefinitionsIn80CharsOrLess = {
+  'max-len': ['warn', { code: 100 }],
+};
+
 /* eslint-env node */
 module.exports = {
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
@@ -21,6 +25,6 @@ module.exports = {
   root: true,
   rules: {
     ...allowUnusedIgnoreVariables,
-    'max-len': [1, { code: 100 }],
+    ...youTryWritingStepDefinitionsIn80CharsOrLess,
   },
 };
