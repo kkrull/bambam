@@ -3,13 +3,13 @@ import { EventTime, EventTimeParams } from './EventTime';
 
 //A stream of timed, musical events for the same instrument.
 export default class MidiTrack {
-  public static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
-    return new MidiTrack(ticksPerQuarterNote);
+  public static withTicksDivision(_ticksPerQuarterNote: number): MidiTrack {
+    return new MidiTrack();
   }
 
   private readonly _noteEvents: NoteEvent[];
 
-  private constructor(private readonly bpm: number) {
+  private constructor() {
     this._noteEvents = [];
   }
 
@@ -23,10 +23,6 @@ export default class MidiTrack {
     this._noteEvents.push(NoteEvent.of(eventParams));
   }
 
-  beatsPerMinute(): number {
-    return this.bpm;
-  }
-
   noteNumbersAt(when: EventTimeParams): number[] {
     return this._noteEvents
       .filter((event) => event.when.isSameAs(when))
@@ -38,7 +34,7 @@ export default class MidiTrack {
   }
 
   remap(mapper: MidiMap): MidiTrack {
-    const remappedTrack = new MidiTrack(this.bpm);
+    const remappedTrack = new MidiTrack();
     this._noteEvents.forEach((event) => {
       const remappedEvent = mapper.remap(event);
       remappedTrack.addEvent(remappedEvent);

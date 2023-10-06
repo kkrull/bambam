@@ -21,13 +21,6 @@ When('I ask BamBam to remap that track to General MIDI Percussion', () => {
 });
 
 Then(
-  'the re-mapped track should have the same tempo map as the original',
-  () => {
-    expect(gmTrack.beatsPerMinute).to.eql(ezDrummerTrack.beatsPerMinute);
-  },
-);
-
-Then(
   'the General MIDI track should play the same drum pattern as the original',
   () => {
     expect(gmTrack.noteTimes()).to.eql(ezDrummerTrack.noteTimes());
