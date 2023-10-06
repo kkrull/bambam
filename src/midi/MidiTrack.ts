@@ -3,9 +3,13 @@ import { EventTime, EventTimeParams } from './EventTime';
 
 //A stream of timed, musical events for the same instrument.
 export default class MidiTrack {
+  public static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
+    return new MidiTrack(ticksPerQuarterNote);
+  }
+
   private readonly _noteEvents: NoteEvent[];
 
-  constructor(private readonly bpm: number) {
+  private constructor(private readonly bpm: number) {
     this._noteEvents = [];
   }
 
@@ -48,6 +52,7 @@ export default class MidiTrack {
   }
 }
 
+//Maps MIDI note events one at a time from one note or articulation to another
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
 }
