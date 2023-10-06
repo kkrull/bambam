@@ -37,7 +37,7 @@ Then('the re-mapped track should be a valid MIDI track that others can read', ()
 
 /* All about timing */
 
-Then('the General MIDI track should play the same drum pattern as the original', () => {
+Then('the re-mapped track should play the same drum pattern as the original', () => {
   expect(gmTrack.noteTimes()).to.eql(ezDrummerTrack.noteTimes());
 });
 
