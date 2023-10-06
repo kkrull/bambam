@@ -7,11 +7,13 @@ export default class MidiTrack {
     return new MidiTrack(new TickDivision(ticksPerQuarterNote));
   }
 
-  private readonly _noteEvents: NoteEvent[];
   endTime?: EventTime;
+  private readonly _noteEvents: NoteEvent[];
+  private _tempoMap: TempoMap;
 
   private constructor(readonly division: TickDivision) {
     this._noteEvents = [];
+    this._tempoMap = [];
   }
 
   addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
@@ -41,6 +43,7 @@ export default class MidiTrack {
   remap(mapper: MidiMap): MidiTrack {
     const remappedTrack = new MidiTrack(this.division);
     remappedTrack.endTime = this.endTime;
+    remappedTrack._tempoMap = this.tempoMap();
 
     this._noteEvents.forEach((event) => {
       const remappedEvent = mapper.remap(event);
@@ -48,6 +51,15 @@ export default class MidiTrack {
     });
 
     return remappedTrack;
+  }
+
+  setTempo(bpm: number, when: EventTimeParams) {
+    const event = new SetTempoEvent(bpm, EventTime.of(when));
+    this._tempoMap.push(event);
+  }
+
+  tempoMap(): TempoMap {
+    return this._tempoMap.slice();
   }
 
   private addEvent(event: NoteEvent): void {
@@ -59,6 +71,22 @@ export default class MidiTrack {
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
 }
+
+//An ordered sequence of the initial tempo followed by any changes in tempo
+export type TempoMap = SetTempoEvent[];
+
+//A Set Tempo event, that sets the tempo of the track in beats per minute
+export class SetTempoEvent {
+  constructor(
+    readonly beatsPerMinute: number,
+    readonly when: EventTime,
+  ) {}
+}
+
+export type SetTempoEventParams = {
+  beatsPerMinute: number;
+  when: EventTime;
+};
 
 //Tick-based resolution for MIDI data (stream, file, track), in the MIDI header
 class TickDivision {
