@@ -73,6 +73,7 @@ that provide them and where to look for configuration:
   - `prettier`: main package
   - `.prettierignore`: which files should be skipped, while formatting
   - `.prettierrc.json`: configuration file
+  - Documentation (options): <https://prettier.io/docs/en/options.html>
 - TypeScript adds static typing to JavaScript.
   - `typescript`: main package
   - `@tsconfig/node18`: base configuration for the version of node.js we're
