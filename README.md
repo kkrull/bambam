@@ -34,6 +34,7 @@ that provide them and where to look for configuration:
   - `features/cucumber.cjs`: configuration file for where to find tests and
     support code
   - `features/tsconfig.json`: TypeScript configuration
+  - VS Code Extension: <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
 - `direnv` integrates environment management with your shell (e.g. bash or zsh).
   - `.envrc`: configuration script
   - Homebrew installation: `brew install direnv`
