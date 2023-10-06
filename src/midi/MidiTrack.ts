@@ -24,6 +24,10 @@ export default class MidiTrack {
     this._noteEvents.push(NoteEvent.of(eventParams));
   }
 
+  endTrack(when: EventTimeParams) {
+    this.endTime = EventTime.of(when);
+  }
+
   noteNumbersAt(when: EventTimeParams): number[] {
     return this._noteEvents
       .filter((event) => event.when.isSameAs(when))
@@ -36,6 +40,8 @@ export default class MidiTrack {
 
   remap(mapper: MidiMap): MidiTrack {
     const remappedTrack = new MidiTrack();
+    remappedTrack.endTime = this.endTime;
+
     this._noteEvents.forEach((event) => {
       const remappedEvent = mapper.remap(event);
       remappedTrack.addEvent(remappedEvent);

@@ -19,6 +19,8 @@ Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
   ezDrummerTrack.addNote({ measure: 1, beat: 2, tick: 0 }, 24, {
     velocity: 100,
   });
+
+  ezDrummerTrack.endTrack({ measure: 2, beat: 1, tick: 0 });
 });
 
 When('I ask BamBam to remap that track to General MIDI Percussion', () => {
