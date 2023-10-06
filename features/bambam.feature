@@ -3,6 +3,7 @@ Feature: Convert EZDrummer 2 track to General MIDI
   I want to convert EZDrummer 2 tracks back and forth with General MIDI
   So that I can maintain flow when copying drum tracks to MuseScore
 
+  @focus
   Scenario: BamBam should produce a valid MIDI track
     #TODO KDK: Include End of Track event, which is not optional
     #TODO KDK: Include Marker events?  It's not really about timing or notes; it's about structure and form.
@@ -18,7 +19,6 @@ Feature: Convert EZDrummer 2 track to General MIDI
     And the re-mapped track should have the same time signature as the original
     And the re-mapped track should play the same drum pattern as the original
 
-  @focus
   Scenario: BamBam should re-map an EZDrummer 2 track to General MIDI Percussion
     #TODO KDK: Include Key Signature?  It may not be very relevant on a percussion track
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI

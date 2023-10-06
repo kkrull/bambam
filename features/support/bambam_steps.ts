@@ -15,7 +15,7 @@ Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
     velocity: 100,
   });
 
-  //C0 24 (Hats Open 1): No GM mapping
+  //C0 24 Hats Open 1: No GM mapping
   ezDrummerTrack.addNote({ measure: 1, beat: 2, tick: 0 }, 24, {
     velocity: 100,
   });
@@ -29,7 +29,8 @@ When('I ask BamBam to remap that track to General MIDI Percussion', () => {
 /* Structure and basic usage */
 
 Then('the re-mapped track should be a valid MIDI track that others can read', () => {
-  return 'pending';
+  expect(gmTrack.endTime).to.exist;
+  expect(gmTrack.endTime).to.eql(ezDrummerTrack.endTime);
 });
 
 /* All about timing */
@@ -41,7 +42,7 @@ Then('the General MIDI track should play the same drum pattern as the original',
 /* All about notes */
 
 Then('non-standard notes should be changed to their equivalent in General MIDI', () => {
-  //42 F#1 (Closed Hi Hat)
+  //42 F#1 Closed Hi Hat (GM)
   expect(gmTrack.noteNumbersAt({ measure: 1, beat: 2, tick: 0 })).to.eql([42]);
 });
 

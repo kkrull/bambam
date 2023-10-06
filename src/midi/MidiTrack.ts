@@ -8,6 +8,7 @@ export default class MidiTrack {
   }
 
   private readonly _noteEvents: NoteEvent[];
+  endTime?: EventTime;
 
   private constructor() {
     this._noteEvents = [];
