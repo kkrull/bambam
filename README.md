@@ -34,6 +34,7 @@ that provide them and where to look for configuration:
   - `features/cucumber.cjs`: configuration file for where to find tests and
     support code
   - `features/tsconfig.json`: TypeScript configuration
+  - VS Code Extension: <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
 - `direnv` integrates environment management with your shell (e.g. bash or zsh).
   - `.envrc`: configuration script
   - Homebrew installation: `brew install direnv`
@@ -72,6 +73,7 @@ that provide them and where to look for configuration:
   - `prettier`: main package
   - `.prettierignore`: which files should be skipped, while formatting
   - `.prettierrc.json`: configuration file
+  - Documentation (options): <https://prettier.io/docs/en/options.html>
 - TypeScript adds static typing to JavaScript.
   - `typescript`: main package
   - `@tsconfig/node18`: base configuration for the version of node.js we're
@@ -118,4 +120,11 @@ Key# Note Drum Sound        Key# Note Drum Sound
 58 Bb2 Vibraslap
 ```
 
-Source: <https://musescore.org/sites/musescore.org/files/General%20MIDI%20Standard%20Percussion%20Set%20Key%20Map.pdf>
+Source:
+<https://musescore.org/sites/musescore.org/files/General%20MIDI%20Standard%20Percussion%20Set%20Key%20Map.pdf>
+
+### MIDI Format
+
+- Document: `doc/midi/RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf`
+- Source:
+  <https://www.midi.org/component/edocman/rp-001-v1-0-standard-midi-files-specification-96-1-4-pdf/fdocument>

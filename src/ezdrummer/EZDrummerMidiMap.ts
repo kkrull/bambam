@@ -12,7 +12,8 @@ export default class EZDrummerMidiMap implements MidiMap {
   ) {}
 
   remap(event: Readonly<NoteEvent>): NoteEvent {
-    const newNoteNumber = this._noteNumberMap[event.noteNumber];
-    return event.withNoteNumber(newNoteNumber);
+    const remappedNote =
+      this._noteNumberMap[event.noteNumber] ?? event.noteNumber;
+    return event.withNoteNumber(remappedNote);
   }
 }

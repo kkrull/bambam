@@ -1,3 +1,19 @@
+const allowUnusedIgnoreVariables = {
+  'no-unused-vars': 'off', //avoid false positives from the base rule
+  '@typescript-eslint/no-unused-vars': [
+    'error',
+    {
+      argsIgnorePattern: '^_',
+      caughtErrorsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+    },
+  ],
+};
+
+const youTryWritingStepDefinitionsIn80CharsOrLess = {
+  'max-len': ['warn', { code: 100 }],
+};
+
 /* eslint-env node */
 module.exports = {
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
@@ -8,6 +24,7 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   root: true,
   rules: {
-    'max-len': [1, { code: 100 }],
+    ...allowUnusedIgnoreVariables,
+    ...youTryWritingStepDefinitionsIn80CharsOrLess,
   },
 };
