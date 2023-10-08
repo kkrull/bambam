@@ -1,7 +1,7 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 
-import { EZDrummerMidiMap } from '@/src/ezdrummer/EZDrummerMidiMap';
+import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiSource } from './midi-source/MidiSource';
 import { StaticMidiSource } from './midi-source/StaticMidiSource';
