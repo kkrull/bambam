@@ -8,6 +8,7 @@ let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
+  //TODO KDK: Introduce a StaticMidiSource driver and corresponding Cucumber tag
   ezDrummerTrack = MidiTrack.withTicksDivision(960);
   ezDrummerTrack.setTempo(120, { measure: 1, beat: 1, tick: 0 });
   ezDrummerTrack.setTimeSignature(
