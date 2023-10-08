@@ -3,30 +3,17 @@ import { expect } from 'chai';
 
 import { EZDrummerMidiMap } from '@/src/ezdrummer/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
+import { MidiSource } from './midi-source/MidiSource';
+import { StaticMidiSource } from './midi-source/StaticMidiSource';
+
+const midiSource: MidiSource = new StaticMidiSource();
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  //TODO KDK: Introduce a StaticMidiSource driver and corresponding Cucumber tag
-  ezDrummerTrack = MidiTrack.withTicksDivision(960);
-  ezDrummerTrack.setTempo(120, { measure: 1, beat: 1, tick: 0 });
-  ezDrummerTrack.setTimeSignature(
-    { numDivisions: 4, divisionNote: 4 },
-    { measure: 1, beat: 1, tick: 0 },
-  );
-
-  //35 B0 Acoustic Bass Drum (GM)
-  ezDrummerTrack.addNote({ measure: 1, beat: 1, tick: 0 }, 35, {
-    velocity: 100,
-  });
-
-  //C0 24 Hats Open 1: No GM mapping
-  ezDrummerTrack.addNote({ measure: 1, beat: 2, tick: 0 }, 24, {
-    velocity: 100,
-  });
-
-  ezDrummerTrack.endTrack({ measure: 2, beat: 1, tick: 0 });
+  //TODO KDK: Introduce a tag to activate StaticMidiSource
+  ezDrummerTrack = midiSource.readTrack();
 });
 
 When('I ask BamBam to remap that track to General MIDI Percussion', () => {
