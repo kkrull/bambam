@@ -3,16 +3,13 @@ import { expect } from 'chai';
 
 import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiSource } from './midi-source/MidiSource';
-import { StaticMidiSource } from './midi-source/StaticMidiSource';
-
-const midiSource: MidiSource = new StaticMidiSource();
+import { MidiSourceProvider } from './midi-source/MidiSource';
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  //TODO KDK: Introduce a tag to activate StaticMidiSource
+  const midiSource = MidiSourceProvider.getInstance().getSource();
   ezDrummerTrack = midiSource.readTrack();
 });
 
