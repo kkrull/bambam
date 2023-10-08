@@ -1,5 +1,12 @@
 import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
-import { EventTime, EventTimeParams } from './EventTime';
+import { EventTime, EventTimeParams } from '../EventTime';
+import {
+  TimeSignature,
+  TimeSignatureParams,
+} from '../time-signature/TimeSignature';
+import { SetTempoEvent } from '../tempo/SetTempoEvent';
+import { SetTimeSignatureEvent } from '../time-signature/SetTimeSignatureEvent';
+import { TickDivision } from '../division/TickDivision';
 
 //A stream of timed, musical events for the same instrument.
 export default class MidiTrack {
@@ -82,64 +89,13 @@ export default class MidiTrack {
   }
 }
 
-/* Division */
-
-//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header
-class TickDivision {
-  constructor(readonly ticksPerQuarterNote: number) {}
-}
-
-/* Re-mapping */
-
 //Maps MIDI note events one at a time from one note or articulation to another
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
 }
 
-/* Tempo */
-
 //An ordered sequence of the initial tempo followed by any changes in tempo
-export type TempoMap = SetTempoEvent[];
-
-//A Set Tempo event, that sets the tempo of the track in beats per minute
-export class SetTempoEvent {
-  constructor(
-    readonly beatsPerMinute: number,
-    readonly when: EventTime,
-  ) {}
-}
-
-export type SetTempoEventParams = {
-  beatsPerMinute: number;
-  when: EventTime;
-};
-
-/* Time signature */
-
-//How a measure is broken up into divisions and sub-divisions
-class TimeSignature {
-  static from(signature: TimeSignatureParams): TimeSignature {
-    return new TimeSignature(signature.numDivisions, signature.divisionNote);
-  }
-
-  private constructor(
-    readonly numDivisions: number,
-    readonly divisionNote: number,
-  ) {}
-}
-
-//A Set Time Signature event, that starts a new time signature at a certain time
-export class SetTimeSignatureEvent {
-  constructor(
-    readonly signature: TimeSignature,
-    readonly when: EventTime,
-  ) {}
-}
+type TempoMap = SetTempoEvent[];
 
 //An ordered sequence of the initial time signature followed by any changes
-export type TimeSignatureMap = SetTimeSignatureEvent[];
-
-export type TimeSignatureParams = {
-  numDivisions: number;
-  divisionNote: number;
-};
+type TimeSignatureMap = SetTimeSignatureEvent[];

@@ -1,5 +1,5 @@
-import { MidiMap } from '@/src/midi/MidiTrack';
-import { NoteEvent } from '@/src/midi/NoteEvent';
+import { MidiMap } from '@/src/midi/track/MidiTrack';
+import { NoteEvent } from '@/src/midi/track/NoteEvent';
 
 //Produces altered versions of given events, such as transposing or re-mapping
 export default class EZDrummerMidiMap implements MidiMap {
