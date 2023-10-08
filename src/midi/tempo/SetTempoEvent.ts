@@ -1,4 +1,4 @@
-import { EventTime } from '../EventTime';
+import { EventTime } from '@/src/midi/EventTime';
 
 //A Set Tempo event, that sets the tempo of the track in beats per minute
 export class SetTempoEvent {

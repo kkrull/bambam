@@ -1,8 +1,8 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 
-import EZDrummerMidiMap from '@/src/ezdrummer/EZDrummerMidiMap';
-import MidiTrack from '@/src/midi/track/MidiTrack';
+import { EZDrummerMidiMap } from '@/src/ezdrummer/EZDrummerMidiMap';
+import { MidiTrack } from '@/src/midi/track/MidiTrack';
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;

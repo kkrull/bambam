@@ -1,4 +1,4 @@
-import { EventTime } from '../EventTime';
+import { EventTime } from '@/src/midi/EventTime';
 
 //What happens (a note is played), along with when and how it is played
 export class NoteEvent {

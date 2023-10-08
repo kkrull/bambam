@@ -1,15 +1,15 @@
-import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
-import { EventTime, EventTimeParams } from '../EventTime';
+import { EventTime, EventTimeParams } from '@/src/midi/EventTime';
+import { TickDivision } from '@/src/midi/division/TickDivision';
+import { SetTempoEvent } from '@/src/midi/tempo/SetTempoEvent';
 import {
   TimeSignature,
   TimeSignatureParams,
-} from '../time-signature/TimeSignature';
-import { SetTempoEvent } from '../tempo/SetTempoEvent';
-import { SetTimeSignatureEvent } from '../time-signature/SetTimeSignatureEvent';
-import { TickDivision } from '../division/TickDivision';
+} from '@/src/midi/time-signature/TimeSignature';
+import { SetTimeSignatureEvent } from '@/src/midi/time-signature/SetTimeSignatureEvent';
+import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
 
 //A stream of timed, musical events for the same instrument.
-export default class MidiTrack {
+export class MidiTrack {
   public static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
     return new MidiTrack(new TickDivision(ticksPerQuarterNote));
   }
