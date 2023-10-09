@@ -1,15 +1,13 @@
 import { Before } from '@cucumber/cucumber';
 
 import { FileMidiSource } from './FileMidiSource';
-import { MidiSourceProvider } from './MidiSource';
+import { MidiSourceProvider } from './MidiSourceProvider';
 import { StaticMidiSource } from './StaticMidiSource';
 
 Before({ tags: '@FileMidiSource' }, () => {
-  const provider = MidiSourceProvider.getInstance();
-  provider.setSource(new FileMidiSource());
+  MidiSourceProvider.setInstance(new FileMidiSource());
 });
 
 Before({ tags: '@StaticMidiSource' }, () => {
-  const provider = MidiSourceProvider.getInstance();
-  provider.setSource(new StaticMidiSource());
+  MidiSourceProvider.setInstance(new StaticMidiSource());
 });

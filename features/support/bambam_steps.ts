@@ -3,13 +3,13 @@ import { expect } from 'chai';
 
 import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiSourceProvider } from './midi-source/MidiSource';
+import { MidiSourceProvider } from './midi-source/MidiSourceProvider';
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
 Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
-  const midiSource = MidiSourceProvider.getInstance().getSource();
+  const midiSource = MidiSourceProvider.getInstance();
   ezDrummerTrack = midiSource.readTrack();
 });
 
