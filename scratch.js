@@ -6,10 +6,21 @@ const { Buffer } = require('node:buffer');
   console.log('Opening file');
   const fh = await fsp.open('./features/data/ezd-mapping.mid', 'r');
 
-  const buffer = Buffer.alloc(4);
-  const result = await fh.read(buffer, { length: 4 });
+  const chunkType = await readBytes(fh, 4);
+  console.log(`${chunkType.hex.join(' ')}\t${chunkType.text}`);
 
-  const bufferAsHex = [...buffer].map((x) => Buffer.from([x]).toString('hex'));
-  const chunkType = result.buffer.toString('latin1');
-  console.log(`${bufferAsHex.join(' ')}\t${chunkType}`);
+  const chunkLength = await readBytes(fh, 4);
+  console.log(`Chunk length: ${chunkLength.number} bytes`);
 })();
+
+async function readBytes(fh, numBytes) {
+  const buffer = Buffer.alloc(numBytes);
+  await fh.read(buffer, { length: numBytes });
+
+  return {
+    data: [...buffer],
+    hex: [...buffer].map((x) => Buffer.from([x]).toString('hex')),
+    number: buffer.readInt32BE(0),
+    text: buffer.toString('latin1'),
+  };
+}
