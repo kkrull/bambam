@@ -5,6 +5,7 @@ const { Buffer } = require('node:buffer');
 (async () => {
   const fh = await fs.open('./features/data/ezd-mapping.mid', 'r');
 
+  //TODO KDK: Read the next chunk then parse the file chunk
   const chunkType = await readBytes(fh, 4);
   console.log(`${chunkType.toHex().join(' ')}\t${chunkType.toText()}`);
 
