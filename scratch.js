@@ -11,6 +11,9 @@ const { Buffer } = require('node:buffer');
 
   const chunkLength = await readBytes(fh, 4);
   console.log(`Chunk length: ${chunkLength.number()} bytes`);
+
+  const chunkData = await readBytes(fh, chunkLength.number());
+  console.log(chunkData);
 })();
 
 async function readBytes(fh, numBytes) {
