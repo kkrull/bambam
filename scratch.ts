@@ -8,11 +8,14 @@ import { Buffer } from 'node:buffer';
   console.log(`File: ${stat.size} bytes`);
 
   const headerChunk = await readChunk(fh);
-  console.log(headerChunk.toHex());
+  console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
+  console.log(headerChunk.data.toHex());
 
   let chunk = await readChunk(fh);
   while (chunk.length !== 0) {
-    console.log(chunk.toHex());
+    console.log();
+    console.log(`${chunk.typeName}: ${chunk.length} bytes`);
+    console.log(chunk.data.toHex());
     chunk = await readChunk(fh);
   }
 
@@ -20,24 +23,29 @@ import { Buffer } from 'node:buffer';
   await fh.close();
 })();
 
-async function readChunk(fh: FileHandle): Promise<MidiData> {
+async function readChunk(fh: FileHandle): Promise<MidiChunk> {
   const chunkType = await readBytes(fh, 4);
   if (chunkType.length === 0) {
-    return chunkType;
+    return new MidiChunk('', 0, new MidiData(Buffer.alloc(0), 0));
   }
 
-  console.log(`${chunkType.toHex().join(' ')}\t${chunkType.toText()}`);
-
   const chunkLength = await readBytes(fh, 4);
-  console.log(`Chunk length: ${chunkLength.toNumber()} bytes`);
-
-  return readBytes(fh, chunkLength.toNumber());
+  const chunkData = await readBytes(fh, chunkLength.toNumber());
+  return new MidiChunk(chunkType.toText(), chunkLength.toNumber(), chunkData);
 }
 
 async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
   const buffer = Buffer.alloc(numBytes);
   const result = await fh.read({ buffer, length: numBytes });
   return MidiData.from(result);
+}
+
+class MidiChunk {
+  constructor(
+    public readonly typeName: string,
+    public readonly length: number,
+    public readonly data: MidiData,
+  ) {}
 }
 
 class MidiData {
