@@ -16,6 +16,8 @@ import { Buffer } from 'node:buffer';
 
   const chunkData = await readBytes(fh, chunkLength.toNumber());
   console.log(chunkData.toObject());
+
+  await fh.close();
 })();
 
 async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
