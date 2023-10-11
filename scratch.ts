@@ -7,6 +7,7 @@ import { Buffer } from 'node:buffer';
   const stat = await fh.stat();
   console.log(`File: ${stat.size} bytes`);
 
+  //TODO KDK: Make a copy of this file and start parsing the header chunk
   const headerChunk = await readChunk(fh);
   console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
   headerChunk.data
