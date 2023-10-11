@@ -7,18 +7,27 @@ import { Buffer } from 'node:buffer';
   const stat = await fh.stat();
   console.log(`File: ${stat.size} bytes`);
 
-  //TODO KDK: Read the next chunk then parse the file chunk
+  const headerChunk = await readChunk(fh);
+  console.log(headerChunk.toObject());
+
+  const firstTrackChunk = await readChunk(fh);
+  console.log(firstTrackChunk.toObject());
+
+  const secondTrackChunk = await readChunk(fh);
+  console.log(secondTrackChunk.toHex());
+
+  await fh.close();
+})();
+
+async function readChunk(fh: FileHandle): Promise<MidiData> {
   const chunkType = await readBytes(fh, 4);
   console.log(`${chunkType.toHex().join(' ')}\t${chunkType.toText()}`);
 
   const chunkLength = await readBytes(fh, 4);
   console.log(`Chunk length: ${chunkLength.toNumber()} bytes`);
 
-  const chunkData = await readBytes(fh, chunkLength.toNumber());
-  console.log(chunkData.toObject());
-
-  await fh.close();
-})();
+  return await readBytes(fh, chunkLength.toNumber());
+}
 
 async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
   const buffer = Buffer.alloc(numBytes);
