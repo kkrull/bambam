@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { FileHandle, open } from 'node:fs/promises';
+import { FileHandle, FileReadResult, open } from 'node:fs/promises';
 import { Buffer } from 'node:buffer';
 
 (async () => {
@@ -31,26 +31,36 @@ async function readChunk(fh: FileHandle): Promise<MidiData> {
 
 async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
   const buffer = Buffer.alloc(numBytes);
-  await fh.read({ buffer, length: numBytes });
-  return new MidiData(buffer);
+  const result = await fh.read({ buffer, length: numBytes });
+  return MidiData.from(result);
 }
 
 class MidiData {
-  constructor(private buffer: Buffer) {}
+  public static from(result: FileReadResult<Buffer>): MidiData {
+    return new MidiData(
+      result.buffer.subarray(0, result.bytesRead),
+      result.bytesRead,
+    );
+  }
 
-  toBytes() {
+  constructor(
+    private buffer: Buffer,
+    public readonly length: number,
+  ) {}
+
+  toBytes(): number[] {
     return [...this.buffer];
   }
 
-  toHex() {
+  toHex(): string[] {
     return this.toBytes().map((x) => Buffer.from([x]).toString('hex'));
   }
 
-  toNumber() {
+  toNumber(): number {
     return this.buffer.readInt32BE(0);
   }
 
-  toText() {
+  toText(): string {
     return this.buffer.toString('latin1');
   }
 
