@@ -9,13 +9,18 @@ import { Buffer } from 'node:buffer';
 
   const headerChunk = await readChunk(fh);
   console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
-  console.log(headerChunk.data.toHex());
+  headerChunk.data
+    .toHexRows(16)
+    .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
 
   let chunk = await readChunk(fh);
   while (chunk.length !== 0) {
     console.log();
     console.log(`${chunk.typeName}: ${chunk.length} bytes`);
-    console.log(chunk.data.toHex());
+    chunk.data
+      .toHexRows(16)
+      .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
+
     chunk = await readChunk(fh);
   }
 
@@ -67,6 +72,18 @@ class MidiData {
 
   toHex(): string[] {
     return this.toBytes().map((x) => Buffer.from([x]).toString('hex'));
+  }
+
+  toHexRows(chunkSize: number): string[][] {
+    const flatArray = this.toHex();
+
+    const chunks: string[][] = [];
+    for (let i = 0; i < flatArray.length; i = i + chunkSize) {
+      const chunk = flatArray.slice(i, i + chunkSize);
+      chunks.push(chunk);
+    }
+
+    return chunks;
   }
 
   toNumber(): number {
