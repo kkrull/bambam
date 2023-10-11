@@ -22,7 +22,7 @@ import { Buffer } from 'node:buffer';
 
 async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
   const buffer = Buffer.alloc(numBytes);
-  await fh.read(buffer, 0, numBytes);
+  await fh.read({ buffer, length: numBytes });
   return new MidiData(buffer);
 }
 
