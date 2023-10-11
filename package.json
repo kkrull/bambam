@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "main": "index.js",
-  "name": "cucumberjs-8",
+  "name": "bambam",
   "scripts": {
     "format": "prettier --ignore-unknown --write .",
     "format:check": "prettier --ignore-unknown --list-different .",
