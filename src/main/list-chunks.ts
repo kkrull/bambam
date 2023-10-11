@@ -2,31 +2,13 @@
 import { FileHandle, FileReadResult, open } from 'node:fs/promises';
 import { Buffer } from 'node:buffer';
 
-(async () => {
-  const fh = await open('./features/data/ezd-mapping.mid', 'r');
-  const stat = await fh.stat();
-  console.log(`File: ${stat.size} bytes`);
-
-  const headerChunk = await readChunk(fh);
-  console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
-  headerChunk.data
-    .toHexRows(16)
-    .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
-
-  let chunk = await readChunk(fh);
-  while (chunk.length !== 0) {
-    console.log();
-    console.log(`${chunk.typeName}: ${chunk.length} bytes`);
-    chunk.data
-      .toHexRows(16)
-      .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
-
-    chunk = await readChunk(fh);
+function parseArgs(argv: string[]): Config {
+  if (argv.length !== 3) {
+    throw Error(`Usage ${argv[0]} ${argv[1]} <MIDI file>`);
   }
 
-  console.log('End of file');
-  await fh.close();
-})();
+  return new Config(argv[2]);
+}
 
 async function readChunk(fh: FileHandle): Promise<MidiChunk> {
   const chunkType = await readBytes(fh, 4);
@@ -43,6 +25,14 @@ async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
   const buffer = Buffer.alloc(numBytes);
   const result = await fh.read({ buffer, length: numBytes });
   return MidiData.from(result);
+}
+
+class Config {
+  constructor(public readonly filename: string) {}
+
+  async openFile(): Promise<FileHandle> {
+    return open(this.filename, 'r');
+  }
 }
 
 class MidiChunk {
@@ -103,3 +93,29 @@ class MidiData {
     };
   }
 }
+
+(async (config: Config) => {
+  const fh = await config.openFile();
+  const stat = await fh.stat();
+  console.log(`File: ${stat.size} bytes`);
+
+  const headerChunk = await readChunk(fh);
+  console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
+  headerChunk.data
+    .toHexRows(16)
+    .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
+
+  let chunk = await readChunk(fh);
+  while (chunk.length !== 0) {
+    console.log();
+    console.log(`${chunk.typeName}: ${chunk.length} bytes`);
+    chunk.data
+      .toHexRows(16)
+      .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
+
+    chunk = await readChunk(fh);
+  }
+
+  console.log('End of file');
+  await fh.close();
+})(parseArgs(process.argv));
