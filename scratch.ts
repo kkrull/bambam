@@ -8,17 +8,15 @@ import { Buffer } from 'node:buffer';
   console.log(`File: ${stat.size} bytes`);
 
   const headerChunk = await readChunk(fh);
-  console.log(headerChunk.toObject());
+  console.log(headerChunk.toHex());
 
-  const firstTrackChunk = await readChunk(fh);
-  console.log(firstTrackChunk.toObject());
+  let chunk = await readChunk(fh);
+  while (chunk.length !== 0) {
+    console.log(chunk.toHex());
+    chunk = await readChunk(fh);
+  }
 
-  const secondTrackChunk = await readChunk(fh);
-  console.log(secondTrackChunk.toHex());
-
-  const noChunk = await readChunk(fh);
-  console.log((noChunk.length === 0 && 'End of file') || 'More to read');
-
+  console.log('End of file');
   await fh.close();
 })();
 
