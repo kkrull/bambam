@@ -4,17 +4,60 @@ Converts a MIDI drum track from one drum sample map to another.
 
 ## Development
 
-Start in the middle (domain model) and test outwards (UI), via a different
-driver. Push scenarios down to unit tests and extract libraries for stable
-parts.
+### Format code
 
-Prefer over-simplification over using terminology from the solution domain.
+```shell
+npm run format #Re-format files in place
+npm run format:check #CI-ready script that checks for improperly formatted files
+```
+
+### Install packages
+
+```shell
+npm install
+npm ci #Make sure only the declared packages are installed (good for CI)
+```
+
+### Lint code
+
+```shell
+npm run lint #CI-ready script that checks for linting errors
+npm run lint:fix #Automatically fix linting errors, where possible
+```
+
+### Run scripts
+
+There's a utility script in `src/main/` that helps inspect MIDI files.
+
+```shell
+#Usage
+npm run main:list-chunks -- <MIDI file>
+
+#Example
+npm run main:list-chunks -- features/data/ezd-mapping.mid
+```
 
 ### Test code
 
 ```shell
-npm test
+npm run test #Run all Cucumber scenarios
+npm run test:focus #Run scenarios tagged with @focus
+npm run test -- [...cucumber.js args] #Pass custom options to cucumber.js
 ```
+
+### Type-check code
+
+```shell
+npm run types:check #CI-ready script that checks for type safety issues
+npm run types:watch #Watch known source files, reporting any type issues live
+```
+
+## Development strategy
+
+Start in the middle (domain model) and test outwards, via a different driver.
+Push scenarios down to unit tests and extract libraries for stable parts.
+
+Prefer over-simplification over using terminology from the solution domain.
 
 ## Tools
 
@@ -123,7 +166,7 @@ Key# Note Drum Sound        Key# Note Drum Sound
 Source:
 <https://musescore.org/sites/musescore.org/files/General%20MIDI%20Standard%20Percussion%20Set%20Key%20Map.pdf>
 
-### MIDI Format
+### MIDI format
 
 - Document: `doc/midi/RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf`
 - Source:
