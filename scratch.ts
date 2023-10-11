@@ -16,11 +16,18 @@ import { Buffer } from 'node:buffer';
   const secondTrackChunk = await readChunk(fh);
   console.log(secondTrackChunk.toHex());
 
+  const noChunk = await readChunk(fh);
+  console.log((noChunk.length === 0 && 'End of file') || 'More to read');
+
   await fh.close();
 })();
 
 async function readChunk(fh: FileHandle): Promise<MidiData> {
   const chunkType = await readBytes(fh, 4);
+  if (chunkType.length === 0) {
+    return chunkType;
+  }
+
   console.log(`${chunkType.toHex().join(' ')}\t${chunkType.toText()}`);
 
   const chunkLength = await readBytes(fh, 4);
