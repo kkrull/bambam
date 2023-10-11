@@ -26,7 +26,7 @@ async function readChunk(fh: FileHandle): Promise<MidiData> {
   const chunkLength = await readBytes(fh, 4);
   console.log(`Chunk length: ${chunkLength.toNumber()} bytes`);
 
-  return await readBytes(fh, chunkLength.toNumber());
+  return readBytes(fh, chunkLength.toNumber());
 }
 
 async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
