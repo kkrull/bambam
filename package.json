@@ -28,6 +28,7 @@
     "lint": "eslint features features/**/*.cjs src",
     "lint:fix": "eslint --fix features features/**/*.cjs src",
     "prepare": "husky install",
+    "scratch": "node scratch.js",
     "test": "cucumber-js -c features/cucumber.cjs",
     "test:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
