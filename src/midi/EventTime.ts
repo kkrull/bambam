@@ -1,6 +1,6 @@
 //Musical M:B:T time
 export class EventTime {
-  public static of({ measure, beat, tick }: EventTimeParams): EventTime {
+  static of({ measure, beat, tick }: EventTimeParams): EventTime {
     return new EventTime(measure, beat, tick);
   }
 

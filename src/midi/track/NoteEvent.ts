@@ -2,7 +2,7 @@ import { EventTime } from '@/src/midi/EventTime';
 
 //What happens (a note is played), along with when and how it is played
 export class NoteEvent {
-  public static of({ when, noteNumber, how }: NoteEventParams): NoteEvent {
+  static of({ when, noteNumber, how }: NoteEventParams): NoteEvent {
     return new NoteEvent(when, noteNumber, how);
   }
 
