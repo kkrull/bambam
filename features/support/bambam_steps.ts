@@ -14,7 +14,7 @@ Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', async () => {
 });
 
 When('I ask BamBam to remap that track to General MIDI Percussion', () => {
-  //TODO KDK: Prototype copying events without parsing anything unnecessary, using static data model
+  //TODO KDK: Re-do the static data model
   const midiMap = EZDrummerMidiMap.version2Map();
   gmTrack = ezDrummerTrack.remap(midiMap);
 });
