@@ -1,62 +1,49 @@
-import { EventTime, EventTimeParams } from '@/src/midi/EventTime';
-import { TickDivision } from '@/src/midi/division/TickDivision';
-import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
+import { DeltaTime, NoteEvent, MidiNoteProperties } from './NoteEvent';
 
-//A stream of timed, musical events for the same instrument.
+//A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
-  static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
-    return new MidiTrack(new TickDivision(ticksPerQuarterNote));
-  }
+  constructor(
+    readonly division: TickDivision,
+    readonly endTime: DeltaTime,
+  ) {}
 
-  endTime?: EventTime;
-  private readonly _noteEvents: NoteEvent[];
-
-  private constructor(readonly division: TickDivision) {
-    this._noteEvents = [];
-  }
-
-  addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
-    const eventParams: NoteEventParams = {
-      when: EventTime.of(when),
-      noteNumber,
-      how,
-    };
-
-    this._noteEvents.push(NoteEvent.of(eventParams));
-  }
-
-  endTrack(when: EventTimeParams) {
-    this.endTime = EventTime.of(when);
-  }
-
-  noteNumbersAt(when: EventTimeParams): number[] {
-    return this._noteEvents
-      .filter((event) => event.when.isSameAs(when))
-      .map((event) => event.noteNumber);
-  }
-
-  noteTimes(): EventTime[] {
-    return this._noteEvents.map((event) => event.when);
-  }
-
-  remap(mapper: MidiMap): MidiTrack {
-    const remappedTrack = new MidiTrack(this.division);
-    remappedTrack.endTime = this.endTime;
-
-    this._noteEvents.forEach((event) => {
-      const remappedEvent = mapper.remap(event);
-      remappedTrack.addEvent(remappedEvent);
-    });
-
-    return remappedTrack;
-  }
-
-  private addEvent(event: NoteEvent): void {
-    this._noteEvents.push(event);
+  remap(_mapper: MidiMap): MidiTrack {
+    throw Error('Not implemented');
   }
 }
 
-//Maps MIDI note events one at a time from one note or articulation to another
+//Constructs a MIDI track.
+export class MidiTrackBuilder {
+  private endTime?: DeltaTime;
+  private noteEvents: NoteEvent[] = [];
+
+  addEndTrackEvent(_deltaTime: number): MidiTrackBuilder {
+    throw Error('not implemented');
+  }
+
+  addNoteEvent(
+    _deltaTime: number,
+    _noteNumber: number,
+    _how: MidiNoteProperties,
+  ): MidiTrackBuilder {
+    throw Error('not implemented');
+  }
+
+  withTicksDivision(_ticksPerQuarterNote: number): MidiTrackBuilder {
+    throw Error('not implemented');
+  }
+
+  build(): MidiTrack {
+    throw Error('not implemented');
+  }
+}
+
+//Transforms MIDI events one at a time, such as from one note to another.
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
+}
+
+//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header.
+export class TickDivision {
+  constructor(readonly ticksPerQuarterNote: number) {}
 }

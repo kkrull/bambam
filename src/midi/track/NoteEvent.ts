@@ -1,28 +1,44 @@
-import { EventTime } from '@/src/midi/EventTime';
-
-//What happens (a note is played), along with when and how it is played
+//A timed event related to a note, along with how it is played.
 export class NoteEvent {
   static of({ when, noteNumber, how }: NoteEventParams): NoteEvent {
     return new NoteEvent(when, noteNumber, how);
   }
 
   private constructor(
-    readonly when: EventTime,
-    readonly noteNumber: number,
-    readonly how: NoteProperties,
+    readonly when: DeltaTime,
+    readonly noteNumber: MidiNote,
+    readonly how: MidiNoteProperties,
   ) {}
 
-  withNoteNumber(otherNoteNumber: number): NoteEvent {
+  withNoteNumber(otherNoteNumber: MidiNote): NoteEvent {
     return new NoteEvent(this.when, otherNoteNumber, this.how);
   }
 }
 
 export type NoteEventParams = {
-  when: EventTime;
-  noteNumber: number;
-  how: NoteProperties;
+  when: DeltaTime;
+  noteNumber: MidiNote;
+  how: MidiNoteProperties;
 };
 
-export type NoteProperties = {
+//Time elapsed between an event and the one just before it.
+export class DeltaTime {
+  static of(ticks: number): DeltaTime {
+    return new DeltaTime(ticks);
+  }
+
+  private constructor(readonly ticks: number) {}
+}
+
+//A note that can be played on a MIDI device.
+class MidiNote {
+  static fromNumber(value: number): MidiNote {
+    return new MidiNote(value);
+  }
+
+  private constructor(readonly value: number) {}
+}
+
+export type MidiNoteProperties = {
   velocity: number;
 };

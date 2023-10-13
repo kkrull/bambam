@@ -11,9 +11,10 @@ export class EZDrummerMidiMap implements MidiMap {
     private readonly _noteNumberMap: { [key: number]: number },
   ) {}
 
-  remap(event: Readonly<NoteEvent>): NoteEvent {
-    const remappedNote =
-      this._noteNumberMap[event.noteNumber] ?? event.noteNumber;
-    return event.withNoteNumber(remappedNote);
+  remap(_event: Readonly<NoteEvent>): NoteEvent {
+    throw Error('not implemented');
+    // const remappedNote =
+    //   this._noteNumberMap[event.noteNumber.value] ?? event.noteNumber;
+    // return event.withNoteNumber(remappedNote);
   }
 }
