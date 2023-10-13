@@ -1,28 +1,18 @@
 import { EventTime, EventTimeParams } from '@/src/midi/EventTime';
 import { TickDivision } from '@/src/midi/division/TickDivision';
-import { SetTempoEvent } from '@/src/midi/tempo/SetTempoEvent';
-import {
-  TimeSignature,
-  TimeSignatureParams,
-} from '@/src/midi/time-signature/TimeSignature';
-import { SetTimeSignatureEvent } from '@/src/midi/time-signature/SetTimeSignatureEvent';
 import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
 
 //A stream of timed, musical events for the same instrument.
 export class MidiTrack {
-  public static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
+  static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
     return new MidiTrack(new TickDivision(ticksPerQuarterNote));
   }
 
   endTime?: EventTime;
   private readonly _noteEvents: NoteEvent[];
-  private _tempoMap: TempoMap;
-  private _timeSignatureMap: TimeSignatureMap;
 
   private constructor(readonly division: TickDivision) {
     this._noteEvents = [];
-    this._tempoMap = [];
-    this._timeSignatureMap = [];
   }
 
   addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
@@ -52,8 +42,6 @@ export class MidiTrack {
   remap(mapper: MidiMap): MidiTrack {
     const remappedTrack = new MidiTrack(this.division);
     remappedTrack.endTime = this.endTime;
-    remappedTrack._tempoMap = this.tempoMap();
-    remappedTrack._timeSignatureMap = this.timeSignatureMap();
 
     this._noteEvents.forEach((event) => {
       const remappedEvent = mapper.remap(event);
@@ -61,27 +49,6 @@ export class MidiTrack {
     });
 
     return remappedTrack;
-  }
-
-  setTempo(bpm: number, when: EventTimeParams) {
-    const event = new SetTempoEvent(bpm, EventTime.of(when));
-    this._tempoMap.push(event);
-  }
-
-  setTimeSignature(signature: TimeSignatureParams, when: EventTimeParams) {
-    const event = new SetTimeSignatureEvent(
-      TimeSignature.from(signature),
-      EventTime.of(when),
-    );
-    this._timeSignatureMap.push(event);
-  }
-
-  tempoMap(): TempoMap {
-    return this._tempoMap.slice();
-  }
-
-  timeSignatureMap(): TimeSignatureMap {
-    return this._timeSignatureMap.slice();
   }
 
   private addEvent(event: NoteEvent): void {
@@ -93,9 +60,3 @@ export class MidiTrack {
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
 }
-
-//An ordered sequence of the initial tempo followed by any changes in tempo
-type TempoMap = SetTempoEvent[];
-
-//An ordered sequence of the initial time signature followed by any changes
-type TimeSignatureMap = SetTimeSignatureEvent[];

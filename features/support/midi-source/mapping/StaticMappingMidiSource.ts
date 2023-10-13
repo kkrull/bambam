@@ -5,11 +5,6 @@ import { MidiSource } from '@/support/midi-source/MidiSource';
 export class StaticMappingMidiSource implements MidiSource {
   async readTrack(): Promise<MidiTrack> {
     const ezDrummerTrack = MidiTrack.withTicksDivision(960);
-    ezDrummerTrack.setTempo(120, { measure: 1, beat: 1, tick: 0 });
-    ezDrummerTrack.setTimeSignature(
-      { numDivisions: 4, divisionNote: 4 },
-      { measure: 1, beat: 1, tick: 0 },
-    );
 
     //35 B0 Acoustic Bass Drum (GM)
     ezDrummerTrack.addNote({ measure: 1, beat: 1, tick: 0 }, 35, {
