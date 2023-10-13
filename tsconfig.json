@@ -4,7 +4,8 @@
   "compilerOptions": {
     //features/tsconfig has its own paths, but cucumber-js still needs this
     "paths": {
-      "@/src/*": ["./src/*"]
+      "@/src/*": ["./src/*"],
+      "@/support/*": ["./features/support/*"]
     }
   },
   "include": ["./src/**/*.ts"]

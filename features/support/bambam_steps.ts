@@ -8,9 +8,9 @@ import { MidiSourceProvider } from './midi-source/MidiSourceProvider';
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
 
-Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', () => {
+Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', async () => {
   const midiSource = MidiSourceProvider.getInstance();
-  ezDrummerTrack = midiSource.readTrack();
+  ezDrummerTrack = await midiSource.readTrack();
 });
 
 When('I ask BamBam to remap that track to General MIDI Percussion', () => {
