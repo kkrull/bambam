@@ -1,9 +1,9 @@
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiSource } from './MidiSource';
+import { MidiSource } from '@/support/midi-source/MidiSource';
 
-//MIDI track consisting only of the data model, without reading from I/O
-export class StaticMidiSource implements MidiSource {
-  readTrack(): MidiTrack {
+//MIDI track with a mapping of the drums available to EZDrummer 2, without I/O
+export class StaticMappingMidiSource implements MidiSource {
+  async readTrack(): Promise<MidiTrack> {
     const ezDrummerTrack = MidiTrack.withTicksDivision(960);
     ezDrummerTrack.setTempo(120, { measure: 1, beat: 1, tick: 0 });
     ezDrummerTrack.setTimeSignature(

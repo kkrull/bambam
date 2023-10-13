@@ -1,13 +1,17 @@
-import { Before } from '@cucumber/cucumber';
+import { After, Before } from '@cucumber/cucumber';
 
-import { FileMidiSource } from './FileMidiSource';
 import { MidiSourceProvider } from './MidiSourceProvider';
-import { StaticMidiSource } from './StaticMidiSource';
+import { FileMappingMidiSource } from './mapping/FileMappingMidiSource';
+import { StaticMappingMidiSource } from './mapping/StaticMappingMidiSource';
+
+After(() => {
+  MidiSourceProvider.clearInstance();
+});
 
 Before({ tags: '@FileMidiSource' }, () => {
-  MidiSourceProvider.setInstance(new FileMidiSource());
+  MidiSourceProvider.setInstance(new FileMappingMidiSource());
 });
 
 Before({ tags: '@StaticMidiSource' }, () => {
-  MidiSourceProvider.setInstance(new StaticMidiSource());
+  MidiSourceProvider.setInstance(new StaticMappingMidiSource());
 });
