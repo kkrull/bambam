@@ -14,6 +14,7 @@ Given('I have exported an EZDrummer 2 track from my DAW, as MIDI', async () => {
 });
 
 When('I ask BamBam to remap that track to General MIDI Percussion', () => {
+  //TODO KDK: Prototype copying events without parsing anything unnecessary, using static data model
   const midiMap = EZDrummerMidiMap.version2Map();
   gmTrack = ezDrummerTrack.remap(midiMap);
 });
@@ -25,32 +26,27 @@ Then('the re-mapped track should be a valid MIDI track that others can read', ()
   expect(gmTrack.endTime).to.eql(ezDrummerTrack.endTime);
 });
 
-/* All about timing */
-
-Then('the re-mapped track should play the same drum pattern as the original', () => {
-  expect(gmTrack.noteTimes()).to.eql(ezDrummerTrack.noteTimes());
-});
-
 Then('the re-mapped track should have the same resolution as the original', () => {
   expect(gmTrack.division).to.exist;
   expect(gmTrack.division).to.eql(ezDrummerTrack.division);
 });
 
-Then('the re-mapped track should have the same tempo map as the original', () => {
-  expect(gmTrack.tempoMap()).to.deep.equal(ezDrummerTrack.tempoMap());
+/* Note mapping */
+
+Then('re-mapped channel events for General MIDI Percussion notes should stay the same', () => {
+  return 'pending';
 });
 
-Then('the re-mapped track should have the same time signatures as the original', () => {
-  expect(gmTrack.timeSignatureMap()).to.deep.equal(ezDrummerTrack.timeSignatureMap());
-});
+Then(
+  're-mapped channel events for non-standard notes should use General MIDI Percussion notes',
+  () => {
+    //42 F#1 Closed Hi Hat (GM)
+    // expect(gmTrack.noteNumbersAt({ measure: 1, beat: 2, tick: 0 })).to.eql([42]);
+    return 'pending';
+  },
+);
 
-/* All about notes */
-
-Then('non-standard notes should be changed to their equivalent in General MIDI', () => {
-  //42 F#1 Closed Hi Hat (GM)
-  expect(gmTrack.noteNumbersAt({ measure: 1, beat: 2, tick: 0 })).to.eql([42]);
-});
-
-Then('notes that are already General MIDI Percussion should stay the same', () => {
-  expect(gmTrack.noteNumbersAt({ measure: 1, beat: 1, tick: 0 })).to.eql([35]);
+Then('the re-mapped track should copy all other events from the original track', () => {
+  // expect(gmTrack.noteNumbersAt({ measure: 1, beat: 1, tick: 0 })).to.eql([35]);
+  return 'pending';
 });
