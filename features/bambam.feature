@@ -13,6 +13,7 @@ Feature: Convert EZDrummer 2 track to General MIDI
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI
     When I ask BamBam to remap that track to General MIDI Percussion
 
-    Then re-mapped channel events for General MIDI Percussion notes should stay the same
-    And re-mapped channel events for non-standard notes should use General MIDI Percussion notes
-    And the re-mapped track should copy all other events from the original track
+    Then the re-mapped track should use the same MIDI channel as the original
+    And re-mapped notes should happen at the same time as the original notes
+    And re-mapped notes should exist in the General MIDI Percussion map
+    And the re-mapped track should have all other events from the original track
