@@ -19,16 +19,16 @@ When('I ask BamBam to remap that track to General MIDI Percussion', () => {
   gmTrack = ezDrummerTrack.remap(midiMap);
 });
 
-/* Structure and basic usage */
+/* Track structure */
 
-Then('the re-mapped track should be a valid MIDI track that others can read', () => {
-  expect(gmTrack.endTime).to.exist;
+Then('the re-mapped track should be a valid MIDI track', () => {
   expect(gmTrack.endTime).to.eql(ezDrummerTrack.endTime);
+  expect(gmTrack.endTime).to.exist;
 });
 
-Then('the re-mapped track should have the same resolution as the original', () => {
-  expect(gmTrack.division).to.exist;
+Then('the re-mapped track should have the same time resolution as the original', () => {
   expect(gmTrack.division).to.eql(ezDrummerTrack.division);
+  expect(gmTrack.division).to.exist;
 });
 
 /* Note mapping */
