@@ -23,6 +23,10 @@ export class MidiTrack {
     return delta + this.endTrackEvent.deltaTime.ticks;
   }
 
+  nonNoteEvents(): MidiEvent[] {
+    return this.allEvents().filter((x) => x instanceof NoteEvent === false);
+  }
+
   noteEvents(): NoteEvent[] {
     return this.events
       .filter((x) => x instanceof NoteEvent)

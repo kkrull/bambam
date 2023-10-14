@@ -37,7 +37,7 @@ Then('the re-mapped track should have the same time resolution as the original',
 });
 
 Then('the re-mapped track should have all other events from the original track', () => {
-  return 'pending';
+  expect(gmTrack.nonNoteEvents()).to.deep.equal(ezDrummerTrack.nonNoteEvents());
 });
 
 /* Note mapping */

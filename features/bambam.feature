@@ -10,7 +10,6 @@ Feature: Convert EZDrummer 2 track to General MIDI
     And the re-mapped track should have the same time resolution as the original
     And the re-mapped track should have events at the same times as the original
 
-  @focus
   Scenario: BamBam should re-map an EZDrummer 2 track to General MIDI Percussion
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI
     When I ask BamBam to remap that track to General MIDI Percussion
