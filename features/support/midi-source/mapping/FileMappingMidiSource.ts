@@ -33,7 +33,7 @@ export class FileMappingMidiSource implements MidiSource {
 
     const ezdChunk = trackChunks[trackChunks.length - 1];
     const midiTrack = new MidiTrackBuilder().withDivisionInTicks(960);
-    readEvents(ezdChunk);
+    readEvents(ezdChunk).forEach((x) => midiTrack.addMidiEvent(x));
     return midiTrack.build();
   }
 }

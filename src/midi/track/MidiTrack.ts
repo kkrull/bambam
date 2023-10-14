@@ -80,6 +80,10 @@ export class MidiTrackBuilder {
     return this;
   }
 
+  addMidiEvent(_event: MidiEvent): void {
+    throw new Error('Method not implemented.');
+  }
+
   addNoteEvent(
     deltaTime: DeltaTime,
     { channel, note, velocity }: AddNoteParams,
