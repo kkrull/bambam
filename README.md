@@ -45,6 +45,13 @@ npm run test:focus #Run scenarios tagged with @focus
 npm run test -- [...cucumber.js args] #Pass custom options to cucumber.js
 ```
 
+Cucumber scenarios can be tagged as follows, to change where data is sourced:
+
+- `@FileMidiSource`: Read MIDI data from an actual file
+- `@StaticMidiSource`: Build MIDI data inside the test
+
+See `MidiSourceHooks.ts` for details.
+
 ### Type-check code
 
 ```shell
