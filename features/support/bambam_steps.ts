@@ -52,5 +52,7 @@ Then('re-mapped notes should exist in the General MIDI Percussion map', () => {
 });
 
 Then('re-mapped notes should happen at the same time as the source notes', () => {
-  return 'pending';
+  const sourceDeltas = ezDrummerTrack.noteEvents().map((x) => x.deltaTime.ticks);
+  const mappedDeltas = gmTrack.noteEvents().map((x) => x.deltaTime.ticks);
+  expect(mappedDeltas).to.eql(sourceDeltas);
 });
