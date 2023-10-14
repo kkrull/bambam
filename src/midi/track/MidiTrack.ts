@@ -14,12 +14,14 @@ export class MidiTrack {
     readonly events: MidiEvent[],
   ) {}
 
-  endTime(): DeltaTime {
-    throw Error('not implemented');
+  endTime(): number {
+    const delta = this.events.reduce((acc, x) => acc + x.deltaTime.ticks, 0);
+    return delta + this.endTrackEvent.deltaTime.ticks;
   }
 
   remap(_mapper: MidiMap): MidiTrack {
-    throw Error('Not implemented');
+    //TODO KDK: Map notes using copy constructor and the mapper
+    return new MidiTrack(this.division, this.endTrackEvent, this.events);
   }
 }
 
