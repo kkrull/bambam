@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiSourceProvider } from './midi-source/MidiSourceProvider';
+import { MidiNote, NoteEvent } from '@/src/midi/track/event-data';
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
@@ -52,8 +53,21 @@ Then('re-mapped notes should exist in the General MIDI Percussion map', () => {
 });
 
 Then('the re-mapped track should have re-mapped notes', () => {
-  const sourceTimes = ezDrummerTrack.noteEventTimes();
-  const mappedTimes = gmTrack.noteEventTimes();
-  expect(mappedTimes).to.deep.equal(sourceTimes);
-  return 'pending';
+  const sourceData = ezDrummerTrack.noteEventTimes();
+  const mappedData = gmTrack.noteEventTimes();
+  expect(mappedData).to.have.lengthOf(sourceData.length);
+
+  const sourceTimes = sourceData.map((x) => x.ticksFromStart);
+  const mappedTimes = mappedData.map((x) => x.ticksFromStart);
+  expect(mappedTimes).to.eql(sourceTimes);
+
+  const ezdHatsOpen = sourceData[1].event;
+  expect(mappedData[1].event).to.eql(
+    new NoteEvent(
+      ezdHatsOpen.deltaTime,
+      ezdHatsOpen.channel,
+      MidiNote.numbered(42),
+      ezdHatsOpen.velocity,
+    ),
+  );
 });
