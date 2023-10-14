@@ -14,8 +14,13 @@ export class MidiTrack {
 
 //Constructs a MIDI track.
 export class MidiTrackBuilder {
+  private division?: TickDivision;
   private endTime?: DeltaTime;
   private noteEvents: NoteEvent[] = [];
+
+  build(): MidiTrack {
+    throw Error('not implemented');
+  }
 
   addEndTrackEvent(_deltaTime: number): MidiTrackBuilder {
     throw Error('not implemented');
@@ -29,12 +34,9 @@ export class MidiTrackBuilder {
     throw Error('not implemented');
   }
 
-  withTicksDivision(_ticksPerQuarterNote: number): MidiTrackBuilder {
-    throw Error('not implemented');
-  }
-
-  build(): MidiTrack {
-    throw Error('not implemented');
+  withTicksDivision(ticksPerQuarterNote: number): MidiTrackBuilder {
+    this.division = new TickDivision(ticksPerQuarterNote);
+    return this;
   }
 }
 

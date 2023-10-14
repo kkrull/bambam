@@ -3,6 +3,7 @@ Feature: Convert EZDrummer 2 track to General MIDI
   I want to convert EZDrummer 2 tracks to General MIDI
   So that I can maintain flow when copying drum tracks to MuseScore
 
+  @focus
   Scenario: BamBam should produce a valid MIDI track
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI
     When I ask BamBam to remap that track to General MIDI Percussion
