@@ -36,6 +36,10 @@ Then('the re-mapped track should have all other events from the original track',
 
 /* Note mapping */
 
+Then('re-mapped notes should be on the same MIDI channel as the source notes', () => {
+  return 'pending';
+});
+
 Then('re-mapped notes should exist in the General MIDI Percussion map', () => {
   //35 B0 Acoustic Bass Drum (GM)
   // expect(gmTrack.noteNumbersAt({ measure: 1, beat: 1, tick: 0 })).to.eql([35]);
@@ -45,10 +49,6 @@ Then('re-mapped notes should exist in the General MIDI Percussion map', () => {
   return 'pending';
 });
 
-Then('re-mapped notes should happen at the same time as the original notes', () => {
-  return 'pending';
-});
-
-Then('the re-mapped track should use the same MIDI channel as the original', () => {
+Then('re-mapped notes should happen at the same time as the source notes', () => {
   return 'pending';
 });
