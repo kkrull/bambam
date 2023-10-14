@@ -1,4 +1,4 @@
-import { FileHandle, FileReadResult, open } from 'node:fs/promises';
+import { FileHandle, open } from 'node:fs/promises';
 import path from 'node:path';
 
 import { MidiTrack, MidiTrackBuilder } from '@/src/midi/track/MidiTrack';
@@ -19,9 +19,6 @@ export class FileMappingMidiSource implements MidiSource {
 
     const headerChunk = await readChunk(fh);
     console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
-    headerChunk.data
-      .toHexRows(16)
-      .forEach((hexRow, i) => console.log(`${i * 16}:\t${hexRow.join(' ')}`));
 
     const trackChunks = [];
     let trackChunk = await readChunk(fh);
@@ -46,24 +43,19 @@ async function openFile(filename: string): Promise<FileHandle> {
 }
 
 function readEvents(_trackChunk: MidiChunk): MidiEvent[] {
-  return [];
+  // _trackChunk.data.readEvent();
+  throw Error('Not implemented: Keep calling MidiData#readEvent until empty');
 }
 
 async function readChunk(fh: FileHandle): Promise<MidiChunk> {
-  const chunkType = await readBytes(fh, 4);
-  if (chunkType.length === 0) {
-    return new MidiChunk('', 0, new MidiData(Buffer.alloc(0), 0));
+  const chunkType = await MidiData.read(fh, 4);
+  if (chunkType.asText() === '') {
+    return new MidiChunk('', 0, MidiData.empty());
   }
 
-  const chunkLength = await readBytes(fh, 4);
-  const chunkData = await readBytes(fh, chunkLength.toNumber());
-  return new MidiChunk(chunkType.toText(), chunkLength.toNumber(), chunkData);
-}
-
-async function readBytes(fh: FileHandle, numBytes: number): Promise<MidiData> {
-  const buffer = Buffer.alloc(numBytes);
-  const result = await fh.read({ buffer, length: numBytes });
-  return MidiData.from(result);
+  const chunkLength = await MidiData.read(fh, 4);
+  const chunkData = await MidiData.read(fh, chunkLength.asInt32());
+  return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
 }
 
 class MidiChunk {
@@ -74,53 +66,146 @@ class MidiChunk {
   ) {}
 }
 
-class MidiData {
-  static from(result: FileReadResult<Buffer>): MidiData {
-    return new MidiData(
-      result.buffer.subarray(0, result.bytesRead),
-      result.bytesRead,
-    );
+//One or more bytes of MIDI data comprising a single value
+export class MidiData {
+  static empty(): MidiData {
+    return new MidiData(Buffer.alloc(0));
   }
 
-  constructor(
-    private buffer: Buffer,
-    public readonly length: number,
-  ) {}
+  static async read(file: FileHandle, nBytes: number): Promise<MidiData> {
+    const buffer = Buffer.alloc(nBytes);
+    const result = await file.read({ buffer, length: nBytes });
+    return new MidiData(result.buffer.subarray(0, result.bytesRead));
+  }
+
+  private offset: number;
+
+  private constructor(private readonly buffer: Buffer) {
+    this.offset = 0;
+  }
+
+  asInt16(): number {
+    return this.buffer.readInt16BE(0);
+  }
+
+  asInt32(): number {
+    return this.buffer.readInt32BE(0);
+  }
+
+  asText(): string {
+    return this.buffer.toString('latin1');
+  }
+
+  offsetBuffer(): Buffer {
+    return this.buffer.subarray(this.offset);
+  }
+
+  //<Track Chunk> = <chunk type> <length> <MTrk event>+
+  readEvent() {
+    if (this.offset === this.buffer.length) {
+      return null;
+    }
+
+    //<MTrk event> = <delta-time> <event>
+    //<event> = <MIDI event> | <sysex event> | <meta-event>
+    const deltaTime = this.readQuantity();
+    const eventType = this.readUInt8(); //FF
+
+    //<sysex event> = F0 <length> <bytes to be transmitted after F0>
+    //<sysex event> = F7 <length> <all bytes to be transmitted>
+    if (eventType === 0xff) {
+      //<meta-event> = FF <type> <length> <bytes>
+      return this.readMetaEvent(deltaTime);
+    } else {
+      //<MIDI event> = <any channel event>
+      return this.readChannelEvent(deltaTime, eventType);
+    }
+  }
+
+  //TODO KDK: Return NoteEvent
+  readChannelEvent(deltaTime: number, eventType: number) {
+    switch (eventType) {
+      case 0x80: {
+        const noteNumber = this.readUInt8();
+        const velocity = this.readUInt8();
+        return {
+          deltaTime,
+          name: 'Ch. 01 Event: Note Off',
+          eventType,
+          noteNumber,
+          velocity,
+        };
+      }
+
+      case 0x90: {
+        const noteNumber = this.readUInt8();
+        const velocity = this.readUInt8();
+        return {
+          deltaTime,
+          name: 'Ch. 01 Event: Note On',
+          eventType,
+          noteNumber,
+          velocity,
+        };
+      }
+
+      default:
+        throw Error(`Unknown event type: ${eventType}`);
+    }
+  }
+
+  //TODO KDK: Return MidiEvent
+  readMetaEvent(deltaTime: number) {
+    const subType = this.readUInt8(); //03
+    const length = this.readQuantity();
+    const data = [...this.buffer.subarray(this.offset, this.offset + length)];
+    this.offset += length;
+
+    return {
+      data,
+      deltaTime,
+      eventType: 0xff,
+      eventSubtype: subType,
+      length,
+      name: 'Meta Event',
+    };
+  }
+
+  //These numbers are represented 7 bits per byte, most significant bits first.
+  //All bytes except the last have bit 7 set, and the last byte has bit 7 clear.
+  readQuantity(): number {
+    let quantity = 0;
+    for (const rawByte of this.offsetBuffer()) {
+      this.offset++;
+
+      quantity = (quantity << 7) + (rawByte & 0x7f);
+      if ((rawByte & 0x80) === 0) {
+        break;
+      }
+    }
+
+    return quantity;
+  }
+
+  readUInt8(): number {
+    const bytes = [...this.buffer.subarray(this.offset)];
+    this.offset += 1;
+    return bytes[0];
+  }
+
+  slice(firstOffset: number, endOffset: number): MidiData {
+    return new MidiData(this.buffer.subarray(firstOffset, endOffset));
+  }
 
   toBytes(): number[] {
     return [...this.buffer];
   }
 
-  toHex(): string[] {
-    return this.toBytes().map((x) => Buffer.from([x]).toString('hex'));
-  }
-
-  toHexRows(chunkSize: number): string[][] {
-    const flatArray = this.toHex();
-
-    const chunks: string[][] = [];
-    for (let i = 0; i < flatArray.length; i = i + chunkSize) {
-      const chunk = flatArray.slice(i, i + chunkSize);
-      chunks.push(chunk);
-    }
-
-    return chunks;
-  }
-
-  toNumber(): number {
-    return this.buffer.readInt32BE(0);
-  }
-
-  toText(): string {
-    return this.buffer.toString('latin1');
-  }
-
   toObject() {
     return {
       bytes: this.toBytes(),
-      hex: this.toHex(),
-      number: this.toNumber(),
-      text: this.toText(),
+      number: this.asInt32(),
+      text: this.asText(),
     };
   }
 }
