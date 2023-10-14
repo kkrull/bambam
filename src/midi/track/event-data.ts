@@ -10,6 +10,10 @@ export class DeltaTime {
   }
 
   private constructor(readonly ticks: number) {}
+
+  plus(other: DeltaTime): DeltaTime {
+    return new DeltaTime(this.ticks + other.ticks);
+  }
 }
 
 //An event required at the end of a track chunk to show when it ends.

@@ -29,6 +29,19 @@ export class MidiTrack {
       .map((x) => x as NoteEvent);
   }
 
+  noteEventTimes(): NoteEventTime[] {
+    let accumulatedTime = DeltaTime.ofTicks(0);
+    const noteEventTimes: NoteEventTime[] = [];
+    for (const event of this.allEvents()) {
+      accumulatedTime = accumulatedTime.plus(event.deltaTime);
+      if (event instanceof NoteEvent) {
+        noteEventTimes.push(NoteEventTime.at(accumulatedTime, event));
+      }
+    }
+
+    return noteEventTimes;
+  }
+
   remap(_mapper: MidiMap): MidiTrack {
     //TODO KDK: Map notes using copy constructor and the mapper
     return new MidiTrack(this.division, this.endTrackEvent, this.events);
@@ -79,6 +92,18 @@ type AddNoteParams = {
 //Transforms MIDI events one at a time, such as from one note to another.
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
+}
+
+//A note event, in time relative to the start of the track.
+export class NoteEventTime {
+  static at(accumulatedDelta: DeltaTime, event: NoteEvent): NoteEventTime {
+    return new NoteEventTime(accumulatedDelta.ticks, event);
+  }
+
+  private constructor(
+    readonly ticksFromStart: number,
+    readonly event: NoteEvent,
+  ) {}
 }
 
 //Tick-based resolution for MIDI data (stream, file, track), in the MIDI header.
