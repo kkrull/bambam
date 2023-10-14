@@ -44,7 +44,7 @@ class MidiChunk {
 }
 
 class MidiData {
-  public static from(result: FileReadResult<Buffer>): MidiData {
+  static from(result: FileReadResult<Buffer>): MidiData {
     return new MidiData(
       result.buffer.subarray(0, result.bytesRead),
       result.bytesRead,

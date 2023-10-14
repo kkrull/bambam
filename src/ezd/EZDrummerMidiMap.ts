@@ -1,9 +1,9 @@
 import { MidiMap } from '@/src/midi/track/MidiTrack';
-import { NoteEvent } from '@/src/midi/track/NoteEvent';
+import { MidiNote, NoteEvent } from '@/src/midi/track/event-data';
 
-//Produces altered versions of given events, such as transposing or re-mapping
+//Re-maps EZDrummer 2 notes to General MIDI notes.
 export class EZDrummerMidiMap implements MidiMap {
-  public static version2Map(): EZDrummerMidiMap {
+  static version2Map(): EZDrummerMidiMap {
     return new EZDrummerMidiMap({ [24]: 42 });
   }
 
@@ -11,9 +11,9 @@ export class EZDrummerMidiMap implements MidiMap {
     private readonly _noteNumberMap: { [key: number]: number },
   ) {}
 
-  remap(event: Readonly<NoteEvent>): NoteEvent {
+  remap(event: NoteEvent): NoteEvent {
     const remappedNote =
-      this._noteNumberMap[event.noteNumber] ?? event.noteNumber;
-    return event.withNoteNumber(remappedNote);
+      this._noteNumberMap[event.note.noteNumber] ?? event.note.noteNumber;
+    return event.withNote(MidiNote.numbered(remappedNote));
   }
 }

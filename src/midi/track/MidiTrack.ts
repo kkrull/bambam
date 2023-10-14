@@ -1,101 +1,123 @@
-import { EventTime, EventTimeParams } from '@/src/midi/EventTime';
-import { TickDivision } from '@/src/midi/division/TickDivision';
-import { SetTempoEvent } from '@/src/midi/tempo/SetTempoEvent';
 import {
-  TimeSignature,
-  TimeSignatureParams,
-} from '@/src/midi/time-signature/TimeSignature';
-import { SetTimeSignatureEvent } from '@/src/midi/time-signature/SetTimeSignatureEvent';
-import { NoteEvent, NoteEventParams, NoteProperties } from './NoteEvent';
+  DeltaTime,
+  EndTrackEvent,
+  MidiEvent,
+  MidiNote,
+  NoteEvent,
+} from './event-data';
 
-//A stream of timed, musical events for the same instrument.
+//A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
-  public static withTicksDivision(ticksPerQuarterNote: number): MidiTrack {
-    return new MidiTrack(new TickDivision(ticksPerQuarterNote));
+  constructor(
+    readonly division: TickDivision,
+    readonly endTrackEvent: EndTrackEvent,
+    readonly events: MidiEvent[],
+  ) {}
+
+  allEvents(): MidiEvent[] {
+    return [...this.events, this.endTrackEvent];
   }
 
-  endTime?: EventTime;
-  private readonly _noteEvents: NoteEvent[];
-  private _tempoMap: TempoMap;
-  private _timeSignatureMap: TimeSignatureMap;
-
-  private constructor(readonly division: TickDivision) {
-    this._noteEvents = [];
-    this._tempoMap = [];
-    this._timeSignatureMap = [];
+  endTime(): number {
+    const delta = this.events.reduce((acc, x) => acc + x.deltaTime.ticks, 0);
+    return delta + this.endTrackEvent.deltaTime.ticks;
   }
 
-  addNote(when: EventTimeParams, noteNumber: number, how: NoteProperties) {
-    const eventParams: NoteEventParams = {
-      when: EventTime.of(when),
-      noteNumber,
-      how,
-    };
-
-    this._noteEvents.push(NoteEvent.of(eventParams));
+  nonNoteEvents(): MidiEvent[] {
+    return this.allEvents().filter((x) => x instanceof NoteEvent === false);
   }
 
-  endTrack(when: EventTimeParams) {
-    this.endTime = EventTime.of(when);
+  noteEvents(): NoteEvent[] {
+    return this.events
+      .filter((x) => x instanceof NoteEvent)
+      .map((x) => x as NoteEvent);
   }
 
-  noteNumbersAt(when: EventTimeParams): number[] {
-    return this._noteEvents
-      .filter((event) => event.when.isSameAs(when))
-      .map((event) => event.noteNumber);
-  }
+  noteEventTimes(): NoteEventTime[] {
+    let accumulatedTime = DeltaTime.ofTicks(0);
+    const noteEventTimes: NoteEventTime[] = [];
+    for (const event of this.allEvents()) {
+      accumulatedTime = accumulatedTime.plus(event.deltaTime);
+      if (event instanceof NoteEvent) {
+        noteEventTimes.push(NoteEventTime.at(accumulatedTime, event));
+      }
+    }
 
-  noteTimes(): EventTime[] {
-    return this._noteEvents.map((event) => event.when);
+    return noteEventTimes;
   }
 
   remap(mapper: MidiMap): MidiTrack {
-    const remappedTrack = new MidiTrack(this.division);
-    remappedTrack.endTime = this.endTime;
-    remappedTrack._tempoMap = this.tempoMap();
-    remappedTrack._timeSignatureMap = this.timeSignatureMap();
+    const mappedEvents: MidiEvent[] = this.events.map((x) => {
+      if (x instanceof NoteEvent === false) {
+        return x;
+      }
 
-    this._noteEvents.forEach((event) => {
-      const remappedEvent = mapper.remap(event);
-      remappedTrack.addEvent(remappedEvent);
+      return mapper.remap(x as NoteEvent);
     });
 
-    return remappedTrack;
-  }
-
-  setTempo(bpm: number, when: EventTimeParams) {
-    const event = new SetTempoEvent(bpm, EventTime.of(when));
-    this._tempoMap.push(event);
-  }
-
-  setTimeSignature(signature: TimeSignatureParams, when: EventTimeParams) {
-    const event = new SetTimeSignatureEvent(
-      TimeSignature.from(signature),
-      EventTime.of(when),
-    );
-    this._timeSignatureMap.push(event);
-  }
-
-  tempoMap(): TempoMap {
-    return this._tempoMap.slice();
-  }
-
-  timeSignatureMap(): TimeSignatureMap {
-    return this._timeSignatureMap.slice();
-  }
-
-  private addEvent(event: NoteEvent): void {
-    this._noteEvents.push(event);
+    return new MidiTrack(this.division, this.endTrackEvent, mappedEvents);
   }
 }
 
-//Maps MIDI note events one at a time from one note or articulation to another
+//Constructs a MIDI track.
+export class MidiTrackBuilder {
+  private division?: TickDivision;
+  private endTrack?: EndTrackEvent;
+  private events: MidiEvent[] = [];
+
+  build(): MidiTrack {
+    if (!this.division) {
+      throw Error('Missing time resolution (e.g. ticks per quarter note)');
+    } else if (!this.endTrack) {
+      throw Error('Missing required End Track event');
+    }
+
+    return new MidiTrack(this.division, this.endTrack, this.events.slice());
+  }
+
+  addEndTrackEvent(deltaTime: DeltaTime): MidiTrackBuilder {
+    this.endTrack = new EndTrackEvent(deltaTime);
+    return this;
+  }
+
+  addNoteEvent(
+    deltaTime: DeltaTime,
+    { channel, note, velocity }: AddNoteParams,
+  ): MidiTrackBuilder {
+    this.events.push(new NoteEvent(deltaTime, channel, note, velocity));
+    return this;
+  }
+
+  withDivisionInTicks(ticksPerQuarterNote: number): MidiTrackBuilder {
+    this.division = new TickDivision(ticksPerQuarterNote);
+    return this;
+  }
+}
+
+type AddNoteParams = {
+  channel: number;
+  note: MidiNote;
+  velocity: number;
+};
+
+//Transforms MIDI events one at a time, such as from one note to another.
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
 }
 
-//An ordered sequence of the initial tempo followed by any changes in tempo
-type TempoMap = SetTempoEvent[];
+//A note event, in time relative to the start of the track.
+export class NoteEventTime {
+  static at(accumulatedDelta: DeltaTime, event: NoteEvent): NoteEventTime {
+    return new NoteEventTime(accumulatedDelta.ticks, event);
+  }
 
-//An ordered sequence of the initial time signature followed by any changes
-type TimeSignatureMap = SetTimeSignatureEvent[];
+  private constructor(
+    readonly ticksFromStart: number,
+    readonly event: NoteEvent,
+  ) {}
+}
+
+//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header.
+export class TickDivision {
+  constructor(readonly ticksPerQuarterNote: number) {}
+}

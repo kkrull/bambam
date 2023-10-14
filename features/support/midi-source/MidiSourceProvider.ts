@@ -5,11 +5,11 @@ import { StaticMappingMidiSource } from './mapping/StaticMappingMidiSource';
 export class MidiSourceProvider {
   private static _instance: MidiSource | null;
 
-  public static clearInstance() {
+  static clearInstance() {
     MidiSourceProvider._instance = null;
   }
 
-  public static getInstance(): MidiSource {
+  static getInstance(): MidiSource {
     if (!MidiSourceProvider._instance) {
       MidiSourceProvider._instance = new StaticMappingMidiSource();
     }
@@ -17,7 +17,7 @@ export class MidiSourceProvider {
     return MidiSourceProvider._instance;
   }
 
-  public static setInstance(source: MidiSource) {
+  static setInstance(source: MidiSource) {
     MidiSourceProvider._instance = source;
   }
 
