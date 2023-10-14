@@ -51,8 +51,8 @@ Then('re-mapped notes should be on the same MIDI channel as the source notes', (
 Then('re-mapped notes should exist in the General MIDI Percussion map', () => {
   const nonGmNotes = gmTrack
     .noteEvents()
-    .filter((x) => x.note.value < 35)
-    .filter((x) => x.note.value > 81);
+    .filter((x) => x.note.noteNumber < 35)
+    .filter((x) => x.note.noteNumber > 81);
 
   expect(nonGmNotes).to.be.empty;
 });

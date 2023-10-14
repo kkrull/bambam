@@ -29,7 +29,7 @@ export class MidiNote {
     return new MidiNote(value);
   }
 
-  private constructor(readonly value: number) {}
+  private constructor(readonly noteNumber: number) {}
 }
 
 //A timed event related to a note, along with how it is played.
