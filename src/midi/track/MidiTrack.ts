@@ -1,4 +1,4 @@
-import { DeltaTime, NoteEvent, MidiNoteProperties } from './NoteEvent';
+import { DeltaTime, MidiEvent, MidiNote, NoteEvent } from './event-data';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
@@ -16,22 +16,24 @@ export class MidiTrack {
 export class MidiTrackBuilder {
   private division?: TickDivision;
   private endTime?: DeltaTime;
-  private noteEvents: NoteEvent[] = [];
+  private events: MidiEvent[] = [];
 
   build(): MidiTrack {
+    //Add EndTrack event at the very end
     throw Error('not implemented');
   }
 
-  addEndTrackEvent(_deltaTime: number): MidiTrackBuilder {
-    throw Error('not implemented');
+  addEndTrackEvent(_deltaTime: DeltaTime): MidiTrackBuilder {
+    this.endTime = _deltaTime;
+    return this;
   }
 
   addNoteEvent(
-    _deltaTime: number,
-    _noteNumber: number,
-    _how: MidiNoteProperties,
+    deltaTime: DeltaTime,
+    { channel, note, velocity }: AddNoteParams,
   ): MidiTrackBuilder {
-    throw Error('not implemented');
+    this.events.push(new NoteEvent(deltaTime, channel, note, velocity));
+    return this;
   }
 
   withTicksDivision(ticksPerQuarterNote: number): MidiTrackBuilder {
@@ -39,6 +41,12 @@ export class MidiTrackBuilder {
     return this;
   }
 }
+
+type AddNoteParams = {
+  channel: number;
+  note: MidiNote;
+  velocity: number;
+};
 
 //Transforms MIDI events one at a time, such as from one note to another.
 export interface MidiMap {
