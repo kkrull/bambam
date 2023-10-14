@@ -19,6 +19,12 @@ export class MidiTrack {
     return delta + this.endTrackEvent.deltaTime.ticks;
   }
 
+  noteEvents(): NoteEvent[] {
+    return this.events
+      .filter((x) => x instanceof NoteEvent)
+      .map((x) => x as NoteEvent);
+  }
+
   remap(_mapper: MidiMap): MidiTrack {
     //TODO KDK: Map notes using copy constructor and the mapper
     return new MidiTrack(this.division, this.endTrackEvent, this.events);
