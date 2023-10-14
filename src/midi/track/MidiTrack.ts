@@ -1,11 +1,22 @@
-import { DeltaTime, MidiEvent, MidiNote, NoteEvent } from './event-data';
+import {
+  DeltaTime,
+  EndTrackEvent,
+  MidiEvent,
+  MidiNote,
+  NoteEvent,
+} from './event-data';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
   constructor(
     readonly division: TickDivision,
-    readonly endTime: DeltaTime,
+    readonly endTrackEvent: EndTrackEvent,
+    readonly events: MidiEvent[],
   ) {}
+
+  endTime(): DeltaTime {
+    throw Error('not implemented');
+  }
 
   remap(_mapper: MidiMap): MidiTrack {
     throw Error('Not implemented');
@@ -15,16 +26,21 @@ export class MidiTrack {
 //Constructs a MIDI track.
 export class MidiTrackBuilder {
   private division?: TickDivision;
-  private endTime?: DeltaTime;
+  private endTrack?: EndTrackEvent;
   private events: MidiEvent[] = [];
 
   build(): MidiTrack {
-    //Add EndTrack event at the very end
-    throw Error('not implemented');
+    if (!this.division) {
+      throw Error('Missing time resolution (e.g. ticks per quarter note)');
+    } else if (!this.endTrack) {
+      throw Error('Missing required End Track event');
+    }
+
+    return new MidiTrack(this.division, this.endTrack, this.events.slice());
   }
 
-  addEndTrackEvent(_deltaTime: DeltaTime): MidiTrackBuilder {
-    this.endTime = _deltaTime;
+  addEndTrackEvent(deltaTime: DeltaTime): MidiTrackBuilder {
+    this.endTrack = new EndTrackEvent(deltaTime);
     return this;
   }
 
@@ -36,7 +52,7 @@ export class MidiTrackBuilder {
     return this;
   }
 
-  withTicksDivision(ticksPerQuarterNote: number): MidiTrackBuilder {
+  withDivisionInTicks(ticksPerQuarterNote: number): MidiTrackBuilder {
     this.division = new TickDivision(ticksPerQuarterNote);
     return this;
   }

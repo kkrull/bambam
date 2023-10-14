@@ -6,7 +6,7 @@ import { MidiSource } from '@/support/midi-source/MidiSource';
 export class StaticMappingMidiSource implements MidiSource {
   async readTrack(): Promise<MidiTrack> {
     const ezDrummerTrack = new MidiTrackBuilder()
-      .withTicksDivision(960)
+      .withDivisionInTicks(960)
       .addNoteEvent(DeltaTime.ofTicks(0), {
         //35 B0 Acoustic Bass Drum (GM)
         channel: 10,

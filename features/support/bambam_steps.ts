@@ -21,8 +21,8 @@ When('I ask BamBam to remap that track to General MIDI Percussion', () => {
 /* Track structure */
 
 Then('the re-mapped track should be a valid MIDI track', () => {
-  expect(gmTrack.endTime).to.eql(ezDrummerTrack.endTime);
-  expect(gmTrack.endTime).to.exist;
+  expect(gmTrack.endTime()).to.eql(ezDrummerTrack.endTime());
+  expect(gmTrack.endTime()).to.exist;
 });
 
 Then('the re-mapped track should have the same time resolution as the original', () => {
