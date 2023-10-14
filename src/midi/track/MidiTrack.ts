@@ -46,9 +46,16 @@ export class MidiTrack {
     return noteEventTimes;
   }
 
-  remap(_mapper: MidiMap): MidiTrack {
-    //TODO KDK: Map notes using copy constructor and the mapper
-    return new MidiTrack(this.division, this.endTrackEvent, this.events);
+  remap(mapper: MidiMap): MidiTrack {
+    const mappedEvents: MidiEvent[] = this.events.map((x) => {
+      if (x instanceof NoteEvent === false) {
+        return x;
+      }
+
+      return mapper.remap(x as NoteEvent);
+    });
+
+    return new MidiTrack(this.division, this.endTrackEvent, mappedEvents);
   }
 }
 

@@ -43,7 +43,7 @@ export class NoteEvent extends MidiEvent {
     super(deltaTime);
   }
 
-  withNote(_otherNote: MidiNote): NoteEvent {
-    throw Error('not implemented');
+  withNote(other: MidiNote): NoteEvent {
+    return new NoteEvent(this.deltaTime, this.channel, other, this.velocity);
   }
 }
