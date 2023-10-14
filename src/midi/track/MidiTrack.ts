@@ -14,6 +14,10 @@ export class MidiTrack {
     readonly events: MidiEvent[],
   ) {}
 
+  allEvents(): MidiEvent[] {
+    return [...this.events, this.endTrackEvent];
+  }
+
   endTime(): number {
     const delta = this.events.reduce((acc, x) => acc + x.deltaTime.ticks, 0);
     return delta + this.endTrackEvent.deltaTime.ticks;

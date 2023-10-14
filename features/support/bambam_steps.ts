@@ -25,6 +25,12 @@ Then('the re-mapped track should be a valid MIDI track', () => {
   expect(gmTrack.endTime()).to.exist;
 });
 
+Then('the re-mapped track should have events at the same times as the original', () => {
+  const sourceDeltas = ezDrummerTrack.allEvents().map((x) => x.deltaTime.ticks);
+  const mappedDeltas = gmTrack.allEvents().map((x) => x.deltaTime.ticks);
+  expect(mappedDeltas).to.eql(sourceDeltas);
+});
+
 Then('the re-mapped track should have the same time resolution as the original', () => {
   expect(gmTrack.division).to.eql(ezDrummerTrack.division);
   expect(gmTrack.division).to.exist;
