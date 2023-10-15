@@ -3,6 +3,7 @@ import path from 'node:path';
 import { openFile, parseHeader, readChunk } from '@/src/midi/track/midi-fns';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
+import { MidiChunk } from '@/src/midi/track/MidiChunk';
 import { MidiSource } from '@/support/midi-source/MidiSource';
 
 //File-based MIDI track with a mapping of the drums available to EZDrummer 2.
@@ -21,7 +22,7 @@ export class FileMappingMidiSource implements MidiSource {
     this.verifyFormat(1, format);
     this.verifyNumTracks(2, numTracks);
 
-    const trackChunks = [];
+    const trackChunks: MidiChunk[] = [];
     let trackChunk = await readChunk(file);
     while (!trackChunk.isEmpty()) {
       trackChunks.push(trackChunk);

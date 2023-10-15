@@ -27,11 +27,11 @@ export class MidiTrackBuilder {
     throw new Error('Method not implemented.');
   }
 
-  addNoteEvent(
+  addNoteOnEvent(
     deltaTime: DeltaTime,
     { channel, note, velocity }: AddNoteParams,
   ): MidiTrackBuilder {
-    this.events.push(new NoteEvent(deltaTime, channel, note, velocity));
+    this.events.push(NoteEvent.on(deltaTime, channel, note, velocity));
     return this;
   }
 

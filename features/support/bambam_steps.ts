@@ -63,7 +63,7 @@ Then('the re-mapped track should have re-mapped notes', () => {
 
   const ezdHatsOpen = sourceData[1].event;
   expect(mappedData[1].event).to.eql(
-    new NoteEvent(
+    NoteEvent.on(
       ezdHatsOpen.deltaTime,
       ezdHatsOpen.channel,
       MidiNote.numbered(42),

@@ -1,6 +1,9 @@
 //Any MIDI event, which is always preceded by a delta time from the prior event.
 export abstract class MidiEvent {
-  constructor(readonly deltaTime: DeltaTime) {}
+  constructor(
+    readonly deltaTime: DeltaTime,
+    readonly eventType: number,
+  ) {}
 }
 
 //Time elapsed between an event and the one just before it.
