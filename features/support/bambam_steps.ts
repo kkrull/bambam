@@ -61,6 +61,7 @@ Then('the re-mapped track should have re-mapped notes', () => {
   const mappedTimes = mappedData.map((x) => x.ticksFromStart);
   expect(mappedTimes).to.eql(sourceTimes);
 
+  //TODO KDK: Update this to use the notes that are in the file (or make a file that is like the static data set)
   const ezdHatsOpen = sourceData[1].event;
   expect(mappedData[1].event).to.eql(
     NoteEvent.on(
