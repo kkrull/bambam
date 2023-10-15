@@ -5,26 +5,26 @@ import { TickDivision, MidiTrack } from './MidiTrack';
 //Constructs a MIDI track.
 export class MidiTrackBuilder {
   private division?: TickDivision;
-  private endTrack?: EndTrackEvent;
   private events: MidiEvent[] = [];
 
   build(): MidiTrack {
     if (!this.division) {
       throw Error('Missing time resolution (e.g. ticks per quarter note)');
-    } else if (!this.endTrack) {
+    } else if (!this.endTrack()) {
       throw Error('Missing required End Track event');
     }
 
-    return new MidiTrack(this.division, this.endTrack, this.events.slice());
+    return new MidiTrack(this.division, this.endTrack(), this.events.slice());
   }
 
   addEndTrackEvent(deltaTime: DeltaTime): MidiTrackBuilder {
-    this.endTrack = new EndTrackEvent(deltaTime);
+    this.events.push(new EndTrackEvent(deltaTime));
     return this;
   }
 
-  addMidiEvent(_event: MidiEvent): void {
-    throw new Error('Method not implemented.');
+  addMidiEvent(event: MidiEvent): MidiTrackBuilder {
+    this.events.push(event);
+    return this;
   }
 
   addNoteOnEvent(
@@ -38,6 +38,10 @@ export class MidiTrackBuilder {
   withDivisionInTicks(ticksPerQuarterNote: number): MidiTrackBuilder {
     this.division = new TickDivision(ticksPerQuarterNote);
     return this;
+  }
+
+  private endTrack(): EndTrackEvent {
+    return this.events[this.events.length - 1] as EndTrackEvent;
   }
 }
 

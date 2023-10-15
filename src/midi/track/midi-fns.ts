@@ -1,7 +1,7 @@
 import { FileHandle, open } from 'node:fs/promises';
 import { MidiChunk, MidiData } from './MidiChunk';
 import { DeltaTime, MidiEvent } from './MidiEvent';
-import { MetaEvent, MidiNote, NoteEvent } from './events';
+import { EndTrackEvent, MetaEvent, MidiNote, NoteEvent } from './events';
 
 /* Header chunks */
 
@@ -74,9 +74,14 @@ export function readEvent(trackData: MidiData): MidiEvent {
   const deltaTime = DeltaTime.ofTicks(trackData.readQuantity());
   const eventType = trackData.readUInt8();
   if (eventType === 0xff) {
-    //<meta-event> = FF <type> <length> <bytes>
     const subType = trackData.readUInt8();
     const length = trackData.readQuantity();
+    if (subType === 0x2f) {
+      //<End of Track> = FF 2F 00
+      return new EndTrackEvent(deltaTime);
+    }
+
+    //<meta-event> = FF <type> <length> <bytes>
     const data = trackData.readData(length);
     return new MetaEvent(deltaTime, eventType, subType, length, data);
   } else if ((eventType & 0x80) === 0x80) {
