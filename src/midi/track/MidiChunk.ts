@@ -47,6 +47,10 @@ export class MidiData {
     return this.buffer.toString('latin1');
   }
 
+  isDone(): boolean {
+    return this.offset === this.buffer.length;
+  }
+
   isEmpty(): boolean {
     return this.buffer.length === 0;
   }

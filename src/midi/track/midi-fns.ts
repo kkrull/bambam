@@ -57,8 +57,14 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
 
 /* Track chunks */
 
-export function readEvents(_trackChunk: MidiChunk): MidiEvent[] {
-  return [];
+export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
+  const events: MidiEvent[] = [];
+  while (!trackChunk.data.isDone()) {
+    trackChunk.data.readUInt8();
+  }
+
+  return events;
   // _trackChunk.data.readEvent();
-  // throw Error('Not implemented: Keep calling MidiData#readEvent until empty');
 }
+
+// export function readEvent(trackChunk: MidiData): MidiEvent {}
