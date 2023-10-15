@@ -1,5 +1,6 @@
 import path from 'node:path';
 
+import { openFile, readChunk } from '@/src/midi/track/io';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiSource } from '@/support/midi-source/MidiSource';
 
@@ -11,6 +12,11 @@ export class FileMappingMidiSource implements MidiSource {
   );
 
   async readTrack(): Promise<MidiTrack> {
-    throw Error('Not implemented');
+    const fh = await openFile(this.midiPath);
+    const headerChunk = await readChunk(fh);
+    console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
+
+    await fh.close();
+    throw Error('not finished');
   }
 }
