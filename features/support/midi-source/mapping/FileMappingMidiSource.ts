@@ -21,7 +21,6 @@ export class FileMappingMidiSource implements MidiSource {
   async readTrack(): Promise<MidiTrack> {
     const file = await openFile(this.midiPath);
     const headerChunk = await readChunk(file);
-    console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
 
     const { format, numTracks, division } = parseHeader(headerChunk);
     this.verifyFormat(1, format);
@@ -31,7 +30,6 @@ export class FileMappingMidiSource implements MidiSource {
     let trackChunk = await readChunk(file);
     while (!trackChunk.isEmpty()) {
       trackChunks.push(trackChunk);
-      console.log(`${trackChunk.typeName}: ${trackChunk.length} bytes`);
       trackChunk = await readChunk(file);
     }
 
