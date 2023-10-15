@@ -26,6 +26,10 @@ export class MidiChunk {
     public readonly length: number,
     public readonly data: MidiData,
   ) {}
+
+  isEmpty(): boolean {
+    return this.data.isEmpty();
+  }
 }
 
 //One or more bytes of MIDI data comprising a single value

@@ -16,6 +16,14 @@ export class FileMappingMidiSource implements MidiSource {
     const headerChunk = await readChunk(fh);
     console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
 
+    const trackChunks = [];
+    let trackChunk = await readChunk(fh);
+    while (!trackChunk.isEmpty()) {
+      trackChunks.push(trackChunk);
+      console.log(`${trackChunk.typeName}: ${trackChunk.length} bytes`);
+      trackChunk = await readChunk(fh);
+    }
+
     await fh.close();
     throw Error('not finished');
   }
