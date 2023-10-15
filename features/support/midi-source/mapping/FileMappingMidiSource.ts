@@ -1,6 +1,11 @@
 import path from 'node:path';
 
-import { openFile, parseHeader, readChunk } from '@/src/midi/track/midi-fns';
+import {
+  openFile,
+  parseHeader,
+  readChunk,
+  readEvents,
+} from '@/src/midi/track/midi-fns';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
 import { MidiChunk } from '@/src/midi/track/MidiChunk';
@@ -32,10 +37,10 @@ export class FileMappingMidiSource implements MidiSource {
 
     await file.close();
 
-    const _ezdChunk = trackChunks[trackChunks.length - 1];
+    const ezdChunk = trackChunks[trackChunks.length - 1];
     const midiTrack = new MidiTrackBuilder();
     midiTrack.withDivisionInTicks(division.ticksPerQuarterNote);
-    // readEvents(ezdChunk).forEach((x) => midiTrack.addMidiEvent(x));
+    readEvents(ezdChunk).forEach((x) => midiTrack.addMidiEvent(x));
     return midiTrack.build();
   }
 

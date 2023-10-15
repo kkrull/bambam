@@ -1,5 +1,6 @@
 import { FileHandle, open } from 'node:fs/promises';
 import { MidiChunk, MidiData } from './MidiChunk';
+import { MidiEvent } from './MidiEvent';
 
 /* Header chunks */
 
@@ -52,4 +53,12 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
   const chunkLength = await MidiData.read(file, 4);
   const chunkData = await MidiData.read(file, chunkLength.asInt32());
   return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
+}
+
+/* Track chunks */
+
+export function readEvents(_trackChunk: MidiChunk): MidiEvent[] {
+  return [];
+  // _trackChunk.data.readEvent();
+  // throw Error('Not implemented: Keep calling MidiData#readEvent until empty');
 }
