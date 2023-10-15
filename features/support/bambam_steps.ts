@@ -3,8 +3,8 @@ import { expect } from 'chai';
 
 import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiSourceProvider } from './midi-source/MidiSourceProvider';
-import { MidiNote, NoteEvent } from '@/src/midi/track/event-data';
+import { MidiNote, NoteEvent } from '@/src/midi/track/events';
+import { MidiSourceProvider } from '@/support/midi-source/MidiSourceProvider';
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;

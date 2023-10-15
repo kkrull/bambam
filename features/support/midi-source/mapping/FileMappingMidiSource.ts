@@ -1,9 +1,10 @@
 import { FileHandle, open } from 'node:fs/promises';
 import path from 'node:path';
 
-import { MidiTrack, MidiTrackBuilder } from '@/src/midi/track/MidiTrack';
+import { MidiEvent } from '@/src/midi/track/MidiEvent';
+import { MidiTrack } from '@/src/midi/track/MidiTrack';
+import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
 import { MidiSource } from '@/support/midi-source/MidiSource';
-import { MidiEvent } from '@/src/midi/track/event-data';
 
 //File-based MIDI track with a mapping of the drums available to EZDrummer 2.
 export class FileMappingMidiSource implements MidiSource {

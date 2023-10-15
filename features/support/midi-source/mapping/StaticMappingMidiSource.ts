@@ -1,5 +1,7 @@
-import { MidiTrack, MidiTrackBuilder } from '@/src/midi/track/MidiTrack';
-import { DeltaTime, MidiNote } from '@/src/midi/track/event-data';
+import { DeltaTime } from '@/src/midi/track/MidiEvent';
+import { MidiTrack } from '@/src/midi/track/MidiTrack';
+import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
+import { MidiNote } from '@/src/midi/track/events';
 import { MidiSource } from '@/support/midi-source/MidiSource';
 
 //MIDI track with a mapping of the drums available to EZDrummer 2, without I/O.
