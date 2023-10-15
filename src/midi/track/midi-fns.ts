@@ -3,11 +3,10 @@ import { MidiChunk, MidiData } from './MidiChunk';
 
 /* Header chunks */
 
-function parseDivision(division: number): number {
+function parseDivision(division: number): Division {
   const divisionType = (division & 0x8000) >> 15;
   if (divisionType === 0) {
-    //Ticks per quarter note
-    return division & 0x7fff;
+    return { ticksPerQuarterNote: division & 0x7fff };
   } else {
     //Sub-divisions of a second, ala SMPTE
     throw Error(`Unsupported division type ${divisionType} in: ${division}`);
@@ -23,15 +22,19 @@ export function parseHeader(header: MidiChunk): HeaderChunk {
     format: header.data.slice(0, 2).asInt16(),
     numTracks: header.data.slice(2, 4).asInt16(),
     division: {
-      ticksPerQuarterNote: parseDivision(header.data.slice(4, 6).asInt16()),
+      ...parseDivision(header.data.slice(4, 6).asInt16()),
     },
   };
 }
 
+export type Division = {
+  ticksPerQuarterNote: number;
+};
+
 export type HeaderChunk = {
   format: number;
   numTracks: number;
-  division: { ticksPerQuarterNote: number };
+  division: Division;
 };
 
 /* I/O */

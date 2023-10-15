@@ -32,9 +32,8 @@ export class FileMappingMidiSource implements MidiSource {
     await file.close();
 
     const _ezdChunk = trackChunks[trackChunks.length - 1];
-    const midiTrack = new MidiTrackBuilder().withDivisionInTicks(
-      division.ticksPerQuarterNote,
-    );
+    const midiTrack = new MidiTrackBuilder();
+    midiTrack.withDivisionInTicks(division.ticksPerQuarterNote);
     // readEvents(ezdChunk).forEach((x) => midiTrack.addMidiEvent(x));
     return midiTrack.build();
   }
