@@ -7,6 +7,18 @@ export class EndTrackEvent extends MidiEvent {
   }
 }
 
+export class MetaEvent extends MidiEvent {
+  constructor(
+    readonly deltaTime: DeltaTime,
+    readonly eventType: number,
+    readonly subType: number,
+    readonly length: number,
+    readonly data: number[],
+  ) {
+    super(deltaTime, eventType);
+  }
+}
+
 //A note that can be played on a MIDI device.
 export class MidiNote {
   static numbered(value: number): MidiNote {

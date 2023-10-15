@@ -55,6 +55,12 @@ export class MidiData {
     return this.buffer.length === 0;
   }
 
+  readData(nBytes: number): number[] {
+    const bytes = [...this.offsetBuffer()];
+    this.offset += nBytes;
+    return bytes.slice(0, nBytes);
+  }
+
   //Variable-length quantity of 1..4 bytes of 7 bits per byte.
   //All bytes except the last have bit 7 set; in the last byte it is clear.
   readQuantity(): number {

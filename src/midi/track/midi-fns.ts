@@ -1,6 +1,7 @@
 import { FileHandle, open } from 'node:fs/promises';
 import { MidiChunk, MidiData } from './MidiChunk';
-import { MidiEvent } from './MidiEvent';
+import { DeltaTime, MidiEvent } from './MidiEvent';
+import { MetaEvent } from './events';
 
 /* Header chunks */
 
@@ -60,11 +61,27 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
 export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
   const events: MidiEvent[] = [];
   while (!trackChunk.data.isDone()) {
-    trackChunk.data.readUInt8();
+    const event = readEvent(trackChunk.data);
+    events.push(event);
   }
 
   return events;
-  // _trackChunk.data.readEvent();
 }
 
-// export function readEvent(trackChunk: MidiData): MidiEvent {}
+export function readEvent(trackData: MidiData): MidiEvent {
+  //<MTrk event> = <delta-time> <event>
+  //<event> = <MIDI event> | <sysex event> | <meta-event>
+  const deltaTime = DeltaTime.ofTicks(trackData.readQuantity());
+  const eventType = trackData.readUInt8();
+  if (eventType === 0xff) {
+    //<meta-event> = FF <type> <length> <bytes>
+    const subType = trackData.readUInt8();
+    const length = trackData.readQuantity();
+    const data = trackData.readData(length);
+    return new MetaEvent(deltaTime, eventType, subType, length, data);
+  }
+
+  throw Error(
+    `Unknown event type with delta time ${deltaTime.ticks}: ${eventType}`,
+  );
+}
