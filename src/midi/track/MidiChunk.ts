@@ -1,19 +1,4 @@
-import { FileHandle, open } from 'node:fs/promises';
-
-export function openFile(filename: string): Promise<FileHandle> {
-  return open(filename, 'r');
-}
-
-export async function readChunk(file: FileHandle): Promise<MidiChunk> {
-  const chunkType = await MidiData.read(file, 4);
-  if (chunkType.isEmpty()) {
-    return MidiChunk.empty();
-  }
-
-  const chunkLength = await MidiData.read(file, 4);
-  const chunkData = await MidiData.read(file, chunkLength.asInt32());
-  return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
-}
+import { FileHandle } from 'node:fs/promises';
 
 //Top-level structure for MIDI data.
 export class MidiChunk {
@@ -66,10 +51,6 @@ export class MidiData {
     return this.buffer.length === 0;
   }
 
-  offsetBuffer(): Buffer {
-    return this.buffer.subarray(this.offset);
-  }
-
   //Variable-length quantity of 1..4 bytes of 7 bits per byte.
   //All bytes except the last have bit 7 set; in the last byte it is clear.
   readQuantity(): number {
@@ -77,8 +58,8 @@ export class MidiData {
     for (const rawByte of this.offsetBuffer()) {
       this.offset++;
 
-      quantity = (quantity << 7) + (rawByte & 0x7f);
-      if ((rawByte & 0x80) === 0) {
+      quantity = (quantity << 7) + (rawByte & 127);
+      if ((rawByte & 128) === 0) {
         break;
       }
     }
@@ -87,14 +68,14 @@ export class MidiData {
   }
 
   readUInt8(): number {
-    const bytes = [...this.buffer.subarray(this.offset)];
+    const bytes = [...this.offsetBuffer()];
     this.offset += 1;
     return bytes[0];
   }
 
-  // slice(firstOffset: number, endOffset: number): MidiData {
-  //   return new MidiData(this.buffer.subarray(firstOffset, endOffset));
-  // }
+  slice(firstOffset: number, endOffset: number): MidiData {
+    return new MidiData(this.buffer.subarray(firstOffset, endOffset));
+  }
 
   toBytes(): number[] {
     return [...this.buffer];
@@ -106,5 +87,9 @@ export class MidiData {
       number: this.asInt32(),
       text: this.asText(),
     };
+  }
+
+  private offsetBuffer(): Buffer {
+    return this.buffer.subarray(this.offset);
   }
 }

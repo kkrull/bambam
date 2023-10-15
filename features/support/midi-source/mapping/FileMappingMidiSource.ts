@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import { openFile, readChunk } from '@/src/midi/track/io';
+import { openFile, parseHeader, readChunk } from '@/src/midi/track/midi-fns';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
 import { MidiSource } from '@/support/midi-source/MidiSource';
@@ -13,23 +13,43 @@ export class FileMappingMidiSource implements MidiSource {
   );
 
   async readTrack(): Promise<MidiTrack> {
-    const fh = await openFile(this.midiPath);
-    const headerChunk = await readChunk(fh);
+    const file = await openFile(this.midiPath);
+    const headerChunk = await readChunk(file);
     console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
 
+    const { format, numTracks, division } = parseHeader(headerChunk);
+    this.verifyFormat(1, format);
+    this.verifyNumTracks(2, numTracks);
+
     const trackChunks = [];
-    let trackChunk = await readChunk(fh);
+    let trackChunk = await readChunk(file);
     while (!trackChunk.isEmpty()) {
       trackChunks.push(trackChunk);
       console.log(`${trackChunk.typeName}: ${trackChunk.length} bytes`);
-      trackChunk = await readChunk(fh);
+      trackChunk = await readChunk(file);
     }
 
-    await fh.close();
+    await file.close();
 
     const _ezdChunk = trackChunks[trackChunks.length - 1];
-    const midiTrack = new MidiTrackBuilder().withDivisionInTicks(960);
+    const midiTrack = new MidiTrackBuilder().withDivisionInTicks(
+      division.ticksPerQuarterNote,
+    );
     // readEvents(ezdChunk).forEach((x) => midiTrack.addMidiEvent(x));
     return midiTrack.build();
+  }
+
+  private verifyFormat(expected: number, actual: number): void {
+    if (actual !== expected) {
+      throw Error(`Unsupported format ${actual}: ${this.midiPath}`);
+    }
+  }
+
+  private verifyNumTracks(expected: number, actual: number): void {
+    if (actual !== expected) {
+      throw Error(
+        `Expected ${this.midiPath} to have ${expected} tracks, but has: ${actual}`,
+      );
+    }
   }
 }
