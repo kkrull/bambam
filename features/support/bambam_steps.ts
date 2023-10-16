@@ -3,7 +3,6 @@ import { expect } from 'chai';
 
 import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiNote, NoteEvent } from '@/src/midi/track/events';
 import { MidiSourceProvider } from '@/support/midi-source/MidiSourceProvider';
 
 let ezDrummerTrack: MidiTrack;
@@ -61,14 +60,11 @@ Then('the re-mapped track should have re-mapped notes', () => {
   const mappedTimes = mappedData.map((x) => x.ticksFromStart);
   expect(mappedTimes).to.eql(sourceTimes);
 
-  //TODO KDK: Update this to use the notes that are in the file (or make a file that is like the static data set)
-  const ezdHatsOpen = sourceData[1].event;
-  expect(mappedData[1].event).to.eql(
-    NoteEvent.on(
-      ezdHatsOpen.deltaTime,
-      ezdHatsOpen.channel,
-      MidiNote.numbered(42),
-      ezdHatsOpen.velocity,
-    ),
-  );
+  //TODO KDK: The file has different events, such as note on with velocity 0.  Re-sync static mapping with it.
+  const ezdHatsOpen = sourceData[2];
+  const gmHatsOpen = mappedData[2];
+  expect(gmHatsOpen.ticksFromStart).to.eql(sourceData[1].ticksFromStart);
+  expect(gmHatsOpen.event.channel).to.eql(ezdHatsOpen.event.channel);
+  expect(gmHatsOpen.event.note.noteNumber).to.eql(42);
+  expect(gmHatsOpen.event.velocity).to.eql(ezdHatsOpen.event.velocity);
 });

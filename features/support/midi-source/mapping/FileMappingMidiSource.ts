@@ -15,7 +15,7 @@ import { MidiSource } from '@/support/midi-source/MidiSource';
 export class FileMappingMidiSource implements MidiSource {
   private readonly midiPath = path.join(
     __dirname,
-    '../../../data/ezd-mapping.mid',
+    'modern-original-mix-type-1.mid',
   );
 
   async readTrack(): Promise<MidiTrack> {
