@@ -94,6 +94,7 @@ class MidiData {
   }
 }
 
+//TODO KDK: Make this use code in src/midi/track
 (async (config: Config) => {
   const fh = await config.openFile();
   const stat = await fh.stat();
