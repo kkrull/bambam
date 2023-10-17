@@ -20,33 +20,35 @@ class ListEventsCommand {
 
   async run(): Promise<void> {
     const file = await openFile(this.filename);
-    await this.listFileEvents(file);
+    const contents = await this.fileToObject(file);
+    console.log(JSON.stringify(contents));
     await file.close();
   }
 
-  async listFileEvents(file: FileHandle): Promise<void> {
+  private async fileToObject(file: FileHandle): Promise<object> {
     const headerChunk = await readChunk(file);
-    const { format, numTracks, division } = parseHeader(headerChunk);
-    console.log(
-      JSON.stringify({ header: { format, numTracks, division } }, null, 2),
-    );
-
-    //TODO KDK: Output as JSON so it can be parsed and filtered with jq
-    //just make an object and JSON.stringify it
-    // console.log(`  ,"tracks": [`);
-    // let trackChunk = await readChunk(file);
-    // while (!trackChunk.isEmpty()) {
-    //   this.listTrackEvents(trackChunk);
-    //   trackChunk = await readChunk(file);
-    // }
-    // console.log('  ]');
-    // console.log('}');
+    const trackChunks = await this.readTracks(file);
+    return {
+      header: parseHeader(headerChunk),
+      tracks: trackChunks.map((x) => this.trackToObject(x)),
+    };
   }
 
-  listTrackEvents(trackChunk: MidiChunk): void {
-    readEvents(trackChunk).forEach((event) => {
-      console.log('    ' + JSON.stringify(event, null, 2));
-    });
+  private async readTracks(file: FileHandle): Promise<MidiChunk[]> {
+    const trackChunks = [];
+    let chunk = await readChunk(file);
+    while (!chunk.isEmpty()) {
+      trackChunks.push(chunk);
+      chunk = await readChunk(file);
+    }
+
+    return trackChunks;
+  }
+
+  private trackToObject(chunk: MidiChunk): object {
+    return {
+      events: readEvents(chunk),
+    };
   }
 }
 
