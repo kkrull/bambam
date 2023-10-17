@@ -31,10 +31,11 @@ There's a utility script in `src/main/` that helps inspect MIDI files.
 
 ```shell
 #Usage
-npm run main:list-chunks -- <MIDI file>
+npm run main:list-chunks <MIDI file>
 
-#Example
-npm run main:list-chunks -- features/data/ezd-mapping.mid
+#Examples
+npm run main:list-chunks features/data/ezd-mapping.mid
+npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
 ```
 
 ### Test code
