@@ -30,13 +30,14 @@ npm run lint:fix #Automatically fix linting errors, where possible
 There's a utility script in `src/main/` that helps inspect MIDI files.
 
 ```shell
-#Usage
-npm run main:list-chunks <MIDI file>
-
-#Examples
+#List chunks
 npm run main:list-chunks features/data/ezd-mapping.mid
+
+#List events
 npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
 npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
+npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid \
+  | jq '.tracks[1].events[] | { channel: .channel, deltaTime: .deltaTime, type: .eventType, subType: .subType }'
 ```
 
 ### Test code
