@@ -28,26 +28,24 @@ class ListEventsCommand {
     const headerChunk = await readChunk(file);
     const { format, numTracks, division } = parseHeader(headerChunk);
     console.log(
-      `Header: format=${format}, numTracks=${numTracks}, division=${JSON.stringify(
-        division,
-        null,
-        2,
-      )}`,
+      JSON.stringify({ header: { format, numTracks, division } }, null, 2),
     );
 
-    let trackChunk = await readChunk(file);
-    while (!trackChunk.isEmpty()) {
-      console.log();
-      console.log('Track');
-      this.listTrackEvents(trackChunk);
-      trackChunk = await readChunk(file);
-    }
+    //TODO KDK: Output as JSON so it can be parsed and filtered with jq
+    //just make an object and JSON.stringify it
+    // console.log(`  ,"tracks": [`);
+    // let trackChunk = await readChunk(file);
+    // while (!trackChunk.isEmpty()) {
+    //   this.listTrackEvents(trackChunk);
+    //   trackChunk = await readChunk(file);
+    // }
+    // console.log('  ]');
+    // console.log('}');
   }
 
-  //TODO KDK: List out the events, to use as a basis for updating StaticMappingMidiSource
   listTrackEvents(trackChunk: MidiChunk): void {
     readEvents(trackChunk).forEach((event) => {
-      console.log(JSON.stringify(event, null, 2));
+      console.log('    ' + JSON.stringify(event, null, 2));
     });
   }
 }

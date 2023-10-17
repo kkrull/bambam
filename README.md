@@ -36,6 +36,7 @@ npm run main:list-chunks <MIDI file>
 #Examples
 npm run main:list-chunks features/data/ezd-mapping.mid
 npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
+npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
 ```
 
 ### Test code
