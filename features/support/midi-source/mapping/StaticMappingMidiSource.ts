@@ -13,13 +13,25 @@ export class StaticMappingMidiSource implements MidiSource {
         //35 B0 Acoustic Bass Drum (GM)
         channel: 10,
         note: MidiNote.numbered(35),
-        velocity: 100,
+        velocity: 96,
       })
       .addNoteOnEvent(DeltaTime.ofTicks(960), {
+        //35 B0 Acoustic Bass Drum (GM) "off"
+        channel: 10,
+        note: MidiNote.numbered(35),
+        velocity: 0,
+      })
+      .addNoteOnEvent(DeltaTime.ofTicks(0), {
         //C0 24 Hats Open 1: No GM mapping
         channel: 10,
         note: MidiNote.numbered(24),
-        velocity: 100,
+        velocity: 96,
+      })
+      .addNoteOnEvent(DeltaTime.ofTicks(960), {
+        //C0 24 Hats Open 1: No GM mapping "off"
+        channel: 10,
+        note: MidiNote.numbered(24),
+        velocity: 0,
       })
       .addEndTrackEvent(DeltaTime.ofTicks(3 * 960));
 

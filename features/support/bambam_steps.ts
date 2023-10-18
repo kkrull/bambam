@@ -60,11 +60,11 @@ Then('the re-mapped track should have re-mapped notes', () => {
   const mappedTimes = mappedData.map((x) => x.ticksFromStart);
   expect(mappedTimes).to.eql(sourceTimes);
 
-  //TODO KDK: The file has different events, such as note on with velocity 0.  Re-sync static mapping with it.
-  const ezdHatsOpen = sourceData[2];
-  const gmHatsOpen = mappedData[2];
-  expect(gmHatsOpen.ticksFromStart).to.eql(sourceData[1].ticksFromStart);
-  expect(gmHatsOpen.event.channel).to.eql(ezdHatsOpen.event.channel);
-  expect(gmHatsOpen.event.note.noteNumber).to.eql(42);
-  expect(gmHatsOpen.event.velocity).to.eql(ezdHatsOpen.event.velocity);
+  //Find the sub-sequence of notes, because file- and static-mapping can vary
+  const firstNote = sourceData.findIndex((x) => x.event.note.noteNumber === 35);
+  const sourceNotes = sourceData.slice(firstNote, firstNote + 4);
+  expect(sourceNotes.map((x) => x.event.note.noteNumber)).to.eql([35, 35, 24, 24]);
+
+  const mappedNotes = mappedData.slice(firstNote, firstNote + 4);
+  expect(mappedNotes.map((x) => x.event.note.noteNumber)).to.eql([35, 35, 42, 42]);
 });

@@ -17,6 +17,7 @@ Feature: Convert EZDrummer 2 track to General MIDI
     When I ask BamBam to remap that track to General MIDI Percussion
     Then the re-mapped track should have all non-note events from the original
 
+  @StaticMidiSource @focus
   Scenario: BamBam should re-map an EZDrummer 2 track to General MIDI Percussion
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI
     When I ask BamBam to remap that track to General MIDI Percussion
