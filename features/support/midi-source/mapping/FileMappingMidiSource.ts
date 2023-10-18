@@ -26,7 +26,6 @@ export class FileMappingMidiSource implements MidiSource {
     this.verifyFormat(1, format);
     this.verifyNumTracks(2, numTracks);
 
-    //TODO KDK: Fix the kick drum notes.  They should be note 35 (Kick Alt), not 36 (Kick Hit)
     const trackChunks: MidiChunk[] = [];
     let trackChunk = await readChunk(file);
     while (!trackChunk.isEmpty()) {
