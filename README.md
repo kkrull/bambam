@@ -37,7 +37,7 @@ npm run main:list-chunks features/data/ezd-mapping.mid
 npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
 npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
 npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid \
-  | jq '.tracks[1].events[] | { channel: .channel, deltaTime: .deltaTime, type: .eventType, subType: .subType }'
+  | jq '.tracks[1].events[] | { channel: .channel, deltaTime: .deltaTime, note: .note, type: .eventType, subType: .subType, velocity: .velocity }'
 ```
 
 ### Test code
