@@ -81,8 +81,8 @@ export class MidiData {
     for (const rawByte of this.offsetBuffer()) {
       this.offset++;
 
-      quantity = (quantity << 7) + (rawByte & 127);
-      if ((rawByte & 128) === 0) {
+      quantity = (quantity << 7) + (rawByte & 0x7f);
+      if ((rawByte & 0x80) === 0) {
         break;
       }
     }

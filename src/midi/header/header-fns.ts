@@ -2,9 +2,9 @@ import { MidiChunk } from '../chunk/MidiChunk';
 import { Division, HeaderChunk } from './HeaderChunk';
 
 function parseDivision(division: number): Division {
-  const divisionType = (division & 32768) >> 15;
+  const divisionType = (division & 0x8000) >> 15;
   if (divisionType === 0) {
-    return { ticksPerQuarterNote: division & 32767 };
+    return { ticksPerQuarterNote: division & 0x7fff };
   } else {
     //Sub-divisions of a second, ala SMPTE
     throw Error(`Unsupported division type ${divisionType} in: ${division}`);
