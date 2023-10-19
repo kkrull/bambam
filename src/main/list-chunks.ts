@@ -2,17 +2,26 @@
 //npm run main:list-chunks features/support/midi-source/mapping/modern-original-mix-type-1.mid
 
 class ListChunksCommand {
-  static parseArgv(_argv: string[]): ListChunksCommand {
-    //TODO KDK: Can Promise be used like an Either type, to return an error if usage is wrong?
-    return new ListChunksCommand();
+  static parseArgv(argv: string[]): Promise<ListChunksCommand> {
+    if (argv.length !== 3) {
+      return Promise.reject(`Usage ${argv[0]} ${argv[1]} <MIDI file>`);
+    }
+
+    return Promise.resolve(new ListChunksCommand(argv[2]));
   }
 
+  constructor(readonly filename: string) {}
+
   async run(): Promise<void> {
-    console.log('running...');
+    console.log(`Opening: ${this.filename}`);
     return;
   }
 }
 
-(async (command: ListChunksCommand) => {
+(async () => {
+  const command = await ListChunksCommand.parseArgv(process.argv);
   await command.run();
-})(ListChunksCommand.parseArgv(process.argv));
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
