@@ -17,7 +17,7 @@ class ListChunksCommand {
     const headerChunk = await readChunk(file);
     log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
     headerChunk.data
-      .toHexRows(16)
+      .asHexRows(16)
       .forEach((hexRow, i) => log(`${i * 16}:\t${hexRow.join(' ')}`));
 
     let chunk = await readChunk(file);
@@ -25,7 +25,7 @@ class ListChunksCommand {
       log();
       log(`${chunk.typeName}: ${chunk.length} bytes`);
       chunk.data
-        .toHexRows(16)
+        .asHexRows(16)
         .forEach((hexRow, i) => log(`${i * 16}:\t${hexRow.join(' ')}`));
 
       chunk = await readChunk(file);

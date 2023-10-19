@@ -35,6 +35,26 @@ export class MidiData {
     this.offset = 0;
   }
 
+  asBytes(): number[] {
+    return [...this.buffer];
+  }
+
+  asHex(): string[] {
+    return this.asBytes().map((x) => Buffer.from([x]).toString('hex'));
+  }
+
+  asHexRows(chunkSize: number): string[][] {
+    const flatArray = this.asHex();
+
+    const chunks: string[][] = [];
+    for (let i = 0; i < flatArray.length; i = i + chunkSize) {
+      const chunk = flatArray.slice(i, i + chunkSize);
+      chunks.push(chunk);
+    }
+
+    return chunks;
+  }
+
   asInt16(): number {
     return this.buffer.readInt16BE(0);
   }
@@ -87,29 +107,9 @@ export class MidiData {
     return new MidiData(this.buffer.subarray(firstOffset, endOffset));
   }
 
-  toBytes(): number[] {
-    return [...this.buffer];
-  }
-
-  toHex(): string[] {
-    return this.toBytes().map((x) => Buffer.from([x]).toString('hex'));
-  }
-
-  toHexRows(chunkSize: number): string[][] {
-    const flatArray = this.toHex();
-
-    const chunks: string[][] = [];
-    for (let i = 0; i < flatArray.length; i = i + chunkSize) {
-      const chunk = flatArray.slice(i, i + chunkSize);
-      chunks.push(chunk);
-    }
-
-    return chunks;
-  }
-
   toObject() {
     return {
-      bytes: this.toBytes(),
+      bytes: this.asBytes(),
       number: this.asInt32(),
       text: this.asText(),
     };
