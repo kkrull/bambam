@@ -1,3 +1,4 @@
+import { FileHandle } from 'fs/promises';
 import { MidiChunk } from '../midi/track/MidiChunk';
 import { openFile, readChunk } from '../midi/track/midi-fns';
 import { Log } from './Log';
@@ -19,6 +20,11 @@ class ListChunksCommand {
 
   async run(): Promise<void> {
     const file = await openFile(this.filename);
+    await this.logChunks(file);
+    await file.close();
+  }
+
+  private async logChunks(file: FileHandle) {
     const headerChunk = await readChunk(file);
     this.logChunk(headerChunk);
 
@@ -29,11 +35,9 @@ class ListChunksCommand {
 
       chunk = await readChunk(file);
     }
-
-    await file.close();
   }
 
-  logChunk(chunk: MidiChunk): void {
+  private logChunk(chunk: MidiChunk): void {
     this.log(`${chunk.typeName}: ${chunk.length} bytes`);
     chunk.data
       .asHexRows(16)
