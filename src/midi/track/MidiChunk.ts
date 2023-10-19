@@ -109,14 +109,6 @@ export class MidiData {
     return new MidiData(this.buffer.subarray(firstOffset, endOffset));
   }
 
-  toObject() {
-    return {
-      bytes: this.asBytes(),
-      number: this.asInt32(),
-      text: this.asText(),
-    };
-  }
-
   private offsetBuffer(): Buffer {
     return this.buffer.subarray(this.offset);
   }
