@@ -1,5 +1,6 @@
 import { MidiMap } from '@/src/midi/track/MidiTrack';
-import { MidiNote, NoteEvent } from '@/src/midi/track/event-data';
+import { NoteEvent } from '../midi/note/NoteEvent';
+import { MidiNote } from '../midi/note/MidiNote';
 
 //Re-maps EZDrummer 2 notes to General MIDI notes.
 export class EZDrummerMidiMap implements MidiMap {

@@ -30,11 +30,14 @@ npm run lint:fix #Automatically fix linting errors, where possible
 There's a utility script in `src/main/` that helps inspect MIDI files.
 
 ```shell
-#Usage
-npm run main:list-chunks -- <MIDI file>
+#List chunks
+npm run main:list-chunks features/data/ezd-mapping.mid
 
-#Example
-npm run main:list-chunks -- features/data/ezd-mapping.mid
+#List events
+npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
+npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
+npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid \
+  | jq '.tracks[1].events[] | { channel: .channel, deltaTime: .deltaTime, note: .note, type: .eventType, subType: .subType, velocity: .velocity }'
 ```
 
 ### Test code
@@ -44,6 +47,13 @@ npm run test #Run all Cucumber scenarios
 npm run test:focus #Run scenarios tagged with @focus
 npm run test -- [...cucumber.js args] #Pass custom options to cucumber.js
 ```
+
+Cucumber scenarios can be tagged as follows, to change where data is sourced:
+
+- `@FileMidiSource`: Read MIDI data from an actual file
+- `@StaticMidiSource`: Build MIDI data inside the test
+
+See `MidiSourceHooks.ts` for details.
 
 ### Type-check code
 

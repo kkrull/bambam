@@ -1,10 +1,9 @@
-import {
-  DeltaTime,
-  EndTrackEvent,
-  MidiEvent,
-  MidiNote,
-  NoteEvent,
-} from './event-data';
+import { MidiEvent } from '../event/MidiEvent';
+import { DeltaTime } from '../event/DeltaTime';
+import { EndTrackEvent } from './EndTrackEvent';
+import { NoteEvent } from '../note/NoteEvent';
+import { NoteEventTime } from './NoteEventTime';
+import { TickDivision } from './TickDivision';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
@@ -59,65 +58,7 @@ export class MidiTrack {
   }
 }
 
-//Constructs a MIDI track.
-export class MidiTrackBuilder {
-  private division?: TickDivision;
-  private endTrack?: EndTrackEvent;
-  private events: MidiEvent[] = [];
-
-  build(): MidiTrack {
-    if (!this.division) {
-      throw Error('Missing time resolution (e.g. ticks per quarter note)');
-    } else if (!this.endTrack) {
-      throw Error('Missing required End Track event');
-    }
-
-    return new MidiTrack(this.division, this.endTrack, this.events.slice());
-  }
-
-  addEndTrackEvent(deltaTime: DeltaTime): MidiTrackBuilder {
-    this.endTrack = new EndTrackEvent(deltaTime);
-    return this;
-  }
-
-  addNoteEvent(
-    deltaTime: DeltaTime,
-    { channel, note, velocity }: AddNoteParams,
-  ): MidiTrackBuilder {
-    this.events.push(new NoteEvent(deltaTime, channel, note, velocity));
-    return this;
-  }
-
-  withDivisionInTicks(ticksPerQuarterNote: number): MidiTrackBuilder {
-    this.division = new TickDivision(ticksPerQuarterNote);
-    return this;
-  }
-}
-
-type AddNoteParams = {
-  channel: number;
-  note: MidiNote;
-  velocity: number;
-};
-
 //Transforms MIDI events one at a time, such as from one note to another.
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
-}
-
-//A note event, in time relative to the start of the track.
-export class NoteEventTime {
-  static at(accumulatedDelta: DeltaTime, event: NoteEvent): NoteEventTime {
-    return new NoteEventTime(accumulatedDelta.ticks, event);
-  }
-
-  private constructor(
-    readonly ticksFromStart: number,
-    readonly event: NoteEvent,
-  ) {}
-}
-
-//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header.
-export class TickDivision {
-  constructor(readonly ticksPerQuarterNote: number) {}
 }

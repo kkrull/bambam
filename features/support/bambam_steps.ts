@@ -1,10 +1,9 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 
-import { EZDrummerMidiMap } from '@/src/ezd/EZDrummerMidiMap';
+import { EZDrummerMidiMap } from '@/src/ezd-mapper/EZDrummerMidiMap';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiSourceProvider } from './midi-source/MidiSourceProvider';
-import { MidiNote, NoteEvent } from '@/src/midi/track/event-data';
+import { MidiSourceProvider } from '@/support/midi-source/MidiSourceProvider';
 
 let ezDrummerTrack: MidiTrack;
 let gmTrack: MidiTrack;
@@ -61,13 +60,11 @@ Then('the re-mapped track should have re-mapped notes', () => {
   const mappedTimes = mappedData.map((x) => x.ticksFromStart);
   expect(mappedTimes).to.eql(sourceTimes);
 
-  const ezdHatsOpen = sourceData[1].event;
-  expect(mappedData[1].event).to.eql(
-    new NoteEvent(
-      ezdHatsOpen.deltaTime,
-      ezdHatsOpen.channel,
-      MidiNote.numbered(42),
-      ezdHatsOpen.velocity,
-    ),
-  );
+  //Find the sub-sequence of notes, because file- and static-mapping can vary
+  const firstNote = sourceData.findIndex((x) => x.event.note.noteNumber === 35);
+  const sourceNotes = sourceData.slice(firstNote, firstNote + 4);
+  expect(sourceNotes.map((x) => x.event.note.noteNumber)).to.eql([35, 35, 24, 24]);
+
+  const mappedNotes = mappedData.slice(firstNote, firstNote + 4);
+  expect(mappedNotes.map((x) => x.event.note.noteNumber)).to.eql([35, 35, 42, 42]);
 });

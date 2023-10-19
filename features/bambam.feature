@@ -1,3 +1,4 @@
+@FileMidiSource
 Feature: Convert EZDrummer 2 track to General MIDI
   As a musician
   I want to convert EZDrummer 2 tracks to General MIDI
