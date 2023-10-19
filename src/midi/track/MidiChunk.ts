@@ -43,16 +43,16 @@ export class MidiData {
     return this.asBytes().map((x) => Buffer.from([x]).toString('hex'));
   }
 
-  asHexRows(chunkSize: number): string[][] {
+  asHexRows(numColumns: number): string[][] {
     const flatArray = this.asHex();
 
-    const chunks: string[][] = [];
-    for (let i = 0; i < flatArray.length; i = i + chunkSize) {
-      const chunk = flatArray.slice(i, i + chunkSize);
-      chunks.push(chunk);
+    const rows: string[][] = [];
+    for (let i = 0; i < flatArray.length; i = i + numColumns) {
+      const row = flatArray.slice(i, i + numColumns);
+      rows.push(row);
     }
 
-    return chunks;
+    return rows;
   }
 
   asInt16(): number {
