@@ -1,5 +1,9 @@
-import { DeltaTime, MidiEvent } from './MidiEvent';
-import { EndTrackEvent, NoteEvent } from './events';
+import { MidiEvent } from './MidiEvent';
+import { DeltaTime } from './DeltaTime';
+import { EndTrackEvent } from './EndTrackEvent';
+import { NoteEvent } from './NoteEvent';
+import { NoteEventTime } from './NoteEventTime';
+import { TickDivision } from './TickDivision';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
@@ -57,21 +61,4 @@ export class MidiTrack {
 //Transforms MIDI events one at a time, such as from one note to another.
 export interface MidiMap {
   remap(event: Readonly<NoteEvent>): NoteEvent;
-}
-
-//A note event, in time relative to the start of the track.
-export class NoteEventTime {
-  static at(accumulatedDelta: DeltaTime, event: NoteEvent): NoteEventTime {
-    return new NoteEventTime(accumulatedDelta.ticks, event);
-  }
-
-  private constructor(
-    readonly ticksFromStart: number,
-    readonly event: NoteEvent,
-  ) {}
-}
-
-//Tick-based resolution for MIDI data (stream, file, track), in the MIDI header.
-export class TickDivision {
-  constructor(readonly ticksPerQuarterNote: number) {}
 }

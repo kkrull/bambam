@@ -1,7 +1,12 @@
 import { FileHandle, open } from 'node:fs/promises';
-import { MidiChunk, MidiData } from './MidiChunk';
-import { DeltaTime, MidiEvent } from './MidiEvent';
-import { EndTrackEvent, MetaEvent, MidiNote, NoteEvent } from './events';
+import { MidiChunk } from './MidiChunk';
+import { MidiData } from './MidiData';
+import { MidiEvent } from './MidiEvent';
+import { DeltaTime } from './DeltaTime';
+import { EndTrackEvent } from './EndTrackEvent';
+import { MetaEvent } from './MetaEvent';
+import { NoteEvent } from './NoteEvent';
+import { MidiNote } from './MidiNote';
 
 /* Header chunks */
 

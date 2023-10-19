@@ -1,6 +1,10 @@
-import { DeltaTime, MidiEvent } from './MidiEvent';
-import { EndTrackEvent, MidiNote, NoteEvent } from './events';
-import { TickDivision, MidiTrack } from './MidiTrack';
+import { MidiEvent } from './MidiEvent';
+import { DeltaTime } from './DeltaTime';
+import { EndTrackEvent } from './EndTrackEvent';
+import { NoteEvent } from './NoteEvent';
+import { MidiNote } from './MidiNote';
+import { MidiTrack } from './MidiTrack';
+import { TickDivision } from './TickDivision';
 
 //Constructs a MIDI track.
 export class MidiTrackBuilder {

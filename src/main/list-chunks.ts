@@ -7,7 +7,7 @@ import {
   readChunk,
 } from '../midi/track/midi-fns';
 import { Log } from './Log';
-import { TickDivision } from '../midi/track/MidiTrack';
+import { TickDivision } from '../midi/track/TickDivision';
 
 //Lists the chunks in a MIDI file.
 class ListChunksCommand {
