@@ -35,7 +35,7 @@ class ListEventsCommand {
     const trackChunks = await this.readTracks(file);
     return {
       header: parseHeader(headerChunk),
-      tracks: trackChunks.map((x) => this.trackToObject(x)),
+      tracks: trackChunks.map((x, i) => this.trackToObject(x, i + 1)),
     };
   }
 
@@ -50,9 +50,10 @@ class ListEventsCommand {
     return trackChunks;
   }
 
-  private trackToObject(chunk: MidiChunk): object {
+  private trackToObject(chunk: MidiChunk, trackNum: number): object {
     return {
       events: readEvents(chunk),
+      number: trackNum,
     };
   }
 }
