@@ -1,5 +1,5 @@
-import { MidiEvent } from './MidiEvent';
-import { DeltaTime } from './DeltaTime';
+import { MidiEvent } from '../event/MidiEvent';
+import { DeltaTime } from '../event/DeltaTime';
 import { MidiNote } from './MidiNote';
 
 //A timed event related to a note, along with how it is played.

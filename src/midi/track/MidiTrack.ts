@@ -1,7 +1,7 @@
-import { MidiEvent } from './MidiEvent';
-import { DeltaTime } from './DeltaTime';
+import { MidiEvent } from '../event/MidiEvent';
+import { DeltaTime } from '../event/DeltaTime';
 import { EndTrackEvent } from './EndTrackEvent';
-import { NoteEvent } from './NoteEvent';
+import { NoteEvent } from '../note/NoteEvent';
 import { NoteEventTime } from './NoteEventTime';
 import { TickDivision } from './TickDivision';
 

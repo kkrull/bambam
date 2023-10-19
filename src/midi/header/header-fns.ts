@@ -1,4 +1,4 @@
-import { MidiChunk } from '../MidiChunk';
+import { MidiChunk } from '../chunk/MidiChunk';
 import { Division, HeaderChunk } from './HeaderChunk';
 
 function parseDivision(division: number): Division {

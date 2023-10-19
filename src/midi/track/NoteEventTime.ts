@@ -1,5 +1,5 @@
-import { DeltaTime } from './DeltaTime';
-import { NoteEvent } from './NoteEvent';
+import { DeltaTime } from '../event/DeltaTime';
+import { NoteEvent } from '../note/NoteEvent';
 
 //A note event, in time relative to the start of the track.
 export class NoteEventTime {

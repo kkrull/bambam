@@ -1,6 +1,6 @@
 import { FileHandle, open } from 'fs/promises';
-import { MidiChunk } from '../midi/MidiChunk';
-import { MidiData } from '../midi/MidiData';
+import { MidiChunk } from '../midi/chunk/MidiChunk';
+import { MidiData } from '../midi/chunk/MidiData';
 
 /* I/O */
 

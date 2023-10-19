@@ -1,5 +1,5 @@
-import { MidiEvent } from './MidiEvent';
-import { DeltaTime } from './DeltaTime';
+import { MidiEvent } from '../event/MidiEvent';
+import { DeltaTime } from '../event/DeltaTime';
 
 //An event required at the end of a track chunk to show when it ends.
 export class EndTrackEvent extends MidiEvent {

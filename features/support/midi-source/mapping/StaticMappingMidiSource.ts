@@ -1,5 +1,5 @@
-import { DeltaTime } from '@/src/midi/track/DeltaTime';
-import { MidiNote } from '@/src/midi/track/MidiNote';
+import { DeltaTime } from '@/src/midi/event/DeltaTime';
+import { MidiNote } from '@/src/midi/note/MidiNote';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
 import { MidiSource } from '@/support/midi-source/MidiSource';

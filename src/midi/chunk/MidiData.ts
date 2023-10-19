@@ -1,6 +1,6 @@
 import { FileHandle } from 'node:fs/promises';
 
-//One or more bytes of MIDI data comprising a single value
+//One or more bytes of MIDI data comprising a single value.
 export class MidiData {
   static empty(): MidiData {
     return new MidiData(Buffer.alloc(0));
@@ -27,6 +27,7 @@ export class MidiData {
   }
 
   /* Decoding the data as a whole */
+
   asBytes(): number[] {
     return [...this.buffer];
   }
@@ -62,6 +63,7 @@ export class MidiData {
   }
 
   /* Decoding the data a few bytes at a time */
+
   isDoneReading(): boolean {
     return this.offset === this.buffer.length;
   }
