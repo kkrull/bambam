@@ -7,6 +7,7 @@ import {
 } from '../midi/track/midi-fns';
 import { MidiChunk } from '../midi/track/MidiChunk';
 
+//Lists the events in MIDI tracks
 class ListEventsCommand {
   static parseArgv(argv: string[]): ListEventsCommand {
     if (argv.length !== 3) {

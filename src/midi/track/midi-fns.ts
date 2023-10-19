@@ -60,7 +60,7 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
 
 export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
   const events: MidiEvent[] = [];
-  while (!trackChunk.data.isDone()) {
+  while (!trackChunk.data.isDoneReading()) {
     const event = readEvent(trackChunk.data);
     events.push(event);
   }

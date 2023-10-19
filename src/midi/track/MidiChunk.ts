@@ -35,6 +35,16 @@ export class MidiData {
     this.offset = 0;
   }
 
+  isEmpty(): boolean {
+    return this.buffer.length === 0;
+  }
+
+  slice(firstOffset: number, endOffset: number): MidiData {
+    return new MidiData(this.buffer.subarray(firstOffset, endOffset));
+  }
+
+  /* Decoding the data as a whole */
+
   asBytes(): number[] {
     return [...this.buffer];
   }
@@ -69,12 +79,10 @@ export class MidiData {
     return this.buffer.toString('latin1');
   }
 
-  isDone(): boolean {
-    return this.offset === this.buffer.length;
-  }
+  /* Decoding the data a few bytes at a time */
 
-  isEmpty(): boolean {
-    return this.buffer.length === 0;
+  isDoneReading(): boolean {
+    return this.offset === this.buffer.length;
   }
 
   readData(nBytes: number): number[] {
@@ -103,10 +111,6 @@ export class MidiData {
     const bytes = [...this.offsetBuffer()];
     this.offset += 1;
     return bytes[0];
-  }
-
-  slice(firstOffset: number, endOffset: number): MidiData {
-    return new MidiData(this.buffer.subarray(firstOffset, endOffset));
   }
 
   private offsetBuffer(): Buffer {
