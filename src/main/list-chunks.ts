@@ -1,5 +1,4 @@
-//TODO KDK: Make a new version that uses the library and the command pattern
-//npm run main:list-chunks features/support/midi-source/mapping/modern-original-mix-type-1.mid
+import { openFile, readChunk } from '../midi/track/midi-fns';
 
 class ListChunksCommand {
   static parseArgv(argv: string[]): Promise<ListChunksCommand> {
@@ -13,8 +12,16 @@ class ListChunksCommand {
   constructor(readonly filename: string) {}
 
   async run(): Promise<void> {
+    const file = await openFile(this.filename);
     console.log(`Opening: ${this.filename}`);
-    return;
+    const headerChunk = await readChunk(file);
+    console.log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
+
+    let chunk = await readChunk(file);
+    while (!chunk.isEmpty()) {
+      console.log(`${chunk.typeName}: ${chunk.length} bytes`);
+      chunk = await readChunk(file);
+    }
   }
 }
 
