@@ -40,7 +40,9 @@ export class MidiData {
   }
 
   asHex(): string[] {
-    return this.asBytes().map((x) => Buffer.from([x]).toString('hex'));
+    return this.asBytes()
+      .map((oneByte) => Buffer.from([oneByte]))
+      .map((buffer) => buffer.toString('hex'));
   }
 
   asHexRows(numColumns: number): string[][] {
@@ -88,8 +90,8 @@ export class MidiData {
     for (const rawByte of this.offsetBuffer()) {
       this.offset++;
 
-      quantity = (quantity << 7) + (rawByte & 127);
-      if ((rawByte & 128) === 0) {
+      quantity = (quantity << 7) + (rawByte & 0x7f);
+      if ((rawByte & 0x80) === 0) {
         break;
       }
     }
