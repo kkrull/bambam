@@ -1,6 +1,7 @@
 import { openFile, readChunk } from '../midi/track/midi-fns';
+import { Log } from './Log';
 
-//Lists the chunks in a MIDI file
+//Lists the chunks in a MIDI file.
 class ListChunksCommand {
   static parseArgv(argv: string[]): Promise<ListChunksCommand> {
     if (argv.length !== 3) {
@@ -34,11 +35,6 @@ class ListChunksCommand {
     await file.close();
   }
 }
-
-type Log = {
-  //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (message?: any, ...optionalParams: any[]): void;
-};
 
 (async () => {
   const command = await ListChunksCommand.parseArgv(process.argv);

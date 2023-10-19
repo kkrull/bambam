@@ -6,23 +6,24 @@ import {
   readEvents,
 } from '../midi/track/midi-fns';
 import { MidiChunk } from '../midi/track/MidiChunk';
+import { Log } from './Log';
 
-//Lists the events in MIDI tracks
+//Lists the events in MIDI tracks.
 class ListEventsCommand {
-  static parseArgv(argv: string[]): ListEventsCommand {
+  static parseArgv(argv: string[]): Promise<ListEventsCommand> {
     if (argv.length !== 3) {
-      throw Error(`Usage ${argv[0]} ${argv[1]} <MIDI file>`);
+      return Promise.reject(`Usage ${argv[0]} ${argv[1]} <MIDI file>`);
     }
 
-    return new ListEventsCommand(argv[2]);
+    return Promise.resolve(new ListEventsCommand(argv[2]));
   }
 
   constructor(readonly filename: string) {}
 
-  async run(): Promise<void> {
+  async run(log: Log): Promise<void> {
     const file = await openFile(this.filename);
     const contents = await this.fileToObject(file);
-    console.log(JSON.stringify(contents));
+    log(JSON.stringify(contents));
     await file.close();
   }
 
@@ -53,6 +54,10 @@ class ListEventsCommand {
   }
 }
 
-(async (command: ListEventsCommand) => {
-  await command.run();
-})(ListEventsCommand.parseArgv(process.argv));
+(async () => {
+  const command = await ListEventsCommand.parseArgv(process.argv);
+  await command.run(console.log);
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
