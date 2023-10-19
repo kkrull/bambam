@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { FileHandle, FileReadResult, open } from 'node:fs/promises';
 import { Buffer } from 'node:buffer';
 
