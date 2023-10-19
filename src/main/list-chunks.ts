@@ -1,6 +1,6 @@
 import { FileHandle } from 'fs/promises';
 import { MidiChunk } from '../midi/chunk/MidiChunk';
-import { openFile, readChunk } from '../io/io-fns';
+import { openFile, readChunk } from '../midi/io/io-fns';
 import { parseHeader } from '../midi/header/header-fns';
 import { HeaderChunk } from '../midi/header/HeaderChunk';
 import { Log } from './Log';

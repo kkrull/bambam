@@ -1,8 +1,6 @@
 import { FileHandle, open } from 'fs/promises';
-import { MidiChunk } from '../midi/chunk/MidiChunk';
-import { MidiData } from '../midi/chunk/MidiData';
-
-/* I/O */
+import { MidiChunk } from '../chunk/MidiChunk';
+import { MidiData } from '../chunk/MidiData';
 
 export function openFile(filename: string): Promise<FileHandle> {
   return open(filename, 'r');

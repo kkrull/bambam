@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 import { parseHeader } from '@/src/midi/header/header-fns';
-import { openFile, readChunk } from '@/src/io/io-fns';
+import { openFile, readChunk } from '@/src/midi/io/io-fns';
 import { readEvents } from '@/src/midi/track/track-fns';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
