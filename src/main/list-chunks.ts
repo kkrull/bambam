@@ -1,7 +1,13 @@
 import { FileHandle } from 'fs/promises';
 import { MidiChunk } from '../midi/track/MidiChunk';
-import { openFile, readChunk } from '../midi/track/midi-fns';
+import {
+  HeaderChunk,
+  openFile,
+  parseHeader,
+  readChunk,
+} from '../midi/track/midi-fns';
 import { Log } from './Log';
+import { TickDivision } from '../midi/track/MidiTrack';
 
 //Lists the chunks in a MIDI file.
 class ListChunksCommand {
@@ -27,6 +33,7 @@ class ListChunksCommand {
   private async logChunks(file: FileHandle) {
     const headerChunk = await readChunk(file);
     this.logChunk(headerChunk);
+    this.logHeaderChunk(headerChunk);
 
     let chunk = await readChunk(file);
     while (!chunk.isEmpty()) {
@@ -43,6 +50,26 @@ class ListChunksCommand {
       .asHexRows(16)
       .map((hexRow, i) => `${i * 16}:\t${hexRow.join(' ')}`)
       .forEach((line) => this.log(line));
+  }
+
+  private logHeaderChunk(headerChunk: MidiChunk): void {
+    const header: HeaderChunk = parseHeader(headerChunk);
+    this.log(`Format: ${this.describeFormat(header.format)}`);
+    this.log(`Tracks: ${header.numTracks}`);
+    this.log(`Time division: ${this.describeDivision(header.division)}`);
+  }
+
+  private describeDivision(division: TickDivision): string {
+    return `${division.ticksPerQuarterNote} ticks per quarter note`;
+  }
+
+  private describeFormat(format: number): string {
+    switch (format) {
+      case 1:
+        return `(1) Multi-track`;
+      default:
+        throw Error(`Unsupported format: ${format}`);
+    }
   }
 }
 
