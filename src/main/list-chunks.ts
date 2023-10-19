@@ -1,44 +1,50 @@
+import { MidiChunk } from '../midi/track/MidiChunk';
 import { openFile, readChunk } from '../midi/track/midi-fns';
 import { Log } from './Log';
 
 //Lists the chunks in a MIDI file.
 class ListChunksCommand {
-  static parseArgv(argv: string[]): Promise<ListChunksCommand> {
+  static parseArgv(log: Log, argv: string[]): Promise<ListChunksCommand> {
     if (argv.length !== 3) {
       return Promise.reject(`Usage ${argv[0]} ${argv[1]} <MIDI file>`);
     }
 
-    return Promise.resolve(new ListChunksCommand(argv[2]));
+    return Promise.resolve(new ListChunksCommand(log, argv[2]));
   }
 
-  constructor(readonly filename: string) {}
+  constructor(
+    private readonly log: Log,
+    readonly filename: string,
+  ) {}
 
-  async run(log: Log): Promise<void> {
+  async run(): Promise<void> {
     const file = await openFile(this.filename);
     const headerChunk = await readChunk(file);
-    log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
-    headerChunk.data
-      .asHexRows(16)
-      .forEach((hexRow, i) => log(`${i * 16}:\t${hexRow.join(' ')}`));
+    this.logChunk(headerChunk);
 
     let chunk = await readChunk(file);
     while (!chunk.isEmpty()) {
-      log();
-      log(`${chunk.typeName}: ${chunk.length} bytes`);
-      chunk.data
-        .asHexRows(16)
-        .forEach((hexRow, i) => log(`${i * 16}:\t${hexRow.join(' ')}`));
+      this.log();
+      this.logChunk(chunk);
 
       chunk = await readChunk(file);
     }
 
     await file.close();
   }
+
+  logChunk(chunk: MidiChunk): void {
+    this.log(`${chunk.typeName}: ${chunk.length} bytes`);
+    chunk.data
+      .asHexRows(16)
+      .map((hexRow, i) => `${i * 16}:\t${hexRow.join(' ')}`)
+      .forEach((line) => this.log(line));
+  }
 }
 
 (async () => {
-  const command = await ListChunksCommand.parseArgv(process.argv);
-  await command.run(console.log);
+  const command = await ListChunksCommand.parseArgv(console.log, process.argv);
+  await command.run();
 })().catch((error) => {
   console.error(error);
   process.exit(1);

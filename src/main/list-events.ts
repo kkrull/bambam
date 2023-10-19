@@ -10,20 +10,23 @@ import { Log } from './Log';
 
 //Lists the events in MIDI tracks.
 class ListEventsCommand {
-  static parseArgv(argv: string[]): Promise<ListEventsCommand> {
+  static parseArgv(log: Log, argv: string[]): Promise<ListEventsCommand> {
     if (argv.length !== 3) {
       return Promise.reject(`Usage ${argv[0]} ${argv[1]} <MIDI file>`);
     }
 
-    return Promise.resolve(new ListEventsCommand(argv[2]));
+    return Promise.resolve(new ListEventsCommand(log, argv[2]));
   }
 
-  constructor(readonly filename: string) {}
+  constructor(
+    private readonly log: Log,
+    readonly filename: string,
+  ) {}
 
-  async run(log: Log): Promise<void> {
+  async run(): Promise<void> {
     const file = await openFile(this.filename);
     const contents = await this.fileToObject(file);
-    log(JSON.stringify(contents));
+    this.log(JSON.stringify(contents));
     await file.close();
   }
 
@@ -55,8 +58,8 @@ class ListEventsCommand {
 }
 
 (async () => {
-  const command = await ListEventsCommand.parseArgv(process.argv);
-  await command.run(console.log);
+  const command = await ListEventsCommand.parseArgv(console.log, process.argv);
+  await command.run();
 })().catch((error) => {
   console.error(error);
   process.exit(1);
