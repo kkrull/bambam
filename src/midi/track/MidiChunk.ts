@@ -91,6 +91,22 @@ export class MidiData {
     return [...this.buffer];
   }
 
+  toHex(): string[] {
+    return this.toBytes().map((x) => Buffer.from([x]).toString('hex'));
+  }
+
+  toHexRows(chunkSize: number): string[][] {
+    const flatArray = this.toHex();
+
+    const chunks: string[][] = [];
+    for (let i = 0; i < flatArray.length; i = i + chunkSize) {
+      const chunk = flatArray.slice(i, i + chunkSize);
+      chunks.push(chunk);
+    }
+
+    return chunks;
+  }
+
   toObject() {
     return {
       bytes: this.toBytes(),

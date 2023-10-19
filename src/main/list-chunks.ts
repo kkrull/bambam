@@ -16,10 +16,18 @@ class ListChunksCommand {
     const file = await openFile(this.filename);
     const headerChunk = await readChunk(file);
     log(`${headerChunk.typeName}: ${headerChunk.length} bytes`);
+    headerChunk.data
+      .toHexRows(16)
+      .forEach((hexRow, i) => log(`${i * 16}:\t${hexRow.join(' ')}`));
 
     let chunk = await readChunk(file);
     while (!chunk.isEmpty()) {
+      log();
       log(`${chunk.typeName}: ${chunk.length} bytes`);
+      chunk.data
+        .toHexRows(16)
+        .forEach((hexRow, i) => log(`${i * 16}:\t${hexRow.join(' ')}`));
+
       chunk = await readChunk(file);
     }
 
