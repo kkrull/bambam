@@ -1,11 +1,8 @@
 import { FileHandle } from 'fs/promises';
-import { MidiChunk } from '../midi/track/MidiChunk';
-import {
-  HeaderChunk,
-  openFile,
-  parseHeader,
-  readChunk,
-} from '../midi/track/midi-fns';
+import { MidiChunk } from '../midi/MidiChunk';
+import { openFile, readChunk } from '../io/io-fns';
+import { parseHeader } from '../midi/header/header-fns';
+import { HeaderChunk } from '../midi/header/HeaderChunk';
 import { Log } from './Log';
 import { TickDivision } from '../midi/track/TickDivision';
 

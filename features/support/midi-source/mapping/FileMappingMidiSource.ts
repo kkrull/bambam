@@ -1,14 +1,11 @@
 import path from 'node:path';
 
-import {
-  openFile,
-  parseHeader,
-  readChunk,
-  readEvents,
-} from '@/src/midi/track/midi-fns';
+import { parseHeader } from '@/src/midi/header/header-fns';
+import { openFile, readChunk } from '@/src/io/io-fns';
+import { readEvents } from '@/src/midi/track/track-fns';
 import { MidiTrack } from '@/src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
-import { MidiChunk } from '@/src/midi/track/MidiChunk';
+import { MidiChunk } from '@/src/midi/MidiChunk';
 import { MidiSource } from '@/support/midi-source/MidiSource';
 
 //File-based MIDI track with a mapping of the drums available to EZDrummer 2.
