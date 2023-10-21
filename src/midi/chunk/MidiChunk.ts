@@ -20,8 +20,12 @@ export class MidiChunk {
   }
 
   async write(file: FileHandle): Promise<number> {
-    const typeBuffer = Buffer.from(this.typeName, 'latin1');
-    const typeWrite = await file.write(typeBuffer);
-    return typeWrite.bytesWritten;
+    const writeType = await file.write(Buffer.from(this.typeName, 'latin1'));
+
+    const lengthBuffer = Buffer.alloc(4);
+    lengthBuffer.writeInt32BE(this.length);
+    const writeLength = await file.write(lengthBuffer);
+
+    return writeType.bytesWritten + writeLength.bytesWritten;
   }
 }
