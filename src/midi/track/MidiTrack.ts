@@ -1,9 +1,9 @@
-import { MidiEvent } from '../event/MidiEvent';
-import { DeltaTime } from '../event/DeltaTime';
-import { EndTrackEvent } from './EndTrackEvent';
-import { NoteEvent } from '../note/NoteEvent';
-import { NoteEventTime } from './NoteEventTime';
-import { TickDivision } from './TickDivision';
+import { DeltaTime } from '@src/midi/event/DeltaTime';
+import { MidiEvent } from '@src/midi/event/MidiEvent';
+import { NoteEvent } from '@src/midi/note/NoteEvent';
+import { EndTrackEvent } from '@src/midi/track/EndTrackEvent';
+import { NoteEventTime } from '@src/midi/track/NoteEventTime';
+import { TickDivision } from '@src/midi/track/TickDivision';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {

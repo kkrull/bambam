@@ -1,4 +1,4 @@
-import { MidiData } from './MidiData';
+import { MidiData } from '@src/midi/chunk/MidiData';
 
 //Top-level structure for MIDI data.
 export class MidiChunk {

@@ -1,4 +1,4 @@
-import { MidiTrack } from '@/src/midi/track/MidiTrack';
+import { MidiTrack } from '@src/midi/track/MidiTrack';
 
 //Provides MIDI
 export interface MidiSource {

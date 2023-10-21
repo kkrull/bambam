@@ -1,4 +1,4 @@
-import { DeltaTime } from './DeltaTime';
+import { DeltaTime } from '@src/midi/event/DeltaTime';
 
 //Any MIDI event, which is always preceded by a delta time from the prior event.
 export abstract class MidiEvent {

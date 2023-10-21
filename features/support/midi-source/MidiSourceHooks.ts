@@ -1,8 +1,8 @@
 import { After, Before } from '@cucumber/cucumber';
 
-import { MidiSourceProvider } from './MidiSourceProvider';
-import { FileMappingMidiSource } from './mapping/FileMappingMidiSource';
-import { StaticMappingMidiSource } from './mapping/StaticMappingMidiSource';
+import { MidiSourceProvider } from '@support/midi-source/MidiSourceProvider';
+import { FileMappingMidiSource } from '@support/midi-source/mapping/FileMappingMidiSource';
+import { StaticMappingMidiSource } from '@support/midi-source/mapping/StaticMappingMidiSource';
 
 After(() => {
   MidiSourceProvider.clearInstance();

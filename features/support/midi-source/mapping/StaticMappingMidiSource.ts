@@ -1,8 +1,8 @@
-import { DeltaTime } from '@/src/midi/event/DeltaTime';
-import { MidiNote } from '@/src/midi/note/MidiNote';
-import { MidiTrack } from '@/src/midi/track/MidiTrack';
-import { MidiTrackBuilder } from '@/src/midi/track/MidiTrackBuilder';
-import { MidiSource } from '@/support/midi-source/MidiSource';
+import { DeltaTime } from '@src/midi/event/DeltaTime';
+import { MidiNote } from '@src/midi/note/MidiNote';
+import { MidiTrack } from '@src/midi/track/MidiTrack';
+import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
+import { MidiSource } from '@support/midi-source/MidiSource';
 
 //MIDI track with a mapping of the drums available to EZDrummer 2, without I/O.
 export class StaticMappingMidiSource implements MidiSource {
