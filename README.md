@@ -90,8 +90,9 @@ that provide them and where to look for configuration:
   - Documentation: <https://github.com/streetsidesoftware/vscode-spell-checker>
   - VS Code extension: <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
 - Cucumber runs BDD tests with Gherkin syntax.
-  - `@cucumber/*` provides cucumber and formatters, which make the output on
-    the command line look nice.
+  - `@cucumber/*` provides
+    [cucumber](https://github.com/cucumber/cucumber-js/tree/main/docs) and
+    formatters, which make the output on the command line look nice.
   - `ts-node` adds TypeScript support to `cucumber-js`.
   - `tsconfig-paths` allows TypeScript sources in `features/` to use path
     aliases to production code sources.
@@ -139,10 +140,14 @@ that provide them and where to look for configuration:
   - `.prettierrc.json`: configuration file
   - Documentation (options): <https://prettier.io/docs/en/options.html>
 - TypeScript adds static typing to JavaScript.
+  - Documentation (`tsconfig.json`): <https://www.typescriptlang.org/tsconfig>
   - `typescript`: main package
   - `@tsconfig/node18`: base configuration for the version of node.js we're
     using here
   - `@types/*`: type definitions for all the other packages we're using
+  - [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths#with-ts-node):
+    allows TypeScript sources to use path aliases at runtime, using `ts-node
+-r`.
   - `tsconfig.json` - configuration file for sources in `src/`
   - `features/tsconfig.json` - configuration file for sources in `features/`
 

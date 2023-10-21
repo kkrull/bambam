@@ -1,5 +1,5 @@
-import { MidiEvent } from './MidiEvent';
-import { DeltaTime } from './DeltaTime';
+import { DeltaTime } from '@src/midi/event/DeltaTime';
+import { MidiEvent } from '@src/midi/event/MidiEvent';
 
 //A meta event to pass through.
 export class MetaEvent extends MidiEvent {

@@ -1,5 +1,5 @@
 @FileMidiSource
-Feature: Convert EZDrummer 2 track to General MIDI
+Feature: Re-map EZDrummer 2 track to General MIDI
   As a musician
   I want to convert EZDrummer 2 tracks to General MIDI
   So that I can maintain flow when copying drum tracks to MuseScore
@@ -10,7 +10,6 @@ Feature: Convert EZDrummer 2 track to General MIDI
 
     Then the re-mapped track should be a valid MIDI track
     And the re-mapped track should have the same time resolution as the original
-    # And the re-mapped track should have the same format as the original
 
   Scenario: BamBam should copy all non-mappable events from the original track
     Given I have exported an EZDrummer 2 track from my DAW, as MIDI

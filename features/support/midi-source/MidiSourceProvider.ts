@@ -1,5 +1,5 @@
-import { MidiSource } from './MidiSource';
-import { StaticMappingMidiSource } from './mapping/StaticMappingMidiSource';
+import { MidiSource } from '@support/midi-source/MidiSource';
+import { StaticMappingMidiSource } from '@support/midi-source/mapping/StaticMappingMidiSource';
 
 //Provides access to whichever MIDI source is active right now
 export class MidiSourceProvider {

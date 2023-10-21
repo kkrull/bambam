@@ -1,5 +1,5 @@
-import { MidiChunk } from '../chunk/MidiChunk';
-import { Division, HeaderChunk } from './HeaderChunk';
+import { MidiChunk } from '@src/midi/chunk/MidiChunk';
+import { Division, HeaderChunk } from '@src/midi/header/HeaderChunk';
 
 function parseDivision(division: number): Division {
   const divisionType = (division & 0x8000) >> 15;

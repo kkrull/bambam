@@ -1,9 +1,10 @@
-import { FileHandle } from 'fs/promises';
-import { readEvents } from '../midi/track/track-fns';
-import { openFile, readChunk } from '../midi/io/io-fns';
-import { parseHeader } from '../midi/header/header-fns';
-import { MidiChunk } from '../midi/chunk/MidiChunk';
-import { Log } from './Log';
+import { FileHandle } from 'node:fs/promises';
+
+import { Log } from '@src/main/Log';
+import { MidiChunk } from '@src/midi/chunk/MidiChunk';
+import { parseHeader } from '@src/midi/header/header-fns';
+import { openFile, readChunk } from '@src/midi/io/io-fns';
+import { readEvents } from '@src/midi/track/track-fns';
 
 //Lists the events in MIDI tracks.
 class ListEventsCommand {
