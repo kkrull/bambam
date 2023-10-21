@@ -26,6 +26,11 @@ export class MidiChunk {
     lengthBuffer.writeInt32BE(this.length);
     const writeLength = await file.write(lengthBuffer);
 
-    return writeType.bytesWritten + writeLength.bytesWritten;
+    const dataBuffer = Buffer.from(this.data.asBytes());
+    const writeData = await file.write(dataBuffer);
+
+    return (
+      writeType.bytesWritten + writeLength.bytesWritten + writeData.bytesWritten
+    );
   }
 }
