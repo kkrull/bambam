@@ -1,10 +1,5 @@
-import { FileHandle } from 'node:fs/promises';
-
 import { Log } from '@src/main/Log';
-import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { parseHeader } from '@src/midi/header/header-fns';
 import { openFile, readChunk } from '@src/midi/io/io-fns';
-import { readEvents } from '@src/midi/track/track-fns';
 
 //Copies a MIDI file to make sure events are brought to me...unspoiled.
 class CopyFileCommand {
@@ -26,36 +21,20 @@ class CopyFileCommand {
 
   async run(): Promise<void> {
     const sourceFile = await openFile(this.sourceFilename, 'r');
-    const targetFile = await openFile(this.sourceFilename, 'w');
-    await targetFile.close();
-    await sourceFile.close();
-  }
+    const targetFile = await openFile(this.targetFilename, 'w');
 
-  private async fileToObject(file: FileHandle): Promise<object> {
-    const headerChunk = await readChunk(file);
-    const trackChunks = await this.readTracks(file);
-    return {
-      header: parseHeader(headerChunk),
-      tracks: trackChunks.map((x, i) => this.trackToObject(x, i + 1)),
-    };
-  }
-
-  private async readTracks(file: FileHandle): Promise<MidiChunk[]> {
-    const trackChunks = [];
-    let chunk = await readChunk(file);
+    let chunk = await readChunk(sourceFile);
     while (!chunk.isEmpty()) {
-      trackChunks.push(chunk);
-      chunk = await readChunk(file);
+      this.log(`${chunk.typeName} [${chunk.length} bytes]`);
+
+      const numBytesWritten = await chunk.write(targetFile);
+      this.log(`Wrote ${numBytesWritten} bytes`);
+
+      chunk = await readChunk(sourceFile);
     }
 
-    return trackChunks;
-  }
-
-  private trackToObject(chunk: MidiChunk, trackNum: number): object {
-    return {
-      events: readEvents(chunk),
-      number: trackNum,
-    };
+    await targetFile.close();
+    await sourceFile.close();
   }
 }
 

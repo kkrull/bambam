@@ -1,3 +1,4 @@
+// import { Buffer } from 'node:buffer';
 import { FileHandle } from 'node:fs/promises';
 
 //One or more bytes of MIDI data comprising a single value.
