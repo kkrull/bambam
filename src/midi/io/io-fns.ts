@@ -3,8 +3,8 @@ import { FileHandle, open } from 'node:fs/promises';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { MidiData } from '@src/midi/chunk/MidiData';
 
-export function openFile(filename: string): Promise<FileHandle> {
-  return open(filename, 'r');
+export function openFile(filename: string, flag = 'r'): Promise<FileHandle> {
+  return open(filename, flag);
 }
 
 export async function readChunk(file: FileHandle): Promise<MidiChunk> {

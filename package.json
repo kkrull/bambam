@@ -27,6 +27,7 @@
     "format:check": "prettier --ignore-unknown --list-different .",
     "lint": "eslint features features/**/*.cjs src",
     "lint:fix": "eslint --fix features features/**/*.cjs src",
+    "main:copy-file": "ts-node -r tsconfig-paths/register src/main/copy-file.ts",
     "main:list-chunks": "ts-node -r tsconfig-paths/register src/main/list-chunks.ts",
     "main:list-events": "ts-node -r tsconfig-paths/register src/main/list-events.ts",
     "prepare": "husky install",
