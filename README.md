@@ -90,8 +90,9 @@ that provide them and where to look for configuration:
   - Documentation: <https://github.com/streetsidesoftware/vscode-spell-checker>
   - VS Code extension: <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
 - Cucumber runs BDD tests with Gherkin syntax.
-  - `@cucumber/*` provides cucumber and formatters, which make the output on
-    the command line look nice.
+  - `@cucumber/*` provides
+    [cucumber](https://github.com/cucumber/cucumber-js/tree/main/docs) and
+    formatters, which make the output on the command line look nice.
   - `ts-node` adds TypeScript support to `cucumber-js`.
   - `tsconfig-paths` allows TypeScript sources in `features/` to use path
     aliases to production code sources.

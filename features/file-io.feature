@@ -4,6 +4,7 @@ Feature: MIDI File I/O
   I want to read and write MIDI files
   So that I can export MIDI tracks from one program and use them in another
 
+  @focus
   Scenario: BamBam should read and write MIDI files
     Given I have exported a MIDI Format 1 file from my DAW
     When I ask BamBam to write a copy of that source file
