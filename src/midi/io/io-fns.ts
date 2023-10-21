@@ -17,3 +17,13 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
   const chunkData = await MidiData.read(file, chunkLength.asInt32());
   return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
 }
+
+export async function writeUInt8(
+  file: FileHandle,
+  byte: number,
+): Promise<number> {
+  const buffer = Buffer.alloc(1);
+  buffer.writeInt8(byte);
+  const { bytesWritten } = await file.write(buffer);
+  return bytesWritten;
+}

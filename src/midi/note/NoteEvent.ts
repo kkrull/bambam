@@ -1,3 +1,5 @@
+import { FileHandle } from 'fs/promises';
+
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
 import { MidiNote } from '@src/midi/note/MidiNote';
@@ -52,5 +54,9 @@ export class NoteEvent extends MidiEvent {
       other,
       this.velocity,
     );
+  }
+
+  async writePayload(_file: FileHandle): Promise<number> {
+    throw new Error('Method not implemented.');
   }
 }

@@ -1,3 +1,5 @@
+import { FileHandle } from 'fs/promises';
+
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
 
@@ -11,5 +13,9 @@ export class MetaEvent extends MidiEvent {
     readonly data: number[],
   ) {
     super(deltaTime, eventType);
+  }
+
+  async writePayload(_file: FileHandle): Promise<number> {
+    throw new Error('Method not implemented.');
   }
 }

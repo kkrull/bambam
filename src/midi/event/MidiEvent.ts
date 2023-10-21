@@ -1,5 +1,7 @@
 import { FileHandle } from 'fs/promises';
+
 import { DeltaTime } from '@src/midi/event/DeltaTime';
+import { writeUInt8 } from '@src/midi/io/io-fns';
 
 //Any MIDI event, which is always preceded by a delta time from the prior event.
 export abstract class MidiEvent {
@@ -8,7 +10,12 @@ export abstract class MidiEvent {
     readonly eventType: number,
   ) {}
 
-  write(_targetFile: FileHandle): Promise<number> {
-    throw new Error('Method not implemented.');
+  async write(file: FileHandle): Promise<number> {
+    const deltaTimeBytes = await this.deltaTime.write(file);
+    const eventTypeBytes = await writeUInt8(file, this.eventType);
+    const payloadBytes = await this.writePayload(file);
+    return deltaTimeBytes + eventTypeBytes + payloadBytes;
   }
+
+  abstract writePayload(file: FileHandle): Promise<number>;
 }
