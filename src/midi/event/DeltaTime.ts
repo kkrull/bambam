@@ -14,7 +14,7 @@ export class DeltaTime {
   }
 
   async write(file: FileHandle): Promise<number> {
-    const buffer = Buffer.from(toVariableLengthQuantity(this.ticks));
+    const buffer = toVariableLengthQuantity(this.ticks);
     const writeQuantity = await file.write(buffer);
     return writeQuantity.bytesWritten;
   }

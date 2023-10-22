@@ -10,6 +10,7 @@ export class EndTrackEvent extends MidiEvent {
   }
 
   async writePayload(_file: FileHandle): Promise<number> {
+    //TODO KDK: Work here
     throw new Error('Method not implemented.');
   }
 }

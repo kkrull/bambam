@@ -18,7 +18,7 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
   return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
 }
 
-export function toVariableLengthQuantity(quantity: number): number[] {
+export function toVariableLengthQuantity(quantity: number): Buffer {
   let bitsToWrite = quantity;
   const bytes = [];
 
@@ -31,7 +31,7 @@ export function toVariableLengthQuantity(quantity: number): number[] {
     bitsToWrite = bitsToWrite >> 7;
   }
 
-  return bytes;
+  return Buffer.from(bytes);
 }
 
 export async function writeUInt8(
