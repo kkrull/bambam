@@ -1,6 +1,8 @@
 import { Log } from '@src/main/Log';
+import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { openFile, readChunk } from '@src/midi/io/io-fns';
 import { readEvents } from '@src/midi/track/track-fns';
+import { FileHandle } from 'fs/promises';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
 class CopyEventsCommand {
@@ -32,7 +34,7 @@ class CopyEventsCommand {
     while (!trackChunk.isEmpty()) {
       this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
 
-      let totalBytes = 0;
+      let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
       for (const event of readEvents(trackChunk)) {
         const eventBytes = await event.write(targetFile);
         totalBytes += eventBytes;
@@ -44,6 +46,25 @@ class CopyEventsCommand {
 
     await targetFile.close();
     await sourceFile.close();
+  }
+
+  private async writeTrackPreamble(
+    file: FileHandle,
+    chunk: MidiChunk,
+  ): Promise<number> {
+    const writeType = await file.write(this.typeNameBuffer(chunk.typeName));
+    const writeLength = await file.write(this.lengthBuffer(chunk.length));
+    return writeType.bytesWritten + writeLength.bytesWritten;
+  }
+
+  private lengthBuffer(length: number): Buffer {
+    const buffer = Buffer.alloc(4);
+    buffer.writeInt32BE(length);
+    return buffer;
+  }
+
+  private typeNameBuffer(typeName: string): Buffer {
+    return Buffer.from(typeName, 'latin1');
   }
 }
 
