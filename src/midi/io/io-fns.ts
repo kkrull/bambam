@@ -18,6 +18,22 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
   return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
 }
 
+export function toVariableLengthQuantity(quantity: number): number[] {
+  let bitsToWrite = quantity;
+  const bytes = [];
+
+  bytes.unshift(bitsToWrite & 0x7f);
+  bitsToWrite = bitsToWrite >> 7;
+  while (bitsToWrite > 0) {
+    const quantityBits = bitsToWrite & 0x7f;
+    const byte = quantityBits | 0x80;
+    bytes.unshift(byte);
+    bitsToWrite = bitsToWrite >> 7;
+  }
+
+  return bytes;
+}
+
 export async function writeUInt8(
   file: FileHandle,
   byte: number,
@@ -26,4 +42,13 @@ export async function writeUInt8(
   buffer.writeUInt8(byte);
   const { bytesWritten } = await file.write(buffer);
   return bytesWritten;
+}
+
+export async function writeVariableLengthQuantity(
+  file: FileHandle,
+  quantity: number,
+): Promise<number> {
+  const buffer = Buffer.from(toVariableLengthQuantity(quantity));
+  const writeQuantity = await file.write(buffer);
+  return writeQuantity.bytesWritten;
 }
