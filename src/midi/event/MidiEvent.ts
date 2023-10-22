@@ -11,9 +11,9 @@ export abstract class MidiEvent {
   ) {}
 
   async write(file: FileHandle): Promise<number> {
-    throw Error('got here');
     const deltaTimeBytes = await this.deltaTime.write(file);
     const eventTypeBytes = await writeUInt8(file, this.eventType);
+    throw Error('got here');
     const payloadBytes = await this.writePayload(file);
     return deltaTimeBytes + eventTypeBytes + payloadBytes;
   }
