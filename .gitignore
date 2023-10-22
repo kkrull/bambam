@@ -1,4 +1,5 @@
 # BamBam
+*.bin
 output.mid
 
 # Node.js
