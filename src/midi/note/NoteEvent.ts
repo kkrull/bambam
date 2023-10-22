@@ -13,13 +13,8 @@ export class NoteEvent extends MidiEvent {
     note: MidiNote,
     velocity: number,
   ): NoteEvent {
-    return new NoteEvent(
-      deltaTime,
-      (8 << 4) + channel,
-      channel,
-      note,
-      velocity,
-    );
+    const eventType = 0x80 + channel;
+    return new NoteEvent(deltaTime, eventType, channel, note, velocity);
   }
 
   static on(
@@ -28,13 +23,8 @@ export class NoteEvent extends MidiEvent {
     note: MidiNote,
     velocity: number,
   ): NoteEvent {
-    return new NoteEvent(
-      deltaTime,
-      (9 << 4) + channel,
-      channel,
-      note,
-      velocity,
-    );
+    const eventType = 0x90 + channel;
+    return new NoteEvent(deltaTime, eventType, channel, note, velocity);
   }
 
   private constructor(

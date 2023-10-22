@@ -36,7 +36,6 @@ export function readEvent(trackData: MidiData): MidiEvent {
     const data = trackData.readData(length);
     return new MetaEvent(deltaTime, eventType, subType, length, data);
   } else if (0x80 <= eventType && eventType < 0x90) {
-    console.log(`Note OFF: ${eventType}`);
     //<Note off> = 8n note velocity
     const noteNumber = trackData.readUInt8();
     const velocity = trackData.readUInt8();
@@ -47,7 +46,6 @@ export function readEvent(trackData: MidiData): MidiEvent {
       velocity,
     );
   } else if (0x90 <= eventType && eventType < 0xa0) {
-    console.log(`Note ON: ${eventType}`);
     //<Note on> = 9n note velocity
     const noteNumber = trackData.readUInt8();
     const velocity = trackData.readUInt8();
