@@ -1,5 +1,5 @@
 import { FileHandle } from 'fs/promises';
-import { toVariableLengthQuantity } from '../io/io-fns';
+import { toVariableLengthQuantity } from '@src/midi/io/io-fns';
 
 //Time elapsed between an event and the one just before it.
 export class DeltaTime {
