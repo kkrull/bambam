@@ -1,5 +1,4 @@
 import { FileHandle } from 'fs/promises';
-
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
 import {
