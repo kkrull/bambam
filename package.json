@@ -32,6 +32,7 @@
     "main:copy-file": "ts-node -r tsconfig-paths/register src/main/copy-file.ts",
     "main:list-chunks": "ts-node -r tsconfig-paths/register src/main/list-chunks.ts",
     "main:list-events": "ts-node -r tsconfig-paths/register src/main/list-events.ts",
+    "main:remap-events": "ts-node -r tsconfig-paths/register src/main/remap-events.ts",
     "prepare": "husky install",
     "test": "cucumber-js -c features/cucumber.cjs",
     "test:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
