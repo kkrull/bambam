@@ -2,6 +2,7 @@ import { FileHandle } from 'fs/promises';
 
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
+import { writeBytes } from '../io/io-fns';
 
 //An event required at the end of a track chunk to show when it ends.
 export class EndTrackEvent extends MidiEvent {
@@ -9,8 +10,9 @@ export class EndTrackEvent extends MidiEvent {
     super(deltaTime, 0xff);
   }
 
-  async writePayload(_file: FileHandle): Promise<number> {
-    //TODO KDK: Work here
-    throw new Error('Method not implemented.');
+  async writePayload(file: FileHandle): Promise<number> {
+    const endTrackSubType = 0x2f;
+    const endTrackEventLength = 0x00;
+    return writeBytes(file, [endTrackSubType, endTrackEventLength]);
   }
 }
