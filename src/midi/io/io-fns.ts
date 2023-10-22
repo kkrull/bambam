@@ -23,7 +23,7 @@ export async function writeUInt8(
   byte: number,
 ): Promise<number> {
   const buffer = Buffer.alloc(1);
-  buffer.writeInt8(byte);
+  buffer.writeUInt8(byte);
   const { bytesWritten } = await file.write(buffer);
   return bytesWritten;
 }
