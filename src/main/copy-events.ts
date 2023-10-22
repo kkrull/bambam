@@ -1,6 +1,11 @@
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { openFile, readChunk } from '@src/midi/io/io-fns';
+import {
+  openFile,
+  readChunk,
+  writeString,
+  writeUInt32,
+} from '@src/midi/io/io-fns';
 import { readEvents } from '@src/midi/track/track-fns';
 import { FileHandle } from 'fs/promises';
 
@@ -52,19 +57,9 @@ class CopyEventsCommand {
     file: FileHandle,
     chunk: MidiChunk,
   ): Promise<number> {
-    const writeType = await file.write(this.typeNameBuffer(chunk.typeName));
-    const writeLength = await file.write(this.lengthBuffer(chunk.length));
-    return writeType.bytesWritten + writeLength.bytesWritten;
-  }
-
-  private lengthBuffer(length: number): Buffer {
-    const buffer = Buffer.alloc(4);
-    buffer.writeInt32BE(length);
-    return buffer;
-  }
-
-  private typeNameBuffer(typeName: string): Buffer {
-    return Buffer.from(typeName, 'latin1');
+    const writeType = await writeString(file, chunk.typeName);
+    const writeLength = await writeUInt32(file, chunk.length);
+    return writeType + writeLength;
   }
 }
 
