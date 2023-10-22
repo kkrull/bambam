@@ -1,7 +1,7 @@
-import { Buffer } from 'node:buffer';
 import { FileHandle } from 'node:fs/promises';
 
 import { MidiData } from '@src/midi/chunk/MidiData';
+import { writeBytes, writeString, writeUInt32 } from '../io/io-fns';
 
 //Top-level structure for MIDI data.
 export class MidiChunk {
@@ -20,25 +20,9 @@ export class MidiChunk {
   }
 
   async write(file: FileHandle): Promise<number> {
-    const writeType = await file.write(this.typeNameBuffer());
-    const writeLength = await file.write(this.lengthBuffer());
-    const writeData = await file.write(this.dataBuffer());
-    return (
-      writeType.bytesWritten + writeLength.bytesWritten + writeData.bytesWritten
-    );
-  }
-
-  private dataBuffer(): Buffer {
-    return Buffer.from(this.data.asBytes());
-  }
-
-  private lengthBuffer(): Buffer {
-    const buffer = Buffer.alloc(4);
-    buffer.writeInt32BE(this.length);
-    return buffer;
-  }
-
-  private typeNameBuffer(): Buffer {
-    return Buffer.from(this.typeName, 'latin1');
+    const typeSize = await writeString(file, this.typeName);
+    const lengthSize = await writeUInt32(file, this.length);
+    const dataSize = await writeBytes(file, this.data.asBytes());
+    return typeSize + lengthSize + dataSize;
   }
 }

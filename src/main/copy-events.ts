@@ -57,9 +57,9 @@ class CopyEventsCommand {
     file: FileHandle,
     chunk: MidiChunk,
   ): Promise<number> {
-    const writeType = await writeString(file, chunk.typeName);
-    const writeLength = await writeUInt32(file, chunk.length);
-    return writeType + writeLength;
+    const typeSize = await writeString(file, chunk.typeName);
+    const lengthSize = await writeUInt32(file, chunk.length);
+    return typeSize + lengthSize;
   }
 }
 

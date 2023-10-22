@@ -38,6 +38,14 @@ export function toVariableLengthQuantity(quantity: number): Buffer {
   return Buffer.from(bytes);
 }
 
+export async function writeBytes(
+  file: FileHandle,
+  bytes: number[],
+): Promise<number> {
+  const { bytesWritten } = await file.write(Buffer.from(bytes));
+  return bytesWritten;
+}
+
 export async function writeString(
   file: FileHandle,
   aString: string,
