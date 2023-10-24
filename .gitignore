@@ -1,3 +1,7 @@
+# BamBam
+*.bin
+output/
+
 # Node.js
 .eslintcache
 node_modules/

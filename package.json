@@ -15,6 +15,7 @@
     "lint-staged": "^14.0.1",
     "markdownlint-cli2": "^0.10.0",
     "prettier": "3.0.3",
+    "prettier-plugin-organize-imports": "^3.2.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
@@ -27,6 +28,8 @@
     "format:check": "prettier --ignore-unknown --list-different .",
     "lint": "eslint features features/**/*.cjs src",
     "lint:fix": "eslint --fix features features/**/*.cjs src",
+    "main:copy-events": "ts-node -r tsconfig-paths/register src/main/copy-events.ts",
+    "main:copy-file": "ts-node -r tsconfig-paths/register src/main/copy-file.ts",
     "main:list-chunks": "ts-node -r tsconfig-paths/register src/main/list-chunks.ts",
     "main:list-events": "ts-node -r tsconfig-paths/register src/main/list-events.ts",
     "prepare": "husky install",

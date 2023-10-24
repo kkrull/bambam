@@ -4,7 +4,7 @@ import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { parseHeader } from '@src/midi/header/header-fns';
 import { HeaderChunk } from '@src/midi/header/HeaderChunk';
-import { openFile, readChunk } from '@src/midi/io/io-fns';
+import { openFile } from '@src/midi/io/io-fns';
 import { TickDivision } from '@src/midi/track/TickDivision';
 
 //Lists the chunks in a MIDI file.
@@ -29,16 +29,16 @@ class ListChunksCommand {
   }
 
   private async logChunks(file: FileHandle) {
-    const headerChunk = await readChunk(file);
+    const headerChunk = await MidiChunk.read(file);
     this.logChunk(headerChunk);
     this.logHeaderChunk(headerChunk);
 
-    let chunk = await readChunk(file);
+    let chunk = await MidiChunk.read(file);
     while (!chunk.isEmpty()) {
       this.log();
       this.logChunk(chunk);
 
-      chunk = await readChunk(file);
+      chunk = await MidiChunk.read(file);
     }
   }
 
