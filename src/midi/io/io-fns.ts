@@ -18,11 +18,11 @@ export async function readChunk(file: FileHandle): Promise<MidiChunk> {
   return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
 }
 
-export function toBytes(aString: string): Buffer {
+function toBytes(aString: string): Buffer {
   return Buffer.from(aString, 'latin1');
 }
 
-export function toVariableLengthQuantity(quantity: number): Buffer {
+function toVariableLengthQuantity(quantity: number): Buffer {
   let bitsToWrite = quantity;
   const bytes = [];
 
