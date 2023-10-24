@@ -1,6 +1,6 @@
-import { FileHandle } from 'node:fs/promises';
 import { MidiData } from '@src/midi/chunk/MidiData';
 import { writeBytes, writeString, writeUInt32 } from '@src/midi/io/io-fns';
+import { FileHandle } from 'node:fs/promises';
 
 //Top-level structure for MIDI data.
 export class MidiChunk {

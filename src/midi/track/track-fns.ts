@@ -1,10 +1,10 @@
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { MidiData } from '@src/midi/chunk/MidiData';
-import { MidiEvent } from '@src/midi/event/MidiEvent';
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MetaEvent } from '@src/midi/event/MetaEvent';
-import { NoteEvent } from '@src/midi/note/NoteEvent';
+import { MidiEvent } from '@src/midi/event/MidiEvent';
 import { MidiNote } from '@src/midi/note/MidiNote';
+import { NoteEvent } from '@src/midi/note/NoteEvent';
 import { EndTrackEvent } from '@src/midi/track/EndTrackEvent';
 
 /* Track chunks */

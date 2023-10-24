@@ -1,4 +1,3 @@
-import { FileHandle } from 'fs/promises';
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
 import {
@@ -6,6 +5,7 @@ import {
   writeUInt8,
   writeVariableLengthQuantity,
 } from '@src/midi/io/io-fns';
+import { FileHandle } from 'fs/promises';
 
 //A meta event to pass through.
 export class MetaEvent extends MidiEvent {
