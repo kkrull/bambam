@@ -36,13 +36,13 @@ class RemapEventsCommand {
     const numBytesWritten = await headerChunk.write(targetFile);
     this.log(`Wrote ${numBytesWritten} bytes`);
 
-    //Read track 0 (metadata)
+    //Read track 0 (tempo track)
     const tempoTrackChunk = await MidiChunk.read(sourceFile);
     const payloadSize = tempoTrackChunk.length;
     const totalSize = tempoTrackChunk.length + 4 + 4;
     this.log(`${tempoTrackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
 
-    //Write track 0 events
+    //Write track 0 events (tempo track)
     let numBytes = await this.writeTrackPreamble(targetFile, tempoTrackChunk);
     for (const event of readEvents(tempoTrackChunk)) {
       const eventBytes = await event.write(targetFile);
@@ -75,6 +75,7 @@ class RemapEventsCommand {
   }
 
   private parseTrack(division: Division, trackChunk: MidiChunk): MidiTrack {
+    //TODO KDK: Remove duplicate end track event: 00ff 2f00 00ff 2f00
     const track = new MidiTrackBuilder();
     track.withDivisionInTicks(division.ticksPerQuarterNote);
     readEvents(trackChunk).forEach((x) => track.addMidiEvent(x));
