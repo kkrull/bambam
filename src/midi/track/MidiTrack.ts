@@ -46,13 +46,15 @@ export class MidiTrack {
   }
 
   remap(mapper: MidiMap): MidiTrack {
-    const mappedEvents: MidiEvent[] = this.events.map((x) => {
-      if (x instanceof NoteEvent === false) {
-        return x;
-      }
+    const mappedEvents: MidiEvent[] = this.events
+      .filter((x) => x instanceof EndTrackEvent === false)
+      .map((x) => {
+        if (x instanceof NoteEvent === false) {
+          return x;
+        }
 
-      return mapper.remap(x as NoteEvent);
-    });
+        return mapper.remap(x as NoteEvent);
+      });
 
     return new MidiTrack(this.division, this.endTrackEvent, mappedEvents);
   }
