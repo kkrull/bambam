@@ -10,6 +10,7 @@ import { EndTrackEvent } from '@src/midi/track/EndTrackEvent';
 /* Track chunks */
 
 export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
+  //<Track Chunk> = <chunk type> <length> <MTrk event>+
   const events: MidiEvent[] = [];
   while (!trackChunk.data.isDoneReading()) {
     const event = readEvent(trackChunk.data);
