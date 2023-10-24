@@ -46,8 +46,9 @@ export class MidiTrack {
   }
 
   remap(mapper: MidiMap): MidiTrack {
+    //TODO KDK: Filtering out the EndTrackEvent avoids a duplicate in the remap-events script, but causes test to fail.
     const mappedEvents: MidiEvent[] = this.events
-      .filter((x) => x instanceof EndTrackEvent === false)
+      // .filter((x) => x instanceof EndTrackEvent === false)
       .map((x) => {
         if (x instanceof NoteEvent === false) {
           return x;
