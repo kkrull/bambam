@@ -1,25 +1,7 @@
 import { FileHandle, open } from 'node:fs/promises';
 
-import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { MidiData } from '@src/midi/chunk/MidiData';
-
 export function openFile(filename: string, flag = 'r'): Promise<FileHandle> {
   return open(filename, flag);
-}
-
-export async function readChunk(file: FileHandle): Promise<MidiChunk> {
-  const chunkType = await MidiData.read(file, 4);
-  if (chunkType.isEmpty()) {
-    return MidiChunk.empty();
-  }
-
-  const chunkLength = await MidiData.read(file, 4);
-  const chunkData = await MidiData.read(file, chunkLength.asInt32());
-  return new MidiChunk(chunkType.asText(), chunkLength.asInt32(), chunkData);
-}
-
-function toBytes(aString: string): Buffer {
-  return Buffer.from(aString, 'latin1');
 }
 
 function toVariableLengthQuantity(quantity: number): Buffer {
@@ -50,7 +32,8 @@ export async function writeString(
   file: FileHandle,
   aString: string,
 ): Promise<number> {
-  const { bytesWritten } = await file.write(toBytes(aString));
+  const buffer = Buffer.from(aString, 'latin1');
+  const { bytesWritten } = await file.write(buffer);
   return bytesWritten;
 }
 

@@ -1,5 +1,6 @@
 import { Log } from '@src/main/Log';
-import { openFile, readChunk } from '@src/midi/io/io-fns';
+import { MidiChunk } from '@src/midi/chunk/MidiChunk';
+import { openFile } from '@src/midi/io/io-fns';
 
 //Copies a MIDI file to make sure events are brought to me...unspoiled.
 class CopyFileCommand {
@@ -23,14 +24,14 @@ class CopyFileCommand {
     const sourceFile = await openFile(this.sourceFilename, 'r');
     const targetFile = await openFile(this.targetFilename, 'w');
 
-    let chunk = await readChunk(sourceFile);
+    let chunk = await MidiChunk.read(sourceFile);
     while (!chunk.isEmpty()) {
       this.log(`${chunk.typeName} [${chunk.length} bytes]`);
 
       const numBytesWritten = await chunk.write(targetFile);
       this.log(`Wrote ${numBytesWritten} bytes`);
 
-      chunk = await readChunk(sourceFile);
+      chunk = await MidiChunk.read(sourceFile);
     }
 
     await targetFile.close();

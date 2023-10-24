@@ -1,12 +1,8 @@
 import { FileHandle } from 'fs/promises';
+
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import {
-  openFile,
-  readChunk,
-  writeString,
-  writeUInt32,
-} from '@src/midi/io/io-fns';
+import { openFile, writeString, writeUInt32 } from '@src/midi/io/io-fns';
 import { readEvents } from '@src/midi/track/track-fns';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
@@ -31,11 +27,11 @@ class CopyEventsCommand {
     const sourceFile = await openFile(this.sourceFilename, 'r');
     const targetFile = await openFile(this.targetFilename, 'w');
 
-    const headerChunk = await readChunk(sourceFile);
+    const headerChunk = await MidiChunk.read(sourceFile);
     const numBytesWritten = await headerChunk.write(targetFile);
     this.log(`Wrote ${numBytesWritten} bytes`);
 
-    let trackChunk = await readChunk(sourceFile);
+    let trackChunk = await MidiChunk.read(sourceFile);
     while (!trackChunk.isEmpty()) {
       this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
 
@@ -46,7 +42,7 @@ class CopyEventsCommand {
       }
 
       this.log(`Wrote ${totalBytes} bytes`);
-      trackChunk = await readChunk(sourceFile);
+      trackChunk = await MidiChunk.read(sourceFile);
     }
 
     await targetFile.close();

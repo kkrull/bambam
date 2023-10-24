@@ -1,11 +1,11 @@
 import path from 'node:path';
 
+import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { parseHeader } from '@src/midi/header/header-fns';
-import { openFile, readChunk } from '@src/midi/io/io-fns';
+import { openFile } from '@src/midi/io/io-fns';
 import { readEvents } from '@src/midi/track/track-fns';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
-import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { MidiSource } from '@support/midi-source/MidiSource';
 
 //File-based MIDI track with a mapping of the drums available to EZDrummer 2.
@@ -17,17 +17,17 @@ export class FileMappingMidiSource implements MidiSource {
 
   async readTrack(): Promise<MidiTrack> {
     const file = await openFile(this.midiPath);
-    const headerChunk = await readChunk(file);
+    const headerChunk = await MidiChunk.read(file);
 
     const { format, numTracks, division } = parseHeader(headerChunk);
     this.verifyFormat(1, format);
     this.verifyNumTracks(2, numTracks);
 
     const trackChunks: MidiChunk[] = [];
-    let trackChunk = await readChunk(file);
+    let trackChunk = await MidiChunk.read(file);
     while (!trackChunk.isEmpty()) {
       trackChunks.push(trackChunk);
-      trackChunk = await readChunk(file);
+      trackChunk = await MidiChunk.read(file);
     }
 
     await file.close();
