@@ -1,6 +1,6 @@
 # BamBam
 *.bin
-output.mid
+output/
 
 # Node.js
 .eslintcache
