@@ -15,6 +15,7 @@ export class FileMappingMidiSource implements MidiSource {
     'modern-original-mix-type-1.mid',
   );
 
+  //TODO KDK: De-duplicate
   async readTrack(): Promise<MidiTrack> {
     const file = await openFile(this.midiPath);
     const headerChunk = await MidiChunk.read(file);

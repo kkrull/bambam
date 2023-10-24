@@ -75,7 +75,6 @@ class RemapEventsCommand {
   }
 
   private parseTrack(division: Division, trackChunk: MidiChunk): MidiTrack {
-    //TODO KDK: Remove duplicate end track event: 00ff 2f00 00ff 2f00
     const track = new MidiTrackBuilder();
     track.withDivisionInTicks(division.ticksPerQuarterNote);
     readEvents(trackChunk).forEach((x) => track.addMidiEvent(x));

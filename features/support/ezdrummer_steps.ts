@@ -31,6 +31,8 @@ Then('the re-mapped track should have the same time resolution as the original',
 });
 
 Then('the re-mapped track should have all non-note events from the original', () => {
+  console.log('ezd non-note events', ezDrummerTrack.nonNoteEvents());
+  console.log('gmp non-note events', gmTrack.nonNoteEvents());
   expect(gmTrack.nonNoteEvents()).to.deep.equal(ezDrummerTrack.nonNoteEvents());
 });
 
