@@ -1,18 +1,13 @@
-import { FileHandle } from 'fs/promises';
+import { EZDrummerMidiMap } from '@src/ezd-mapper/EZDrummerMidiMap';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import {
-  openFile,
-  readChunk,
-  writeString,
-  writeUInt32,
-} from '@src/midi/io/io-fns';
-import { readEvents } from '@src/midi/track/track-fns';
-import { parseHeader } from '@src/midi/header/header-fns';
-import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
-import { EZDrummerMidiMap } from '@src/ezd-mapper/EZDrummerMidiMap';
 import { Division } from '@src/midi/header/HeaderChunk';
+import { parseHeader } from '@src/midi/header/header-fns';
+import { openFile, writeString, writeUInt32 } from '@src/midi/io/io-fns';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
+import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
+import { readEvents } from '@src/midi/track/track-fns';
+import { FileHandle } from 'fs/promises';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
 class RemapEventsCommand {
@@ -37,16 +32,19 @@ class RemapEventsCommand {
     const targetFile = await openFile(this.targetFilename, 'w');
 
     //Write header
-    const headerChunk = await readChunk(sourceFile);
+    const headerChunk = await MidiChunk.read(sourceFile);
     const numBytesWritten = await headerChunk.write(targetFile);
     this.log(`Wrote ${numBytesWritten} bytes`);
 
-    //Write track 0 (meta data)
-    const metaTrackChunk = await readChunk(sourceFile);
-    this.log(`${metaTrackChunk.typeName} [${metaTrackChunk.length} bytes]`);
+    //Read track 0 (metadata)
+    const tempoTrackChunk = await MidiChunk.read(sourceFile);
+    const payloadSize = tempoTrackChunk.length;
+    const totalSize = tempoTrackChunk.length + 4 + 4;
+    this.log(`${tempoTrackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
 
-    let numBytes = await this.writeTrackPreamble(targetFile, metaTrackChunk);
-    for (const event of readEvents(metaTrackChunk)) {
+    //Write track 0 events
+    let numBytes = await this.writeTrackPreamble(targetFile, tempoTrackChunk);
+    for (const event of readEvents(tempoTrackChunk)) {
       const eventBytes = await event.write(targetFile);
       numBytes += eventBytes;
     }
@@ -54,9 +52,11 @@ class RemapEventsCommand {
 
     //Write track 1 (with notes)
     const { division } = parseHeader(headerChunk);
-    let trackChunk = await readChunk(sourceFile);
+    let trackChunk = await MidiChunk.read(sourceFile);
     while (!trackChunk.isEmpty()) {
-      this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
+      const payloadSize = trackChunk.length;
+      const totalSize = trackChunk.length + 4 + 4;
+      this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
       let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
 
       const ezDrummerTrack = this.parseTrack(division, trackChunk);
@@ -67,7 +67,7 @@ class RemapEventsCommand {
       }
 
       this.log(`Wrote ${totalBytes} bytes`);
-      trackChunk = await readChunk(sourceFile);
+      trackChunk = await MidiChunk.read(sourceFile);
     }
 
     await targetFile.close();
