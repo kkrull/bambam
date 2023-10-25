@@ -1,6 +1,6 @@
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { openFile } from '@src/midi/io/io-fns';
+import { openFile } from '@src/midi/file/file-fns';
 
 //Copies a MIDI file to make sure events are brought to me...unspoiled.
 class CopyFileCommand {

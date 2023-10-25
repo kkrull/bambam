@@ -1,4 +1,3 @@
-import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { MidiData } from '@src/midi/chunk/MidiData';
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MetaEvent } from '@src/midi/event/MetaEvent';
@@ -6,19 +5,6 @@ import { MidiEvent } from '@src/midi/event/MidiEvent';
 import { MidiNote } from '@src/midi/note/MidiNote';
 import { NoteEvent } from '@src/midi/note/NoteEvent';
 import { EndTrackEvent } from '@src/midi/track/EndTrackEvent';
-
-/* Track chunks */
-
-export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
-  //<Track Chunk> = <chunk type> <length> <MTrk event>+
-  const events: MidiEvent[] = [];
-  while (!trackChunk.data.isDoneReading()) {
-    const event = readEvent(trackChunk.data);
-    events.push(event);
-  }
-
-  return events;
-}
 
 export function readEvent(trackData: MidiData): MidiEvent {
   //<MTrk event> = <delta-time> <event>

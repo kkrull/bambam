@@ -1,6 +1,6 @@
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
-import { writeBytes } from '@src/midi/io/io-fns';
+import { writeBytes } from '@src/midi/file/file-fns';
 import { FileHandle } from 'fs/promises';
 
 //An event required at the end of a track chunk to show when it ends.

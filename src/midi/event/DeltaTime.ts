@@ -1,4 +1,4 @@
-import { writeVariableLengthQuantity } from '@src/midi/io/io-fns';
+import { writeVariableLengthQuantity } from '@src/midi/file/file-fns';
 import { FileHandle } from 'fs/promises';
 
 //Time elapsed between an event and the one just before it.

@@ -2,8 +2,8 @@ import { FileHandle } from 'fs/promises';
 
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { openFile, writeString, writeUInt32 } from '@src/midi/io/io-fns';
-import { readEvents } from '@src/midi/track/track-fns';
+import { readEvents } from '@src/midi/chunk/midi-chunk-fns';
+import { openFile, writeString, writeUInt32 } from '@src/midi/file/file-fns';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
 class CopyEventsCommand {

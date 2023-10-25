@@ -1,12 +1,11 @@
 import { EZDrummerMidiMap } from '@src/ezd-mapper/EZDrummerMidiMap';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
+import { parseHeader, readEvents } from '@src/midi/chunk/midi-chunk-fns';
+import { openFile, writeString, writeUInt32 } from '@src/midi/file/file-fns';
 import { Division } from '@src/midi/header/HeaderChunk';
-import { parseHeader } from '@src/midi/header/header-fns';
-import { openFile, writeString, writeUInt32 } from '@src/midi/io/io-fns';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
 import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
-import { readEvents } from '@src/midi/track/track-fns';
 import { FileHandle } from 'fs/promises';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.

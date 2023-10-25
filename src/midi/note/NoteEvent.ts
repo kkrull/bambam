@@ -2,7 +2,7 @@ import { FileHandle } from 'fs/promises';
 
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
-import { writeBytes } from '@src/midi/io/io-fns';
+import { writeBytes } from '@src/midi/file/file-fns';
 import { MidiNote } from '@src/midi/note/MidiNote';
 
 //A timed event related to a note, along with how it is played.

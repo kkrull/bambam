@@ -4,7 +4,7 @@ import {
   writeBytes,
   writeUInt8,
   writeVariableLengthQuantity,
-} from '@src/midi/io/io-fns';
+} from '@src/midi/file/file-fns';
 import { FileHandle } from 'fs/promises';
 
 //A meta event to pass through.

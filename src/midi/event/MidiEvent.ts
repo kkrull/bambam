@@ -1,7 +1,7 @@
 import { FileHandle } from 'fs/promises';
 
 import { DeltaTime } from '@src/midi/event/DeltaTime';
-import { writeUInt8 } from '@src/midi/io/io-fns';
+import { writeUInt8 } from '@src/midi/file/file-fns';
 
 //Any MIDI event, which is always preceded by a delta time from the prior event.
 export abstract class MidiEvent {
