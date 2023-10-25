@@ -73,6 +73,7 @@ class RemapEventsCommand {
     await sourceFile.close();
   }
 
+  //TODO KDK: Move this to midi-chunk-fns
   private parseTrack(division: Division, trackChunk: MidiChunk): MidiTrack {
     const track = new MidiTrackBuilder();
     track.withDivisionInTicks(division.ticksPerQuarterNote);

@@ -16,6 +16,9 @@ Converts a MIDI drum track from one drum sample map to another.
     `midi/`.
   - `midi/`: Abstract data model and core logic. No dependencies.
 - Use the following criteria to decide where to put code:
+  - Goal: Use reasonable but fairly objective criteria to maintain flow.
+    Example: using pure functions avoids the need to decide which class gets a
+    new method and makes unit testing pretty simple.
   - Any data crossing a boundary: Make a `class`. Avoid naked primitives.
   - Simple data queries: Make these methods on the class containing the data.
   - Functions that do stuff: Make pure `functions`. Group pure functions that
