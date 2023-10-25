@@ -2,6 +2,26 @@
 
 Converts a MIDI drum track from one drum sample map to another.
 
+## Decisions
+
+- Establish development tools: CI/CD, formatting, linting, spell checks, test
+  automation, and type checking.
+  - Integrate with Git, so code is always formatted and checked for linting errors.
+  - Write basic documentation for developers, to trace tools to their
+    configuration and documentation.
+- Top-level structure:
+  - `features/`: Feature and discovery tests, along with code specific to those.
+    Depends upon `midi/`.
+  - `main/`: Top-level scripts to call from `package.json`. Depends upon
+    `midi/`.
+  - `midi/`: Abstract data model and core logic. No dependencies.
+- Use the following criteria to decide where to put code:
+  - Any data crossing a boundary: Make a `class`. Avoid naked primitives.
+  - Simple data queries: Make these methods on the class containing the data.
+  - Functions that do stuff: Make pure `functions`. Group pure functions that
+    operate on the same type into a file named after that type (example:
+    `midi-chunk-fns.ts`).
+
 ## Development
 
 ### Format code
