@@ -1,8 +1,6 @@
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
-import { writeBytes } from '@src/midi/file/file-fns';
 import { MidiNote } from '@src/midi/note/MidiNote';
-import { FileHandle } from 'node:fs/promises';
 
 //A timed event related to a note, along with how it is played.
 export class NoteEvent extends MidiEvent {
@@ -48,9 +46,5 @@ export class NoteEvent extends MidiEvent {
       other,
       this.velocity,
     );
-  }
-
-  async writePayload(file: FileHandle): Promise<number> {
-    return writeBytes(file, [this.note.noteNumber, this.velocity]);
   }
 }
