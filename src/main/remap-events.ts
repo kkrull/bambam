@@ -40,9 +40,7 @@ class RemapEventsCommand {
     //Write track 1 (with notes)
     let trackChunk = await MidiChunk.read(sourceFile);
     while (!trackChunk.isEmpty()) {
-      const payloadSize = trackChunk.length;
-      const totalSize = trackChunk.length + 4 + 4;
-      this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
+      this.logChunkSize(trackChunk);
       let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
 
       const ezDrummerTrack = parseTrack(trackChunk, division);
@@ -76,10 +74,7 @@ class RemapEventsCommand {
     file: FileHandle,
     trackChunk: MidiChunk,
   ): Promise<void> {
-    //Read track 0 (tempo track)
-    const payloadSize = trackChunk.length;
-    const totalSize = trackChunk.length + 4 + 4;
-    this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
+    this.logChunkSize(trackChunk);
 
     //Write track 0 events (tempo track)
     let numBytes = await this.writeTrackPreamble(file, trackChunk);
@@ -89,6 +84,12 @@ class RemapEventsCommand {
     }
 
     this.log(`Wrote ${numBytes} bytes`);
+  }
+
+  private logChunkSize(trackChunk: MidiChunk): void {
+    const payloadSize = trackChunk.length;
+    const totalSize = trackChunk.length + 4 + 4;
+    this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
   }
 
   private remapTrack(sourceTrack: MidiTrack): MidiTrack {
