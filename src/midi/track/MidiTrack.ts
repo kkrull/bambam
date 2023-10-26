@@ -7,7 +7,22 @@ import { TickDivision } from '@src/midi/track/TickDivision';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
-  constructor(
+  static withEvents(division: TickDivision, events: MidiEvent[]): MidiTrack {
+    const lastEvent = events[events.length - 1];
+    if (lastEvent instanceof EndTrackEvent !== true) {
+      throw Error(
+        `Missing end of track event: ${JSON.stringify(events, null, 2)}`,
+      );
+    }
+
+    return new MidiTrack(
+      division,
+      lastEvent,
+      events.slice(0, events.length - 1),
+    );
+  }
+
+  private constructor(
     readonly division: TickDivision,
     readonly endTrackEvent: EndTrackEvent,
     readonly events: MidiEvent[],
@@ -46,16 +61,13 @@ export class MidiTrack {
   }
 
   remap(mapper: MidiMap): MidiTrack {
-    //TODO KDK: Filtering out the EndTrackEvent avoids a duplicate in the remap-events script, but causes test to fail.
-    const mappedEvents: MidiEvent[] = this.events
-      // .filter((x) => x instanceof EndTrackEvent === false)
-      .map((x) => {
-        if (x instanceof NoteEvent === false) {
-          return x;
-        }
+    const mappedEvents: MidiEvent[] = this.events.map((x) => {
+      if (x instanceof NoteEvent === false) {
+        return x;
+      }
 
-        return mapper.remap(x as NoteEvent);
-      });
+      return mapper.remap(x as NoteEvent);
+    });
 
     return new MidiTrack(this.division, this.endTrackEvent, mappedEvents);
   }

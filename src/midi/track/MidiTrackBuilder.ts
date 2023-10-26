@@ -18,7 +18,7 @@ export class MidiTrackBuilder {
       throw Error('Missing required End Track event');
     }
 
-    return new MidiTrack(this.division, this.endTrack(), this.events.slice());
+    return MidiTrack.withEvents(this.division, this.events);
   }
 
   addEndTrackEvent(deltaTime: DeltaTime): MidiTrackBuilder {
