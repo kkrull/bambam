@@ -91,6 +91,7 @@ class RemapEventsCommand {
     trackChunk: MidiChunk,
     file: FileHandle,
   ): Promise<number> {
+    //TODO KDK: work here - parse the track instead of reading events and writing separately
     let numBytes = await trackChunk.writePreamble(file);
     for (const event of readEvents(trackChunk)) {
       numBytes += await event.write(file);
