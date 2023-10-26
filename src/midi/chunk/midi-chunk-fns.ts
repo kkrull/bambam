@@ -7,6 +7,7 @@ import { MidiTrack } from '../track/MidiTrack';
 import { MidiTrackBuilder } from '../track/MidiTrackBuilder';
 
 export function parseHeader(header: MidiChunk): HeaderChunk {
+  //<Header Chunk> = <format> <ntracks> <tickdiv>
   if (header.length !== 6) {
     throw Error(`Expected header to have 6 bytes, but has: ${header.length}`);
   }
@@ -24,6 +25,7 @@ export function parseTrack(
   trackChunk: MidiChunk,
   division: Division,
 ): MidiTrack {
+  //<Track Chunk> = <chunk type> <length> <MTrk event>+
   const track = new MidiTrackBuilder();
   track.withDivisionInTicks(division.ticksPerQuarterNote);
   readEvents(trackChunk).forEach((x) => track.addMidiEvent(x));
@@ -31,7 +33,6 @@ export function parseTrack(
 }
 
 export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
-  //<Track Chunk> = <chunk type> <length> <MTrk event>+
   const events: MidiEvent[] = [];
   while (!trackChunk.data.isDoneReading()) {
     const event = readEvent(trackChunk.data);
