@@ -7,6 +7,7 @@ import {
   readEvents,
 } from '@src/midi/chunk/midi-chunk-fns';
 import { openFile, writeString, writeUInt32 } from '@src/midi/file/file-fns';
+import { HeaderChunk } from '@src/midi/header/HeaderChunk';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
 import { FileHandle } from 'fs/promises';
 
@@ -32,27 +33,11 @@ class RemapEventsCommand {
     const sourceFile = await openFile(this.sourceFilename, 'r');
     const targetFile = await openFile(this.targetFilename, 'w');
 
-    //Write header
-    const headerChunk = await MidiChunk.read(sourceFile);
-    const numBytesWritten = await headerChunk.write(targetFile);
-    this.log(`Wrote ${numBytesWritten} bytes`);
-
-    //Read track 0 (tempo track)
+    const { division } = await this.copyHeader(sourceFile, targetFile);
     const tempoTrackChunk = await MidiChunk.read(sourceFile);
-    const payloadSize = tempoTrackChunk.length;
-    const totalSize = tempoTrackChunk.length + 4 + 4;
-    this.log(`${tempoTrackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
-
-    //Write track 0 events (tempo track)
-    let numBytes = await this.writeTrackPreamble(targetFile, tempoTrackChunk);
-    for (const event of readEvents(tempoTrackChunk)) {
-      const eventBytes = await event.write(targetFile);
-      numBytes += eventBytes;
-    }
-    this.log(`Wrote ${numBytes} bytes`);
+    await this.copyTrack(targetFile, tempoTrackChunk);
 
     //Write track 1 (with notes)
-    const { division } = parseHeader(headerChunk);
     let trackChunk = await MidiChunk.read(sourceFile);
     while (!trackChunk.isEmpty()) {
       const payloadSize = trackChunk.length;
@@ -73,6 +58,37 @@ class RemapEventsCommand {
 
     await targetFile.close();
     await sourceFile.close();
+  }
+
+  private async copyHeader(
+    sourceFile: FileHandle,
+    targetFile: FileHandle,
+  ): Promise<HeaderChunk> {
+    const headerChunk = await MidiChunk.read(sourceFile);
+    const header = parseHeader(headerChunk);
+    const numBytesWritten = await headerChunk.write(targetFile);
+
+    this.log(`Wrote ${numBytesWritten} bytes`);
+    return header;
+  }
+
+  private async copyTrack(
+    file: FileHandle,
+    trackChunk: MidiChunk,
+  ): Promise<void> {
+    //Read track 0 (tempo track)
+    const payloadSize = trackChunk.length;
+    const totalSize = trackChunk.length + 4 + 4;
+    this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
+
+    //Write track 0 events (tempo track)
+    let numBytes = await this.writeTrackPreamble(file, trackChunk);
+    for (const event of readEvents(trackChunk)) {
+      const eventBytes = await event.write(file);
+      numBytes += eventBytes;
+    }
+
+    this.log(`Wrote ${numBytes} bytes`);
   }
 
   private remapTrack(sourceTrack: MidiTrack): MidiTrack {
