@@ -1,14 +1,11 @@
 import { EZDrummerMidiMap } from '@src/ezd-mapper/EZDrummerMidiMap';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import {
-  parseHeader,
-  parseTrack,
-  readEvents,
-} from '@src/midi/chunk/midi-chunk-fns';
+import { parseHeader, parseTrack } from '@src/midi/chunk/midi-chunk-fns';
 import { openFile } from '@src/midi/file/file-fns';
-import { HeaderChunk } from '@src/midi/header/HeaderChunk';
+import { Division, HeaderChunk } from '@src/midi/header/HeaderChunk';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
+import { toChunk } from '@src/midi/track/track-fns';
 import { FileHandle } from 'fs/promises';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
@@ -34,23 +31,20 @@ class RemapEventsCommand {
     const targetFile = await openFile(this.targetFilename, 'w');
 
     const { division } = await this.copyHeader(sourceFile, targetFile);
-    await this.copyTrack(sourceFile, targetFile); //Track 0 (tempo track)
+    await this.copyTrack(sourceFile, targetFile, division); //Tempo track
 
-    //Write track 1 (with notes)
-    let trackChunk = await MidiChunk.read(sourceFile);
-    while (!trackChunk.isEmpty()) {
-      this.logChunkSize(trackChunk);
-      let trackBytes = await trackChunk.writePreamble(targetFile);
+    //Percussion track
+    let sourceTrackChunk = await MidiChunk.read(sourceFile);
+    while (!sourceTrackChunk.isEmpty()) {
+      this.logChunkSize(sourceTrackChunk);
 
-      const ezDrummerTrack = parseTrack(trackChunk, division);
-      const gmTrack = this.remapTrack(ezDrummerTrack);
-      for (const event of gmTrack.allEvents()) {
-        const eventBytes = await event.write(targetFile);
-        trackBytes += eventBytes;
-      }
+      const sourceTrack = parseTrack(sourceTrackChunk, division);
+      const targetTrack = this.remapTrack(sourceTrack);
+      const targetTrackChunk = toChunk(targetTrack);
+      const trackBytes = await targetTrackChunk.write(targetFile);
 
       this.log(`Wrote ${trackBytes} bytes`);
-      trackChunk = await MidiChunk.read(sourceFile);
+      sourceTrackChunk = await MidiChunk.read(sourceFile);
     }
 
     await targetFile.close();
@@ -71,11 +65,16 @@ class RemapEventsCommand {
   private async copyTrack(
     sourceFile: FileHandle,
     targetFile: FileHandle,
+    division: Division,
   ): Promise<void> {
-    const trackChunk = await MidiChunk.read(sourceFile);
-    this.logChunkSize(trackChunk);
-    const numBytes = await this.writeTrack(trackChunk, targetFile);
-    this.log(`Wrote ${numBytes} bytes`);
+    const sourceTrackChunk = await MidiChunk.read(sourceFile);
+    this.logChunkSize(sourceTrackChunk);
+
+    const sourceTrack = parseTrack(sourceTrackChunk, division);
+    const targetTrackChunk = toChunk(sourceTrack);
+    const trackBytes = await targetTrackChunk.write(targetFile);
+
+    this.log(`Wrote ${trackBytes} bytes`);
   }
 
   private logChunkSize(chunk: MidiChunk): void {
@@ -85,19 +84,6 @@ class RemapEventsCommand {
   private remapTrack(track: MidiTrack): MidiTrack {
     const midiMap = EZDrummerMidiMap.version2Map();
     return track.remap(midiMap);
-  }
-
-  private async writeTrack(
-    trackChunk: MidiChunk,
-    file: FileHandle,
-  ): Promise<number> {
-    //TODO KDK: work here - parse the track instead of reading events and writing separately
-    let numBytes = await trackChunk.writePreamble(file);
-    for (const event of readEvents(trackChunk)) {
-      numBytes += await event.write(file);
-    }
-
-    return numBytes;
   }
 }
 

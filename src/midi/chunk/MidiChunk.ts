@@ -36,14 +36,9 @@ export class MidiChunk {
   }
 
   async write(file: FileHandle): Promise<number> {
-    const preambleSize = await this.writePreamble(file);
-    const dataSize = await writeBytes(file, this.data.asBytes());
-    return preambleSize + dataSize;
-  }
-
-  async writePreamble(file: FileHandle): Promise<number> {
     const typeSize = await writeString(file, this.typeName);
     const lengthSize = await writeUInt32(file, this.length);
-    return typeSize + lengthSize;
+    const dataSize = await writeBytes(file, this.data.asBytes());
+    return typeSize + lengthSize + dataSize;
   }
 }

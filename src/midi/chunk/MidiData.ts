@@ -7,6 +7,10 @@ export class MidiData {
     return new MidiData(Buffer.alloc(0));
   }
 
+  static fromBytes(data: number[]): MidiData {
+    return new MidiData(Buffer.from(data));
+  }
+
   static async read(file: FileHandle, nBytes: number): Promise<MidiData> {
     const buffer = Buffer.alloc(nBytes);
     const result = await file.read({ buffer, length: nBytes });
