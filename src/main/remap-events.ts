@@ -6,7 +6,7 @@ import {
   parseTrack,
   readEvents,
 } from '@src/midi/chunk/midi-chunk-fns';
-import { openFile, writeString, writeUInt32 } from '@src/midi/file/file-fns';
+import { openFile } from '@src/midi/file/file-fns';
 import { HeaderChunk } from '@src/midi/header/HeaderChunk';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
 import { FileHandle } from 'fs/promises';
@@ -40,7 +40,7 @@ class RemapEventsCommand {
     let trackChunk = await MidiChunk.read(sourceFile);
     while (!trackChunk.isEmpty()) {
       this.logChunkSize(trackChunk);
-      let trackBytes = await this.writeChunkPreamble(trackChunk, targetFile);
+      let trackBytes = await trackChunk.writePreamble(targetFile);
 
       const ezDrummerTrack = parseTrack(trackChunk, division);
       const gmTrack = this.remapTrack(ezDrummerTrack);
@@ -62,8 +62,8 @@ class RemapEventsCommand {
     targetFile: FileHandle,
   ): Promise<HeaderChunk> {
     const headerChunk = await MidiChunk.read(sourceFile);
-    const numBytesWritten = await headerChunk.write(targetFile);
-    this.log(`Wrote ${numBytesWritten} bytes`);
+    const headerSize = await headerChunk.write(targetFile);
+    this.log(`Wrote ${headerSize} bytes`);
 
     return parseHeader(headerChunk);
   }
@@ -78,10 +78,8 @@ class RemapEventsCommand {
     this.log(`Wrote ${numBytes} bytes`);
   }
 
-  private logChunkSize(trackChunk: MidiChunk): void {
-    const payloadSize = trackChunk.length;
-    const totalSize = trackChunk.length + 4 + 4;
-    this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
+  private logChunkSize(chunk: MidiChunk): void {
+    this.log(`${chunk.typeName} [${chunk.length}/${chunk.totalSize} bytes]`);
   }
 
   private remapTrack(track: MidiTrack): MidiTrack {
@@ -89,20 +87,11 @@ class RemapEventsCommand {
     return track.remap(midiMap);
   }
 
-  private async writeChunkPreamble(
-    chunk: MidiChunk,
-    file: FileHandle,
-  ): Promise<number> {
-    const typeSize = await writeString(file, chunk.typeName);
-    const lengthSize = await writeUInt32(file, chunk.length);
-    return typeSize + lengthSize;
-  }
-
   private async writeTrack(
     trackChunk: MidiChunk,
     file: FileHandle,
   ): Promise<number> {
-    let numBytes = await this.writeChunkPreamble(trackChunk, file);
+    let numBytes = await trackChunk.writePreamble(file);
     for (const event of readEvents(trackChunk)) {
       numBytes += await event.write(file);
     }

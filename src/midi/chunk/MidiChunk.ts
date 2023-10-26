@@ -29,10 +29,21 @@ export class MidiChunk {
     return this.data.isEmpty();
   }
 
+  get totalSize(): number {
+    const typeSize = 4;
+    const lengthSize = 4;
+    return this.length + typeSize + lengthSize;
+  }
+
   async write(file: FileHandle): Promise<number> {
+    const preambleSize = await this.writePreamble(file);
+    const dataSize = await writeBytes(file, this.data.asBytes());
+    return preambleSize + dataSize;
+  }
+
+  async writePreamble(file: FileHandle): Promise<number> {
     const typeSize = await writeString(file, this.typeName);
     const lengthSize = await writeUInt32(file, this.length);
-    const dataSize = await writeBytes(file, this.data.asBytes());
-    return typeSize + lengthSize + dataSize;
+    return typeSize + lengthSize;
   }
 }
