@@ -35,6 +35,7 @@ class CopyEventsCommand {
     while (!trackChunk.isEmpty()) {
       this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
 
+      //TODO KDK: Fix this
       let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
       for (const event of readEvents(trackChunk)) {
         const eventBytes = await event.write(targetFile);
