@@ -7,7 +7,7 @@ export class MidiData {
     return new MidiData(Buffer.alloc(0));
   }
 
-  static fromBytes(data: number[]): MidiData {
+  static ofBytes(data: Buffer): MidiData {
     return new MidiData(Buffer.from(data));
   }
 
