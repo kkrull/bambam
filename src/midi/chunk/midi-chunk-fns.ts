@@ -1,19 +1,11 @@
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { readEvent } from '@src/midi/chunk/midi-data-fns';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
-import { HeaderChunk } from '@src/midi/header/HeaderChunk';
+import { Division, HeaderChunk } from '@src/midi/header/HeaderChunk';
 import { parseDivision } from '@src/midi/number-fns';
+import { MidiTrack } from '../track/MidiTrack';
+import { MidiTrackBuilder } from '../track/MidiTrackBuilder';
 
-export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
-  //<Track Chunk> = <chunk type> <length> <MTrk event>+
-  const events: MidiEvent[] = [];
-  while (!trackChunk.data.isDoneReading()) {
-    const event = readEvent(trackChunk.data);
-    events.push(event);
-  }
-
-  return events;
-}
 export function parseHeader(header: MidiChunk): HeaderChunk {
   if (header.length !== 6) {
     throw Error(`Expected header to have 6 bytes, but has: ${header.length}`);
@@ -26,4 +18,25 @@ export function parseHeader(header: MidiChunk): HeaderChunk {
       ...parseDivision(header.data.slice(4, 6).asInt16()),
     },
   };
+}
+
+export function parseTrack(
+  trackChunk: MidiChunk,
+  division: Division,
+): MidiTrack {
+  const track = new MidiTrackBuilder();
+  track.withDivisionInTicks(division.ticksPerQuarterNote);
+  readEvents(trackChunk).forEach((x) => track.addMidiEvent(x));
+  return track.build();
+}
+
+export function readEvents(trackChunk: MidiChunk): MidiEvent[] {
+  //<Track Chunk> = <chunk type> <length> <MTrk event>+
+  const events: MidiEvent[] = [];
+  while (!trackChunk.data.isDoneReading()) {
+    const event = readEvent(trackChunk.data);
+    events.push(event);
+  }
+
+  return events;
 }

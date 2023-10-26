@@ -1,11 +1,13 @@
 import { EZDrummerMidiMap } from '@src/ezd-mapper/EZDrummerMidiMap';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { parseHeader, readEvents } from '@src/midi/chunk/midi-chunk-fns';
+import {
+  parseHeader,
+  parseTrack,
+  readEvents,
+} from '@src/midi/chunk/midi-chunk-fns';
 import { openFile, writeString, writeUInt32 } from '@src/midi/file/file-fns';
-import { Division } from '@src/midi/header/HeaderChunk';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
-import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
 import { FileHandle } from 'fs/promises';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
@@ -58,7 +60,7 @@ class RemapEventsCommand {
       this.log(`${trackChunk.typeName} [${payloadSize}/${totalSize} bytes]`);
       let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
 
-      const ezDrummerTrack = this.parseTrack(division, trackChunk);
+      const ezDrummerTrack = parseTrack(trackChunk, division);
       const gmTrack = this.remapTrack(ezDrummerTrack);
       for (const event of gmTrack.allEvents()) {
         const eventBytes = await event.write(targetFile);
@@ -71,14 +73,6 @@ class RemapEventsCommand {
 
     await targetFile.close();
     await sourceFile.close();
-  }
-
-  //TODO KDK: Move this to midi-chunk-fns
-  private parseTrack(division: Division, trackChunk: MidiChunk): MidiTrack {
-    const track = new MidiTrackBuilder();
-    track.withDivisionInTicks(division.ticksPerQuarterNote);
-    readEvents(trackChunk).forEach((x) => track.addMidiEvent(x));
-    return track.build();
   }
 
   private remapTrack(sourceTrack: MidiTrack): MidiTrack {
