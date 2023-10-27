@@ -3,7 +3,12 @@ import { FileHandle } from 'fs/promises';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { readEvents } from '@src/midi/chunk/midi-chunk-fns';
-import { openFile, writeString, writeUInt32 } from '@src/midi/file/file-fns';
+import {
+  openFile,
+  readChunks,
+  writeString,
+  writeUInt32,
+} from '@src/midi/file/file-fns';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
 class CopyEventsCommand {
@@ -27,15 +32,15 @@ class CopyEventsCommand {
     const sourceFile = await openFile(this.sourceFilename, 'r');
     const targetFile = await openFile(this.targetFilename, 'w');
 
-    const headerChunk = await MidiChunk.read(sourceFile);
+    const chunks = await readChunks(sourceFile);
+    const headerChunk = chunks[0];
     const numBytesWritten = await headerChunk.write(targetFile);
     this.log(`Wrote ${numBytesWritten} bytes`);
 
-    let trackChunk = await MidiChunk.read(sourceFile);
-    while (!trackChunk.isEmpty()) {
+    for (const trackChunk of chunks.slice(1)) {
       this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
 
-      //TODO KDK: Fix this
+      //TODO KDK: Bring back MidiEvent#write or change to MidiTrack#write
       let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
       for (const event of readEvents(trackChunk)) {
         const eventBytes = await event.write(targetFile);
@@ -43,7 +48,6 @@ class CopyEventsCommand {
       }
 
       this.log(`Wrote ${totalBytes} bytes`);
-      trackChunk = await MidiChunk.read(sourceFile);
     }
 
     await targetFile.close();
