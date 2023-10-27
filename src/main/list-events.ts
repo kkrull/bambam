@@ -3,7 +3,7 @@ import { FileHandle } from 'node:fs/promises';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { parseHeader, readEvents } from '@src/midi/chunk/midi-chunk-fns';
-import { openFile } from '@src/midi/file/file-fns';
+import { openFile, readChunks } from '@src/midi/file/file-fns';
 
 //Lists the events in MIDI tracks.
 class ListEventsCommand {
@@ -28,23 +28,12 @@ class ListEventsCommand {
   }
 
   private async fileToObject(file: FileHandle): Promise<object> {
-    const headerChunk = await MidiChunk.read(file);
-    const trackChunks = await this.readTracks(file);
+    const chunks = await readChunks(file);
+    const trackChunks = chunks.slice(1);
     return {
-      header: parseHeader(headerChunk),
+      header: parseHeader(chunks[0]),
       tracks: trackChunks.map((x, i) => this.trackToObject(x, i + 1)),
     };
-  }
-
-  private async readTracks(file: FileHandle): Promise<MidiChunk[]> {
-    const trackChunks = [];
-    let chunk = await MidiChunk.read(file);
-    while (!chunk.isEmpty()) {
-      trackChunks.push(chunk);
-      chunk = await MidiChunk.read(file);
-    }
-
-    return trackChunks;
   }
 
   private trackToObject(chunk: MidiChunk, trackNum: number): object {

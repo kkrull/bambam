@@ -3,7 +3,7 @@ import { FileHandle } from 'node:fs/promises';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { parseHeader } from '@src/midi/chunk/midi-chunk-fns';
-import { openFile } from '@src/midi/file/file-fns';
+import { openFile, readChunks } from '@src/midi/file/file-fns';
 import { HeaderChunk } from '@src/midi/header/HeaderChunk';
 import { TickDivision } from '@src/midi/track/TickDivision';
 
@@ -29,17 +29,15 @@ class ListChunksCommand {
   }
 
   private async logChunks(file: FileHandle) {
-    const headerChunk = await MidiChunk.read(file);
+    const chunks = await readChunks(file);
+    const headerChunk = chunks[0];
     this.logChunk(headerChunk);
     this.logHeaderChunk(headerChunk);
 
-    let chunk = await MidiChunk.read(file);
-    while (!chunk.isEmpty()) {
+    chunks.slice(1).forEach((trackChunk) => {
       this.log();
-      this.logChunk(chunk);
-
-      chunk = await MidiChunk.read(file);
-    }
+      this.logChunk(trackChunk);
+    });
   }
 
   private logChunk(chunk: MidiChunk): void {

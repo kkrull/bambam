@@ -1,8 +1,20 @@
+import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { toVariableLengthQuantity } from '@src/midi/number-fns';
 import { FileHandle, open } from 'node:fs/promises';
 
 export function openFile(filename: string, flag = 'r'): Promise<FileHandle> {
   return open(filename, flag);
+}
+
+export async function readChunks(file: FileHandle): Promise<MidiChunk[]> {
+  const trackChunks = [];
+  let chunk = await MidiChunk.read(file);
+  while (!chunk.isEmpty()) {
+    trackChunks.push(chunk);
+    chunk = await MidiChunk.read(file);
+  }
+
+  return trackChunks;
 }
 
 export async function writeBytes(
