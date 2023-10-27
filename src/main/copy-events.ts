@@ -40,7 +40,7 @@ class CopyEventsCommand {
     for (const trackChunk of chunks.slice(1)) {
       this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
 
-      //TODO KDK: Bring back MidiEvent#write or change to MidiTrack#write
+      //TODO KDK: Bring back MidiEvent#write or change to MidiTrack#write and call this copy-tracks instead
       let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
       for (const event of readEvents(trackChunk)) {
         const eventBytes = await event.write(targetFile);
