@@ -2,7 +2,7 @@ import { EZDrummerMidiMap } from '@src/ezd-mapper/EZDrummerMidiMap';
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
 import { parseHeader, parseTrack } from '@src/midi/chunk/midi-chunk-fns';
-import { openFile } from '@src/midi/file/file-fns';
+import { openFile, readChunks } from '@src/midi/file/file-fns';
 import { Division, HeaderChunk } from '@src/midi/header/HeaderChunk';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
 import { toChunk } from '@src/midi/track/track-fns';
@@ -30,12 +30,14 @@ class RemapEventsCommand {
     const sourceFile = await openFile(this.sourceFilename, 'r');
     const targetFile = await openFile(this.targetFilename, 'w');
 
-    const { division } = await this.copyHeader(sourceFile, targetFile);
-    await this.copyTrack(sourceFile, targetFile, division); //Tempo track
+    const chunks = await readChunks(sourceFile);
+    const { division } = await this.copyHeader(chunks[0], targetFile);
 
-    //Percussion track
-    let sourceTrackChunk = await MidiChunk.read(sourceFile);
-    while (!sourceTrackChunk.isEmpty()) {
+    //Tempo track
+    await this.copyTrack(chunks[1], targetFile, division);
+
+    //Percussion track(s)
+    for (const sourceTrackChunk of chunks.slice(2)) {
       this.logChunkSize(sourceTrackChunk);
 
       const sourceTrack = parseTrack(sourceTrackChunk, division);
@@ -44,7 +46,6 @@ class RemapEventsCommand {
       const trackBytes = await targetTrackChunk.write(targetFile);
 
       this.log(`Wrote ${trackBytes} bytes`);
-      sourceTrackChunk = await MidiChunk.read(sourceFile);
     }
 
     await targetFile.close();
@@ -52,22 +53,19 @@ class RemapEventsCommand {
   }
 
   private async copyHeader(
-    sourceFile: FileHandle,
+    headerChunk: MidiChunk,
     targetFile: FileHandle,
   ): Promise<HeaderChunk> {
-    const headerChunk = await MidiChunk.read(sourceFile);
     const headerSize = await headerChunk.write(targetFile);
     this.log(`Wrote ${headerSize} bytes`);
-
     return parseHeader(headerChunk);
   }
 
   private async copyTrack(
-    sourceFile: FileHandle,
+    sourceTrackChunk: MidiChunk,
     targetFile: FileHandle,
     division: Division,
   ): Promise<void> {
-    const sourceTrackChunk = await MidiChunk.read(sourceFile);
     this.logChunkSize(sourceTrackChunk);
 
     const sourceTrack = parseTrack(sourceTrackChunk, division);

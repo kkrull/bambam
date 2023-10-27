@@ -30,6 +30,7 @@ class ListChunksCommand {
 
   private async logChunks(file: FileHandle) {
     const chunks = await readChunks(file);
+
     const headerChunk = chunks[0];
     this.logChunk(headerChunk);
     this.logHeaderChunk(headerChunk);
