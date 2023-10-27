@@ -1,10 +1,9 @@
 import path from 'node:path';
 
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { parseHeader, readEvents } from '@src/midi/chunk/midi-chunk-fns';
+import { parseHeader, parseTrack } from '@src/midi/chunk/midi-chunk-fns';
 import { openFile } from '@src/midi/file/file-fns';
 import { MidiTrack } from '@src/midi/track/MidiTrack';
-import { MidiTrackBuilder } from '@src/midi/track/MidiTrackBuilder';
 import { MidiSource } from '@support/midi-source/MidiSource';
 
 //File-based MIDI track with a mapping of the drums available to EZDrummer 2.
@@ -14,7 +13,6 @@ export class FileMappingMidiSource implements MidiSource {
     'modern-original-mix-type-1.mid',
   );
 
-  //TODO KDK: De-duplicate
   async readTrack(): Promise<MidiTrack> {
     const file = await openFile(this.midiPath);
     const headerChunk = await MidiChunk.read(file);
@@ -31,12 +29,7 @@ export class FileMappingMidiSource implements MidiSource {
     }
 
     await file.close();
-
-    const ezdChunk = trackChunks[trackChunks.length - 1];
-    const midiTrack = new MidiTrackBuilder();
-    midiTrack.withDivisionInTicks(division.ticksPerQuarterNote);
-    readEvents(ezdChunk).forEach((x) => midiTrack.addMidiEvent(x));
-    return midiTrack.build();
+    return parseTrack(trackChunks[trackChunks.length - 1], division);
   }
 
   private verifyFormat(expected: number, actual: number): void {
