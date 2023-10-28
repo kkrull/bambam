@@ -1,4 +1,6 @@
-# Remapping MEO
+# EZDrummer 2 Mapping
+
+## Modern Original Mix
 
 Remap based upon Reaper drum mapping
 
