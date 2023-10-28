@@ -8,7 +8,6 @@ import { TickDivision } from '@src/midi/track/TickDivision';
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
   static withEvents(division: TickDivision, events: MidiEvent[]): MidiTrack {
-    //TODO KDK: remove redundant check.  it's in the builder too.
     const lastEvent = events[events.length - 1];
     if (lastEvent instanceof EndTrackEvent !== true) {
       throw Error(
