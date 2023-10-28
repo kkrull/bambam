@@ -1,5 +1,5 @@
 import { MidiData } from '@src/midi/chunk/MidiData';
-import { writeBytes, writeString, writeUInt32 } from '@src/midi/io/io-fns';
+import { writeBytes, writeString, writeUInt32 } from '@src/midi/file/file-fns';
 import { FileHandle } from 'node:fs/promises';
 
 //Top-level structure for MIDI data.
@@ -27,6 +27,12 @@ export class MidiChunk {
 
   isEmpty(): boolean {
     return this.data.isEmpty();
+  }
+
+  get totalSize(): number {
+    const typeSize = 4;
+    const lengthSize = 4;
+    return this.length + typeSize + lengthSize;
   }
 
   async write(file: FileHandle): Promise<number> {

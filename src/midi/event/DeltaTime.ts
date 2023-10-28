@@ -1,5 +1,6 @@
-import { writeVariableLengthQuantity } from '@src/midi/io/io-fns';
-import { FileHandle } from 'fs/promises';
+import { ofVariableLengthQuantity } from '@src/midi/buffer-fns';
+import { writeVariableLengthQuantity } from '@src/midi/file/file-fns';
+import { FileHandle } from 'node:fs/promises';
 
 //Time elapsed between an event and the one just before it.
 export class DeltaTime {
@@ -11,6 +12,10 @@ export class DeltaTime {
 
   plus(other: DeltaTime): DeltaTime {
     return new DeltaTime(this.ticks + other.ticks);
+  }
+
+  toBytes(): Buffer {
+    return ofVariableLengthQuantity(this.ticks);
   }
 
   async write(file: FileHandle): Promise<number> {

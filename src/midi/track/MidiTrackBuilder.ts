@@ -14,11 +14,9 @@ export class MidiTrackBuilder {
   build(): MidiTrack {
     if (!this.division) {
       throw Error('Missing time resolution (e.g. ticks per quarter note)');
-    } else if (!this.endTrack()) {
-      throw Error('Missing required End Track event');
     }
 
-    return new MidiTrack(this.division, this.endTrack(), this.events.slice());
+    return MidiTrack.withEvents(this.division, this.events);
   }
 
   addEndTrackEvent(deltaTime: DeltaTime): MidiTrackBuilder {
@@ -42,10 +40,6 @@ export class MidiTrackBuilder {
   withDivisionInTicks(ticksPerQuarterNote: number): MidiTrackBuilder {
     this.division = new TickDivision(ticksPerQuarterNote);
     return this;
-  }
-
-  private endTrack(): EndTrackEvent {
-    return this.events[this.events.length - 1] as EndTrackEvent;
   }
 }
 

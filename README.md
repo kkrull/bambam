@@ -2,6 +2,23 @@
 
 Converts a MIDI drum track from one drum sample map to another.
 
+## Architecture decisions
+
+- Establish development tools: CI/CD, formatting, linting, spell checks, test
+  automation, and type checking.
+  - Integrate with Git, so code is always formatted and checked for linting errors.
+  - Write basic documentation for developers, to trace tools to their
+    configuration and documentation.
+- Use the following criteria to decide where to put code:
+  - Goal: Use reasonable but fairly objective criteria to maintain flow.
+    Example: using pure functions avoids the need to decide which class gets a
+    new method and makes unit testing pretty simple.
+  - Any data crossing a boundary: Make a `class`. Avoid naked primitives.
+  - Simple data queries: Make these methods on the class containing the data.
+  - Functions that do stuff: Make pure `functions`. Group pure functions that
+    operate on the same type into a file named after that type (example:
+    `midi-chunk-fns.ts`).
+
 ## Development
 
 ### Format code
@@ -80,67 +97,160 @@ Prefer over-simplification over using terminology from the solution domain.
 - Include Key Signature?
   - It may not be very relevant on a percussion track.
 
+## Source code structure
+
+- `features/`: Feature and discovery tests, along with code specific to those.
+- `main/`: Top-level scripts to call from `package.json`.
+- `midi/`: Abstract data model and core logic.
+
+```mermaid
+graph LR
+
+features[features]
+main[main]
+midi[midi]
+
+features-->|test|midi
+main-->|create, run|midi
+```
+
 ## Tools
 
-There are a lot of tools that are used for development. Here are the packages
-that provide them and where to look for configuration:
+These tools are used for the project. Look here for references to documentation
+and key configuration files.
 
-- Code Spell Checker:
+### Code Spell Checker
+
+_Identifies words that may be misspelled._
+
+- Documentation: <https://github.com/streetsidesoftware/vscode-spell-checker>
+- Files:
   - `cspell.json`: configuration file and dictionary
-  - Documentation: <https://github.com/streetsidesoftware/vscode-spell-checker>
-  - VS Code extension: <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
-- Cucumber runs BDD tests with Gherkin syntax.
+- VS Code extension:
+  <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
+
+### Cucumber
+
+_Runs BDD tests with Gherkin syntax._
+
+- Files:
+  - `features/cucumber.cjs`: configuration file for where to find tests and
+    support code
+  - `features/tsconfig.json`: TypeScript configuration
+- Node packages:
   - `@cucumber/*` provides
     [cucumber](https://github.com/cucumber/cucumber-js/tree/main/docs) and
     formatters, which make the output on the command line look nice.
   - `ts-node` adds TypeScript support to `cucumber-js`.
   - `tsconfig-paths` allows TypeScript sources in `features/` to use path
     aliases to production code sources.
-  - `features/cucumber.cjs`: configuration file for where to find tests and
-    support code
-  - `features/tsconfig.json`: TypeScript configuration
-  - VS Code Extension: <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
-- `direnv` integrates environment management with your shell (e.g. bash or zsh).
+- VS Code Extension:
+  <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
+
+### `direnv`
+
+_Integrates environment management with your shell (e.g. `bash` or `zsh`)._
+
+- Files:
   - `.envrc`: configuration script
-  - Homebrew installation: `brew install direnv`
-    - Note: Follow instructions about updating `.bashrc` or `.zshrc`
-- EditorConfig defines basic parameters for formatting source files.
+- Installation:
+  - Homebrew: `brew install direnv`
+  - **Note: Follow instructions about updating `.bashrc` or `.zshrc`**
+
+### EditorConfig
+
+_Defines basic parameters for formatting source files._
+
+- Files:
   - `.editorconfig`: configuration file
-- ESLint performs static analysis and style checks.
+
+### ESLint
+
+_Performs static analysis and style checks._
+
+- Files:
+  - `.eslintrc.cjs`: configuration file
+- Node packages:
   - `eslint`: main package
   - `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` add
     support for TypeScript.
-  - `.eslintrc.cjs`: configuration file
-- GitHub actions perform Continuous Integration / Continuous Deployment (CI/CD)
+
+### GitHub Actions
+
+_Performs Continuous Integration / Continuous Deployment (CI/CD)._
+
+- Files:
   - `.github/workflows`: Workflow definitions
-- Husky adds a Git pre-commit hook that runs checks on staged files, before
-  committing to the repository.
-  - `husky`: main package
+
+### Husky
+
+_Adds a Git pre-commit hook that runs checks on staged files, before committing
+to the repository._
+
+- Files:
   - `.husky/pre-commit`: The actual pre-commit script
   - `package.json` also has a `prepare` script that installs the Git hook.
-- `lint-staged` runs the actual checks on source files staged for the next Git
-  commit.
-  - `lint-staged`: main package
+- Node packages:
+  - `husky`: main package
+
+### `lint-staged`
+
+_Runs the actual checks on source files staged for the next Git commit._
+
+- Files:
   - `.lintstagedrc.cjs`: configuration file
-- Markdownlint
+- Node packages:
+  - `lint-staged`: main package
+
+### Markdownlint
+
+_Checks Markdown files for style or formatting errors._
+
+- Documentation:
+  - Main: <https://github.com/DavidAnson/markdownlint>
+  - Rules: <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>
+- Files:
   - `.markdownlint.json`: configuration file
-  - Documentation: <https://github.com/DavidAnson/markdownlint>
-  - Documentation (rules): <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>
-  - Usage: `markdownlint-cli2 .markdownlint.json <markdown file> [...markdown files]`
-  - VS Code extension: <https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint>
-- Node.js is the runtime platform.
+- VS Code extension:
+  <https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint>
+
+### Node.js
+
+_Node.js is the runtime platform._
+
+- Files:
   - `package.json`: package properties, dependencies, and task automation (e.g.
     scripts)
-- Node Version Manager (`nvm`) installs a known version of Node.js and
-  configures your shell to use it.
+
+### Node Version Manager (`nvm`)
+
+_Installs a known version of Node.js and configures your shell to use it._
+
+- Files
   - `.nvmrc`: configuration file
-- Prettier formats source files.
-  - `prettier`: main package
+
+### Prettier
+
+_Formats source files._
+
+- Documentation:
+  - Options: <https://prettier.io/docs/en/options.html>
+- Files:
   - `.prettierignore`: which files should be skipped, while formatting
   - `.prettierrc.cjs`: configuration file
-  - Documentation (options): <https://prettier.io/docs/en/options.html>
-- TypeScript adds static typing to JavaScript.
-  - Documentation (`tsconfig.json`): <https://www.typescriptlang.org/tsconfig>
+- Node packages:
+  - `prettier`: main package
+
+### TypeScript
+
+_Adds static typing to JavaScript._
+
+- Documentation:
+  - Configuration (`tsconfig.json`): <https://www.typescriptlang.org/tsconfig>
+- Files:
+  - `tsconfig.json` - configuration file for sources in `src/`
+  - `features/tsconfig.json` - configuration file for sources in `features/`
+- Node packages:
   - `typescript`: main package
   - `@tsconfig/node18`: base configuration for the version of node.js we're
     using here
@@ -148,8 +258,6 @@ that provide them and where to look for configuration:
   - [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths#with-ts-node):
     allows TypeScript sources to use path aliases at runtime, using `ts-node
 -r`.
-  - `tsconfig.json` - configuration file for sources in `src/`
-  - `features/tsconfig.json` - configuration file for sources in `features/`
 
 ## Reference
 

@@ -1,10 +1,7 @@
-import { FileHandle } from 'node:fs/promises';
-
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { parseHeader } from '@src/midi/header/header-fns';
-import { openFile } from '@src/midi/io/io-fns';
-import { readEvents } from '@src/midi/track/track-fns';
+import { parseHeader, readEvents } from '@src/midi/chunk/midi-chunk-fns';
+import { openFile, readChunks } from '@src/midi/file/file-fns';
 
 //Lists the events in MIDI tracks.
 class ListEventsCommand {
@@ -23,32 +20,20 @@ class ListEventsCommand {
 
   async run(): Promise<void> {
     const file = await openFile(this.filename);
-    const contents = await this.fileToObject(file);
+    const contents = this.chunksToObject(await readChunks(file));
     this.log(JSON.stringify(contents));
     await file.close();
   }
 
-  private async fileToObject(file: FileHandle): Promise<object> {
-    const headerChunk = await MidiChunk.read(file);
-    const trackChunks = await this.readTracks(file);
+  private chunksToObject(chunks: MidiChunk[]): object {
+    const trackChunks = chunks.slice(1);
     return {
-      header: parseHeader(headerChunk),
-      tracks: trackChunks.map((x, i) => this.trackToObject(x, i + 1)),
+      header: parseHeader(chunks[0]),
+      tracks: trackChunks.map((x, i) => this.trackChunkToObject(x, i + 1)),
     };
   }
 
-  private async readTracks(file: FileHandle): Promise<MidiChunk[]> {
-    const trackChunks = [];
-    let chunk = await MidiChunk.read(file);
-    while (!chunk.isEmpty()) {
-      trackChunks.push(chunk);
-      chunk = await MidiChunk.read(file);
-    }
-
-    return trackChunks;
-  }
-
-  private trackToObject(chunk: MidiChunk, trackNum: number): object {
+  private trackChunkToObject(chunk: MidiChunk, trackNum: number): object {
     return {
       events: readEvents(chunk),
       number: trackNum,

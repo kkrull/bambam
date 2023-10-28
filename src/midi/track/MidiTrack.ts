@@ -7,7 +7,22 @@ import { TickDivision } from '@src/midi/track/TickDivision';
 
 //A stream of timed, musical events for 1 or more instruments.
 export class MidiTrack {
-  constructor(
+  static withEvents(division: TickDivision, events: MidiEvent[]): MidiTrack {
+    const lastEvent = events[events.length - 1];
+    if (lastEvent instanceof EndTrackEvent !== true) {
+      throw Error(
+        `Missing end of track event: ${JSON.stringify(events, null, 2)}`,
+      );
+    }
+
+    return new MidiTrack(
+      division,
+      lastEvent,
+      events.slice(0, events.length - 1),
+    );
+  }
+
+  private constructor(
     readonly division: TickDivision,
     readonly endTrackEvent: EndTrackEvent,
     readonly events: MidiEvent[],

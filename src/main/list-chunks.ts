@@ -1,10 +1,8 @@
-import { FileHandle } from 'node:fs/promises';
-
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { parseHeader } from '@src/midi/header/header-fns';
+import { parseHeader } from '@src/midi/chunk/midi-chunk-fns';
+import { openFile, readChunks } from '@src/midi/file/file-fns';
 import { HeaderChunk } from '@src/midi/header/HeaderChunk';
-import { openFile } from '@src/midi/io/io-fns';
 import { TickDivision } from '@src/midi/track/TickDivision';
 
 //Lists the chunks in a MIDI file.
@@ -24,22 +22,19 @@ class ListChunksCommand {
 
   async run(): Promise<void> {
     const file = await openFile(this.filename);
-    await this.logChunks(file);
+    this.logChunks(await readChunks(file));
     await file.close();
   }
 
-  private async logChunks(file: FileHandle) {
-    const headerChunk = await MidiChunk.read(file);
+  private logChunks(chunks: MidiChunk[]) {
+    const headerChunk = chunks[0];
     this.logChunk(headerChunk);
-    this.logHeaderChunk(headerChunk);
+    this.logHeader(parseHeader(headerChunk));
 
-    let chunk = await MidiChunk.read(file);
-    while (!chunk.isEmpty()) {
+    chunks.slice(1).forEach((trackChunk) => {
       this.log();
-      this.logChunk(chunk);
-
-      chunk = await MidiChunk.read(file);
-    }
+      this.logChunk(trackChunk);
+    });
   }
 
   private logChunk(chunk: MidiChunk): void {
@@ -50,8 +45,7 @@ class ListChunksCommand {
       .forEach((line) => this.log(line));
   }
 
-  private logHeaderChunk(headerChunk: MidiChunk): void {
-    const header: HeaderChunk = parseHeader(headerChunk);
+  private logHeader(header: HeaderChunk): void {
     this.log(`Format: ${this.describeFormat(header.format)}`);
     this.log(`Tracks: ${header.numTracks}`);
     this.log(`Time division: ${this.describeDivision(header.division)}`);

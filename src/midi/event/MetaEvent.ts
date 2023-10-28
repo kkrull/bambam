@@ -1,11 +1,7 @@
+import { ofUInt8, ofVariableLengthQuantity } from '@src/midi/buffer-fns';
 import { DeltaTime } from '@src/midi/event/DeltaTime';
 import { MidiEvent } from '@src/midi/event/MidiEvent';
-import {
-  writeBytes,
-  writeUInt8,
-  writeVariableLengthQuantity,
-} from '@src/midi/io/io-fns';
-import { FileHandle } from 'fs/promises';
+import { Buffer } from 'node:buffer';
 
 //A meta event to pass through.
 export class MetaEvent extends MidiEvent {
@@ -19,10 +15,11 @@ export class MetaEvent extends MidiEvent {
     super(deltaTime, eventType);
   }
 
-  async writePayload(file: FileHandle): Promise<number> {
-    const subTypeBytes = await writeUInt8(file, this.subType);
-    const lengthBytes = await writeVariableLengthQuantity(file, this.length);
-    const dataBytes = await writeBytes(file, this.data);
-    return subTypeBytes + lengthBytes + dataBytes;
+  eventBytes(): Buffer {
+    return Buffer.concat([
+      ofUInt8(this.subType),
+      ofVariableLengthQuantity(this.length),
+      Buffer.from(this.data),
+    ]);
   }
 }
