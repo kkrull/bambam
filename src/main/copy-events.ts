@@ -1,14 +1,10 @@
-import { FileHandle } from 'fs/promises';
-
 import { Log } from '@src/main/Log';
 import { MidiChunk } from '@src/midi/chunk/MidiChunk';
-import { readEvents } from '@src/midi/chunk/midi-chunk-fns';
-import {
-  openFile,
-  readChunks,
-  writeString,
-  writeUInt32,
-} from '@src/midi/file/file-fns';
+import { parseHeader, parseTrack } from '@src/midi/chunk/midi-chunk-fns';
+import { openFile, readChunks } from '@src/midi/file/file-fns';
+import { MidiTrack } from '@src/midi/track/MidiTrack';
+import { toChunk } from '@src/midi/track/track-fns';
+import { FileHandle } from 'fs/promises';
 
 //Copy events from a MIDI file to make sure they are brought to me...unspoiled.
 class CopyEventsCommand {
@@ -34,33 +30,28 @@ class CopyEventsCommand {
 
     const chunks = await readChunks(sourceFile);
     const headerChunk = chunks[0];
-    const numBytesWritten = await headerChunk.write(targetFile);
-    this.log(`Wrote ${numBytesWritten} bytes`);
+    await this.writeChunk(headerChunk, targetFile);
 
+    const { division } = parseHeader(headerChunk);
     for (const trackChunk of chunks.slice(1)) {
       this.log(`${trackChunk.typeName} [${trackChunk.length} bytes]`);
-
-      //TODO KDK: Bring back MidiEvent#write or change to MidiTrack#write and call this copy-tracks instead
-      let totalBytes = await this.writeTrackPreamble(targetFile, trackChunk);
-      for (const event of readEvents(trackChunk)) {
-        const eventBytes = await event.write(targetFile);
-        totalBytes += eventBytes;
-      }
-
-      this.log(`Wrote ${totalBytes} bytes`);
+      const track = parseTrack(trackChunk, division);
+      await this.writeTrack(track, targetFile);
     }
 
     await targetFile.close();
     await sourceFile.close();
   }
 
-  private async writeTrackPreamble(
-    file: FileHandle,
-    chunk: MidiChunk,
-  ): Promise<number> {
-    const typeSize = await writeString(file, chunk.typeName);
-    const lengthSize = await writeUInt32(file, chunk.length);
-    return typeSize + lengthSize;
+  private async writeChunk(headerChunk: MidiChunk, targetFile: FileHandle) {
+    const numBytesWritten = await headerChunk.write(targetFile);
+    this.log(`Wrote ${numBytesWritten} bytes`);
+  }
+
+  private async writeTrack(track: MidiTrack, targetFile: FileHandle) {
+    const targetTrackChunk = toChunk(track);
+    const trackBytes = await targetTrackChunk.write(targetFile);
+    this.log(`Wrote ${trackBytes} bytes`);
   }
 }
 
