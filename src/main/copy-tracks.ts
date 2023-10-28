@@ -6,16 +6,16 @@ import { MidiTrack } from '@src/midi/track/MidiTrack';
 import { toChunk } from '@src/midi/track/track-fns';
 import { FileHandle } from 'fs/promises';
 
-//Copy events from a MIDI file to make sure they are brought to me...unspoiled.
-class CopyEventsCommand {
-  static parseArgv(log: Log, argv: string[]): Promise<CopyEventsCommand> {
+//Copy tracks from a MIDI file to make sure they are brought to me...unspoiled.
+class CopyTracksCommand {
+  static parseArgv(log: Log, argv: string[]): Promise<CopyTracksCommand> {
     if (argv.length !== 4) {
       return Promise.reject(
         `Usage ${argv[0]} ${argv[1]} <source file> <target file>`,
       );
     }
 
-    return Promise.resolve(new CopyEventsCommand(log, argv[2], argv[3]));
+    return Promise.resolve(new CopyTracksCommand(log, argv[2], argv[3]));
   }
 
   constructor(
@@ -56,7 +56,7 @@ class CopyEventsCommand {
 }
 
 (async () => {
-  const command = await CopyEventsCommand.parseArgv(console.log, process.argv);
+  const command = await CopyTracksCommand.parseArgv(console.log, process.argv);
   await command.run();
 })().catch((error) => {
   console.error(error);
