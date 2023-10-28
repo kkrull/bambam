@@ -305,3 +305,12 @@ Source:
 - Document: `doc/midi/RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf`
 - Source:
   <https://www.midi.org/component/edocman/rp-001-v1-0-standard-midi-files-specification-96-1-4-pdf/fdocument>
+
+### Muse Score 4
+
+Import a MIDI file into MuseScore 4 by drag and drop.
+
+Note: There seems to be a bug in MuseScore 4, when re-importing a MIDI file that
+has been updated. If MuseScore seems to be playing notes that you recently
+updated, try closing MuseScore, opening it again, and importing the MIDI file
+again.
