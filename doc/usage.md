@@ -86,9 +86,9 @@ Drop that General MIDI file you just made into MuseScore.
 
 Congratulations! You've just written a drum part that sounds about as good as it can in MuseScore,
 without having to write it one arm or leg at a time. Because we all know that the only thing more
-awkward than actually playing the drums and recording it yourself is trying to memorize those
-completely arbitrary note letters for each drum and long enough to type in a kick/snare groove
-without all the snare hits erasing the last kick hit you just wrote.
+awkward than actually playing the drums and recording it yourself is trying to memorize the note
+letters for each drum long enough to type in a kick/snare groove without all the snare hits erasing
+the last kick hit you just wrote.
 
 Sure those early-90s video games won't sound the same, but this way you'll only hear the vibraslap
 and whistle when you **meant** for it to sound that way.
