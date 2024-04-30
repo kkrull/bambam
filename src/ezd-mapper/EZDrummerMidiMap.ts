@@ -3,7 +3,6 @@ import { NoteEvent } from '@src/midi/note/NoteEvent';
 import { MidiMap } from '@src/midi/track/MidiTrack';
 
 //Re-maps EZDrummer 2 notes to General MIDI notes.
-//TODO KDK: Make a separate mapping/program to put all the notes on one channel (MEO has notes on channels 0 and 9)
 export class EZDrummerMidiMap implements MidiMap {
   static version2Map(): EZDrummerMidiMap {
     return new EZDrummerMidiMap({

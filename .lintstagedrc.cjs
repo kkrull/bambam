@@ -7,6 +7,6 @@ module.exports = {
   //Format code first, in case that triggers lint errors
   '*.cjs': ['prettier --write', 'eslint --cache --fix'],
   '*.json': ['prettier --write'],
-  '*.md': ['prettier --write', 'markdownlint-cli2 .markdownlint.json'],
+  '*.md': ['prettier --write', 'markdownlint-cli2 --config .markdownlint.json'],
   '*.ts': ['prettier --write', 'eslint --cache --fix', typeCheckWholeProject],
 };
