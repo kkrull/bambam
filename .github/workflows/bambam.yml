@@ -23,19 +23,6 @@ jobs:
 
       - run: npm ci
 
-  code-build:
-    needs: code
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-          node-version-file: .nvmrc
-
-      - run: npm ci
-      - run: npm run build --if-present
-
   code-check:
     needs: code
     runs-on: ubuntu-latest
@@ -52,7 +39,7 @@ jobs:
       - run: npm run types:check
 
   code-test:
-    needs: code-build
+    needs: code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,6 +49,7 @@ jobs:
           node-version-file: .nvmrc
 
       - run: npm ci
+      - run: num run build --if-present
       - run: npm test
 
   documentation-check:
