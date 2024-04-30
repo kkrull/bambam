@@ -10,7 +10,7 @@ In other words, copy a MIDI file one chunk at a time without a care in the world
 actually in them. This checks the basic process of reading and writing chunks (even chunk types
 that are not recognized), before attempting the more ambitious task of parsing actual events.
 
-### Pro-tip: use `diff` and `xxd` to spot binary differences without questioning the life choices that led you here
+### Pro-tip: use `diff` and `xxd` to spot binary differences without questioning the life choices that led you here <!-- markdownlint-disable-line line-length -->
 
 ```sh
 cat original.mid | xxd > original.bin
@@ -63,7 +63,7 @@ npm run --silent main:list-events \
 
 Note how these both pass `--silent` to `npm run`, to avoid confusing `jq`.
 
-## <a name="remap-events"></a> `npm run main:remap-events <source file> <target file>` <!-- markdownlint-disable-line MD033 -->
+## <a name="remap-events"></a> `npm run main:remap-events <source file> <target file>` <!-- markdownlint-disable-line line-length no-inline-html -->
 
 This might just be the reason you are here.
 
