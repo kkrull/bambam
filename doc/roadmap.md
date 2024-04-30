@@ -2,7 +2,7 @@
 
 ## Development strategy
 
-Start in the middle (domain model) and test outwards, via a different driver.  Push scenarios down
+Start in the middle (domain model) and test outwards, via a different driver. Push scenarios down
 to unit tests and extract libraries for stable parts.
 
 Prefer over-simplification over using terminology from the solution domain.
