@@ -4,7 +4,10 @@ Converts a MIDI drum track from one drum sample map to another.
 
 ## Contents
 
-- `data/ezdrummer-2`: REAPER project used to create MIDI files for testing.
+- `.github/workflows`: GitHub Actions configuration that checks and builds code.
+- `data/`: Data to use for development.
+  - `ezdrummer-2/`: REAPER project used to create MIDI files for testing.
+  - `private/`: A convenient place to keep private data without adding it to the repository.
 - [`doc/`](#documentation): Documentation.
 - `features/`: Feature and discovery tests, along with code specific to those.
 - [`src/`](./doc/architecture.md#02-code-structure)
@@ -14,8 +17,11 @@ Converts a MIDI drum track from one drum sample map to another.
 
 ## Documentation
 
-- [Architecture](./doc/architecture.md)
-- [MIDI Reference](./doc/midi.md)
-- [Roadmap](./doc/roadmap.md)
-- [Task Automation](./doc/task-automation.md)
-- [Tools](./doc/tools.md)
+- [Architecture](./doc/architecture.md): Descisions about how to structure the code.
+- [MIDI Reference](./doc/midi.md): Some notes about MIDI that were useful when working on this
+  project.
+- [Roadmap](./doc/roadmap.md): Some ways to make this code more useful, if development resumes.
+- [Task Automation](./doc/task-automation.md): Automation for common development tasks.
+- [Tools](./doc/tools.md): Tools to set up, in order to develop code in this project.
+- [Usage](./doc/usage.md): How to run this thing, so you can re-map your drum track and get back to
+  production.

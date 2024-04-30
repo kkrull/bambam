@@ -1,61 +1,66 @@
 # Task Automation
 
-## Format code
+This project uses `npm` to automate common development tasks.
+
+## `npm ci`
+
+Install Node.js packages, using the same verisons listed in the lock file.
 
 ```sh
-#Re-format files in place
-npm run format
-
-#CI-ready script that checks for improperly formatted files
-npm run format:check
-```
-
-## Install packages
-
-```sh
-npm install
-
-#Make sure only the declared packages are installed (good for CI)
 npm ci
 ```
 
-## Lint code
+## `npm run format`
+
+Re-format files in place.
 
 ```sh
-#CI-ready script that checks for linting errors
-npm run lint
+npm run format
+```
 
-#Automatically fix linting errors, where possible
+## `npm run format:check`
+
+CI-ready script that checks for improperly formatted files.
+
+```sh
+npm run format:check
+```
+
+## `npm run lint`
+
+CI-ready script that checks for linting errors.
+
+```sh
+npm run lint
+```
+
+## `npm run lint:fix`
+
+Automatically fix linting errors, where possible.
+
+```sh
 npm run lint:fix
 ```
 
-## Run scripts
+## `npm run test [--] [...arguments]`
 
-There's a utility script in `src/main/` that helps inspect MIDI files.
+### Default: run everything
+
+Run all Cucumber scenarios.
 
 ```sh
-#List chunks
-npm run main:list-chunks features/data/ezd-mapping.mid
-
-#List events
-npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
-npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
-npm run --silent main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid \
-  | jq '.tracks[1].events[] | { channel: .channel, deltaTime: .deltaTime, note: .note, type: .eventType, subType: .subType, velocity: .velocity }'
+npm run test
 ```
 
-## Test code
+### Custom run
+
+Pass custom options to `cucumber.js`:
 
 ```sh
-#Run all Cucumber scenarios
-npm run test
-
-#Run scenarios tagged with @focus
-npm run test:focus
-
-#Pass custom options to cucumber.js
 npm run test -- [...cucumber.js args]
 ```
+
+### Data sources
 
 Cucumber scenarios can be tagged as follows, to change where data is sourced:
 
@@ -64,12 +69,26 @@ Cucumber scenarios can be tagged as follows, to change where data is sourced:
 
 See `MidiSourceHooks.ts` for details.
 
-## Type-check code
+## `npm run test:focus`
+
+Run scenarios tagged with `@focus`.
 
 ```sh
-#CI-ready script that checks for type safety issues
-npm run types:check
+npm run test:focus
+```
 
-#Watch known source files, reporting any type issues live
+## `npm run types:check`
+
+CI-ready script that checks for type safety issues.
+
+```sh
+npm run types:check
+```
+
+## `npm run types:watch`
+
+Watch known source files, reporting any type issues live.
+
+```sh
 npm run types:watch
 ```

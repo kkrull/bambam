@@ -1,7 +1,9 @@
 # Tools
 
-These tools are used for the project. Look here for references to documentation
-and key configuration files.
+Tools used for this project, in hopes of making life [easier on
+developers](./architecture.md#01-use-tools).
+
+Look here for references to documentation and key configuration files.
 
 ## Code Spell Checker
 
@@ -18,16 +20,14 @@ _Identifies words that may be misspelled._
 _Runs BDD tests with Gherkin syntax._
 
 - Files:
-  - `features/cucumber.cjs`: configuration file for where to find tests and
-    support code
+  - `features/cucumber.cjs`: configuration file for where to find tests and support code
   - `features/tsconfig.json`: TypeScript configuration
 - Node packages:
-  - `@cucumber/*` provides
-    [cucumber](https://github.com/cucumber/cucumber-js/tree/main/docs) and
+  - `@cucumber/*` provides [cucumber](https://github.com/cucumber/cucumber-js/tree/main/docs) and
     formatters, which make the output on the command line look nice.
   - `ts-node` adds TypeScript support to `cucumber-js`.
-  - `tsconfig-paths` allows TypeScript sources in `features/` to use path
-    aliases to production code sources.
+  - `tsconfig-paths` allows TypeScript sources in `features/` to use path aliases to production code
+    sources.
 - VS Code Extension:
   <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
 
@@ -68,8 +68,7 @@ _Performs Continuous Integration / Continuous Deployment (CI/CD)._
 
 ## Husky
 
-_Adds a Git pre-commit hook that runs checks on staged files, before committing
-to the repository._
+_Adds a Git pre-commit hook that runs checks on staged files, before committing to the repository._
 
 - Files:
   - `.husky/pre-commit`: The actual pre-commit script
@@ -103,8 +102,7 @@ _Checks Markdown files for style or formatting errors._
 _Node.js is the runtime platform._
 
 - Files:
-  - `package.json`: package properties, dependencies, and task automation (e.g.
-    scripts)
+  - `package.json`: package properties, dependencies, and task automation (e.g. scripts)
 
 ## Node Version Manager (`nvm`)
 
@@ -136,9 +134,7 @@ _Adds static typing to JavaScript._
   - `features/tsconfig.json` - configuration file for sources in `features/`
 - Node packages:
   - `typescript`: main package
-  - `@tsconfig/node18`: base configuration for the version of node.js we're
-    using here
+  - `@tsconfig/node18`: base configuration for the version of node.js we're using here
   - `@types/*`: type definitions for all the other packages we're using
   - [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths#with-ts-node):
-    allows TypeScript sources to use path aliases at runtime, using `ts-node
--r`.
+    allows TypeScript sources to use path aliases at runtime, using `ts-node -r`.
