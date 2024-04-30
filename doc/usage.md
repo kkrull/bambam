@@ -1,6 +1,6 @@
 # Usage
 
-This project uses `npm` to run the code, much like other development tasks.
+This project uses `npm` to run the code, much like other [development tasks](./task-automation.md).
 
 ## `npm run main:copy-chunks <source file> <target file>`
 

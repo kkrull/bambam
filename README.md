@@ -9,32 +9,39 @@ You can go from any format to any other format, as long as you start with EZDrum
 Original Mix and map to General MIDI Percussion. In other words, this currently only supports a
 one-way mapping between two specific formats.
 
-## Contents
+## Continuous Integration
 
-Here is how the files in this repository are organized:
+Builds run with GitHub Actions:
 
-- `.github/workflows`: GitHub Actions configuration that checks and builds code.
-- `data/`: Data to use for development.
-  - `ezdrummer-2/`: REAPER project used to create MIDI files for testing.
-  - `private/`: A convenient place to keep private data without adding it to the repository.
-- [`doc/`](#documentation): Documentation.
-- `features/`: Feature and discovery tests, along with code specific to those.
-- `src/`: Code.
-  - `ezd-mapper/`: MIDI mapper for EZDrummer 2 to General MIDI Percussion.
-  - `main/`: Top-level scripts to call from `package.json`.
-  - `midi/`: Abstract data model and core logic.
+- Configuration: [`.github/workflows/`](./.github/workflows/)
+- Dashboard: <https://github.com/kkrull/bambam/actions>
 
 ## Documentation
 
 Reading these might help you use and/or work on the code here:
 
-- [Architecture](./doc/architecture.md): Descisions about how to structure the code.
+- [Architecture](./doc/architecture.md): Decisions about how to structure the code.
 - [MIDI Reference](./doc/midi.md): Some notes about MIDI that were useful during development.
 - [Roadmap](./doc/roadmap.md): Some ways to make this code more useful, if development resumes.
 - [Task Automation](./doc/task-automation.md): Automation for common development tasks.
 - [Tools](./doc/tools.md): Tools to set up, in order to develop code in this project.
 - [Usage](./doc/usage.md): How to run this thing, so you can re-map your drum track and get back to
   production.
+
+## Sources
+
+Here is how the files in this repository are organized:
+
+- `.github/workflows`: GitHub Actions configuration that builds, checks, and tests the code.
+- `data/`: Data to use for development.
+  - `ezdrummer-2/`: REAPER project used to create MIDI files for testing.
+  - `private/`: A convenient place to keep private data without adding it to the repository.
+- `doc/`: Documentation.
+- `features/`: Feature and discovery tests, along with code specific to those.
+- `src/`: Code.
+  - `ezd-mapper/`: MIDI mapper for EZDrummer 2 to General MIDI Percussion.
+  - `main/`: Top-level scripts to call from `package.json`.
+  - `midi/`: Abstract data model and core logic.
 
 ## Usage
 

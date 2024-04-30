@@ -1,6 +1,7 @@
 # Task Automation
 
-This project uses `npm` to automate common development tasks.
+This project uses `npm` to automate common development tasks. See [Usage](./usage.md) for how to
+run the project.
 
 ## `npm ci`
 
@@ -33,7 +34,7 @@ Run all Cucumber scenarios.
 Pass custom options to `cucumber.js`:
 
 ```sh
-npm run test -- [...cucumber.js args]
+npm run test -- --format usage
 ```
 
 ### Data sources
