@@ -1,5 +1,6 @@
 # BamBam
 *.bin
+data/private/
 output/
 
 # Node.js
