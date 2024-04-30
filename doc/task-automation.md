@@ -4,7 +4,7 @@ This project uses `npm` to automate common development tasks.
 
 ## `npm ci`
 
-Install Node.js packages, using the same verisons listed in the lock file.
+Install Node.js packages, using the same versions listed in the lock file.
 
 ## `npm run format`
 
@@ -22,7 +22,7 @@ CI-ready script that checks for linting errors.
 
 Automatically fix linting errors, where possible.
 
-## `npm run test [--] [...arguments]`
+## `npm run test`
 
 ### Default: run everything
 
@@ -44,6 +44,10 @@ Cucumber scenarios can be tagged as follows, to change where data is sourced:
 - `@StaticMidiSource`: Build MIDI data inside the test
 
 See `MidiSourceHooks.ts` for details.
+
+## `npm run test:ci`
+
+CI-ready script that runs tests and writes a test report to `output/`.
 
 ## `npm run test:focus`
 
