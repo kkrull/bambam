@@ -19,7 +19,7 @@ Here is how the files in this repository are organized:
   - `private/`: A convenient place to keep private data without adding it to the repository.
 - [`doc/`](#documentation): Documentation.
 - `features/`: Feature and discovery tests, along with code specific to those.
-- [`src/`](./doc/architecture.md#02-code-structure): Code.
+- `src/`: Code.
   - `ezd-mapper/`: MIDI mapper for EZDrummer 2 to General MIDI Percussion.
   - `main/`: Top-level scripts to call from `package.json`.
   - `midi/`: Abstract data model and core logic.
