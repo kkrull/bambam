@@ -14,12 +14,11 @@ jobs:
   code:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           cache: 'npm'
-          node-version: 18.15
+          node-version-file: .nvmrc
 
       - run: npm ci
       - run: npm run build --if-present
@@ -28,12 +27,11 @@ jobs:
   code-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           cache: 'npm'
-          node-version: 18.15
+          node-version-file: .nvmrc
 
       - run: npm ci
       - run: npm run format:check
@@ -43,10 +41,8 @@ jobs:
   documentation-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Lint Markdownn
-        uses: DavidAnson/markdownlint-cli2-action@v13
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v16
         with:
           config: .markdownlint.json
           globs: '**/*.md'
