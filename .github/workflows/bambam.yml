@@ -1,0 +1,67 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: BamBam CI
+
+on:
+  pull_request:
+    branches: ['main']
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Downstream jobs still need to install packages.  This only caches global dependencies.
+          cache: 'npm'
+          node-version-file: .nvmrc
+
+      - run: npm ci
+
+  code-check:
+    needs: code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          node-version-file: .nvmrc
+
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run types:check
+
+  code-test:
+    needs: code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          node-version-file: .nvmrc
+
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run test:ci
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: warn
+          name: test-report-cucumber
+          path: output/test-cucumberjs.html
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          config: .markdownlint.json
+          globs: '**/*.md'
