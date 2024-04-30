@@ -4,22 +4,13 @@ Converts a MIDI drum track from one drum sample map to another.
 
 ## Contents
 
-### Source code
-
+- `data/ezdrummer-2`: REAPER project used to create MIDI files for testing.
+- [`doc/`](#documentation): Documentation.
 - `features/`: Feature and discovery tests, along with code specific to those.
-- `main/`: Top-level scripts to call from `package.json`.
-- `midi/`: Abstract data model and core logic.
-
-```mermaid
-graph LR
-
-features[features]
-main[main]
-midi[midi]
-
-features-->|test|midi
-main-->|create, run|midi
-```
+- `src/`
+  - `ezd-mapper/`: MIDI mapper for EZDrummer 2 to General MIDI Percussion.
+  - `main/`: Top-level scripts to call from `package.json`.
+  - `midi/`: Abstract data model and core logic.
 
 ## Documentation
 
