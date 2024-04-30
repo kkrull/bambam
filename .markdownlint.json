@@ -3,6 +3,7 @@
   "commands-show-output": false,
   "line-length": {
     "code_blocks": false,
+    "headings": false,
     "line_length": 100
   },
   "no-duplicate-header": {
