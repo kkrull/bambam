@@ -38,7 +38,7 @@
     "test:ci": "cucumber-js -c features/cucumber.cjs --format html:output/test-cucumberjs.html",
     "test:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
-    "types:watch": "tsc --noEmit --watch -p tsconfig.json -p features/tsconfig.json"
+    "types:watch": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json --watch"
   },
   "version": "0.0.1"
 }
