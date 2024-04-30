@@ -9,6 +9,8 @@ Prefer over-simplification over using terminology from the solution domain.
 
 ## Future work
 
+- Make a separate mapping/program to put all the notes on one channel (example song has notes on
+  channels 0 and 9)
 - Include Marker events?
   - It doesn't define timing or notes, but it does describe structure and form.
   - That might be useful when transferring a MIDI percussion track, to a MuseScore file, for the
