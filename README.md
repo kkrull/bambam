@@ -28,6 +28,12 @@ Reading these might help you use and/or work on the code here:
 - [Usage](./doc/usage.md): How to run this thing, so you can re-map your drum track and get back to
   production.
 
+## Future Work
+
+```text
+56 Cymbal 1 Mute Hit
+```
+
 ## Sources
 
 Here is how the files in this repository are organized:
