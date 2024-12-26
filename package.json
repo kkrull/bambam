@@ -4,9 +4,9 @@
   "devDependencies": {
     "@cucumber/cucumber": "^9.5.1",
     "@cucumber/pretty-formatter": "^1.0.0",
-    "@tsconfig/node18": "^18.2.2",
+    "@tsconfig/node18": "^18.2.4",
     "@types/chai": "^4.3.6",
-    "@types/node": "^20.8.2",
+    "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "chai": "^4.3.10",
