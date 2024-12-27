@@ -28,7 +28,7 @@
   "scripts": {
     "format": "prettier --ignore-unknown --write .",
     "format:check": "prettier --ignore-unknown --list-different .",
-    "lint": "eslint features features/**/*.cjs src",
+    "lint:check": "eslint features features/**/*.cjs src",
     "lint:fix": "eslint --fix features features/**/*.cjs src",
     "main:copy-chunks": "ts-node -r tsconfig-paths/register src/main/copy-chunks.ts",
     "main:copy-tracks": "ts-node -r tsconfig-paths/register src/main/copy-tracks.ts",
