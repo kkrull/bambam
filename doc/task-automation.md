@@ -15,7 +15,7 @@ Re-format files in place.
 
 CI-ready script that checks for improperly formatted files.
 
-## `npm run lint`
+## `npm run lint:check`
 
 CI-ready script that checks for linting errors.
 

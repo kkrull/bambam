@@ -21,13 +21,11 @@ When('I ask BamBam to remap that track to General MIDI Percussion', () => {
 /* Track structure */
 
 Then('the re-mapped track should be a valid MIDI track', () => {
-  expect(gmTrack.endTime()).to.eql(ezDrummerTrack.endTime());
-  expect(gmTrack.endTime()).to.exist;
+  expect(gmTrack.endTime()).to.be.a('number').that.eql(ezDrummerTrack.endTime());
 });
 
 Then('the re-mapped track should have the same time resolution as the original', () => {
-  expect(gmTrack.division).to.eql(ezDrummerTrack.division);
-  expect(gmTrack.division).to.exist;
+  expect(gmTrack.division).to.be.an('object').that.eql(ezDrummerTrack.division);
 });
 
 Then('the re-mapped track should have all non-note events from the original', () => {
@@ -48,7 +46,7 @@ Then('re-mapped notes should exist in the General MIDI Percussion map', () => {
     .filter((x) => x.note.noteNumber < 35)
     .filter((x) => x.note.noteNumber > 81);
 
-  expect(nonGmNotes).to.be.empty;
+  expect(nonGmNotes).to.eql([]);
 });
 
 Then('the re-mapped track should have re-mapped notes', () => {

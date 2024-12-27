@@ -4,7 +4,7 @@ root = true
 [*_steps.ts]
 max_line_length = 100
 
-[*.{cjs,js,ts}]
+[*.{cjs,js,mjs,ts}]
 quote_type = single
 
 [*.md]
