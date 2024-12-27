@@ -5,7 +5,7 @@ const typeCheckWholeProject = () =>
 //https://github.com/okonet/lint-staged#configuration
 module.exports = {
   //Format code first, in case that triggers lint errors
-  '*.cjs': ['prettier --write', 'eslint --cache --fix'],
+  '*.{cjs,mjs}': ['prettier --write', 'eslint --cache --fix'],
   '*.json': ['prettier --write'],
   '*.md': ['prettier --write', 'markdownlint-cli2 --config .markdownlint.json'],
   '*.ts': ['prettier --write', 'eslint --cache --fix', typeCheckWholeProject],
