@@ -14,6 +14,22 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
+const allowUnusedIgnoreVariables = {
+  'no-unused-vars': 'off', //avoid false positives from the base rule
+  '@typescript-eslint/no-unused-vars': [
+    'error',
+    {
+      argsIgnorePattern: '^_',
+      caughtErrorsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+    },
+  ],
+};
+
+const youTryWritingStepDefinitionsIn80CharsOrLess = {
+  'max-len': ['warn', { code: 100 }],
+};
+
 export default [
   ...compat.extends(
     'eslint:recommended',
@@ -28,16 +44,8 @@ export default [
       parser: tsParser,
     },
     rules: {
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
-      ],
-      'max-len': ['warn', { code: 100 }],
+      ...allowUnusedIgnoreVariables,
+      ...youTryWritingStepDefinitionsIn80CharsOrLess,
     },
   },
 ];
