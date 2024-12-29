@@ -57,6 +57,8 @@ class ListChunksCommand {
 
   private describeFormat(format: number): string {
     switch (format) {
+      case 0:
+        return `(0) Single, Multi-channel track`;
       case 1:
         return `(1) Multi-track`;
       default:
