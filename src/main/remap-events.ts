@@ -34,7 +34,6 @@ class RemapEventsCommand {
     const { division } = await this.copyHeader(chunks[0], targetFile);
 
     //Tempo track
-    //TODO KDK: Fail if it is a type 0 track without a separate tempo track
     await this.copyTrack(chunks[1], targetFile, division);
 
     //Percussion track(s)
