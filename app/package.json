@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kkrull/bambam/issues"
   },
-  "homepage": "https://github.com/kkrull/bambam#readme"
+  "homepage": "https://github.com/kkrull/bambam#readme",
+  "devDependencies": {
+    "electron": "^33.2.1"
+  }
 }
