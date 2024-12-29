@@ -8,6 +8,10 @@ export class MidiChunk {
     return new MidiChunk('', 0, MidiData.empty());
   }
 
+  static null(): MidiChunk {
+    return new MidiChunk('NULL', 0, MidiData.empty());
+  }
+
   static async read(file: FileHandle): Promise<MidiChunk> {
     const chunkType = await MidiData.read(file, 4);
     if (chunkType.isEmpty()) {

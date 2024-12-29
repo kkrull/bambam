@@ -31,13 +31,29 @@ class RemapEventsCommand {
     const targetFile = await openFile(this.targetFilename, 'w');
 
     const chunks = await readChunks(sourceFile);
-    const { division } = await this.copyHeader(chunks[0], targetFile);
+    const { division, format } = await this.copyHeader(
+      chunks.shift() || MidiChunk.null(),
+      targetFile,
+    );
 
-    //Tempo track
-    await this.copyTrack(chunks[1], targetFile, division);
+    switch (format) {
+      case 0:
+        //Single-track (multi-channel) file; no tempo track to skip
+        break;
+      case 1:
+        //Skip tempo track in multi-track file
+        await this.copyTrack(
+          chunks.shift() || MidiChunk.null(),
+          targetFile,
+          division,
+        );
+        break;
+      default:
+        throw Error(`Unsupported format: ${format}`);
+    }
 
     //Percussion track(s)
-    for (const sourceTrackChunk of chunks.slice(2)) {
+    for (const sourceTrackChunk of chunks) {
       this.logChunkSize(sourceTrackChunk);
 
       const sourceTrack = parseTrack(sourceTrackChunk, division);
