@@ -28,6 +28,8 @@ _Runs BDD tests with Gherkin syntax._
   - `ts-node` adds TypeScript support to `cucumber-js`.
   - `tsconfig-paths` allows TypeScript sources in `features/` to use path aliases to production code
     sources.
+- Interactions:
+  - [TypeScript](#running-with-path-aliases)
 - VS Code Extension:
   <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
 
@@ -159,3 +161,10 @@ _Adds static typing to JavaScript._
 This project uses [`tsc-alias`](https://www.npmjs.com/package/tsc-alias) to convert path aliases in
 `tsconfig.compilerOptions.paths` and `require/import` statements in TypeScript code to relative path
 imports in emitted JavaScript code.
+
+### Running with path aliases
+
+When running TypeScript directly (e.g. running one of the "main" scripts in `package.json`) or when
+running [Cucumber](#cucumber), it is necessary to convert these path aliases at runtime.
+[`ts-node`](https://www.npmjs.com/package/ts-node) does this, either by replacing the `node`
+executable with `ts-node` or by requiring it when first starting (Cucumber).
