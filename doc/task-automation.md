@@ -14,19 +14,19 @@ Compile TypeScript code to `dist/`.
 
 Remove emitted JavaScript code from the TypeScript compiler.
 
-## `npm run format`
+## `npm run prettier:write`
 
 Re-format files in place.
 
-## `npm run format:check`
+## `npm run prettier:list-different`
 
 CI-ready script that checks for improperly formatted files.
 
-## `npm run lint:check`
+## `npm run eslint`
 
 CI-ready script that checks for linting errors.
 
-## `npm run lint:fix`
+## `npm run eslint:fix`
 
 Automatically fix linting errors, where possible.
 
@@ -53,18 +53,18 @@ Cucumber scenarios can be tagged as follows, to change where data is sourced:
 
 See `MidiSourceHooks.ts` for details.
 
-## `npm run test:ci`
+## `npm run cucumber:format-html`
 
 CI-ready script that runs tests and writes a test report to `output/`.
 
-## `npm run test:focus`
+## `npm run cucumber:focus`
 
 Run scenarios tagged with `@focus`.
 
-## `npm run types:check`
+## `npm run tsc:no-emit`
 
 CI-ready script that checks for type safety issues.
 
-## `npm run types:watch`
+## `npm run tsc:watch`
 
 Watch known source files, reporting any type issues live.

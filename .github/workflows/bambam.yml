@@ -34,9 +34,9 @@ jobs:
           node-version-file: .nvmrc
 
       - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint:check
-      - run: npm run types:check
+      - run: npm run prettier:list-different
+      - run: npm run eslint
+      - run: npm run tsc:no-emit
 
   code-test:
     needs: code
@@ -50,7 +50,7 @@ jobs:
 
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run test:ci
+      - run: npm run cucumber:format-html
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: warn
