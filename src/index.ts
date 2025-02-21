@@ -1,1 +1,1 @@
-export { openFile } from './midi/file/file-fns';
+export * as midi from './midi';
