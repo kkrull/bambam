@@ -3,14 +3,15 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    // "baseUrl": "src",
+    "baseUrl": ".",
     "declaration": true,
     "outDir": "dist",
     "paths": {
       //features/tsconfig has its own paths, but cucumber-js still needs this
       "@src/*": ["./src/*"],
       "@support/*": ["./features/support/*"]
-    }
+    },
+    "rootDir": "src"
   },
   "include": ["./src/**/*.ts"]
 }
