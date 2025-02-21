@@ -74,6 +74,17 @@ _Performs Continuous Integration / Continuous Deployment (CI/CD)._
 - Files:
   - `.github/workflows`: Workflow definitions
 
+## [GNU Make](https://www.gnu.org/software/make/)
+
+_Automates project-related tasks, such as rendering project audio._
+
+- Documentation:
+  - Makefile Style Guide: <https://style-guides.readthedocs.io/en/latest/makefile.html>
+  - Manual: <https://www.gnu.org/software/make/manual/make.html>
+  - Portable Makefiles: <https://www.oreilly.com/openbook/make3/book/ch07.pdf>
+- Files:
+  - `Makefile`
+
 ## Husky
 
 _Adds a Git pre-commit hook that runs checks on staged files, before committing to the repository._

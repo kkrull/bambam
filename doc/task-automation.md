@@ -1,7 +1,6 @@
 # Task Automation
 
-This project uses `npm` to automate common development tasks. See [Usage](./usage.md) for how to
-run the project.
+This project uses `npm` to automate common development tasks.
 
 ## `npm ci`
 
