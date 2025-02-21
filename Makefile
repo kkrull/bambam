@@ -29,6 +29,8 @@ debug-artifacts:
 .PHONY: debug-paths
 debug-paths:
 	$(info Paths:)
+	$(info - node prefix: $(shell $(NPM) config get prefix))
+	$(info - path: $(PATH))
 	@:
 
 ## Programs
