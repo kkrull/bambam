@@ -34,9 +34,7 @@ jobs:
           node-version-file: .nvmrc
 
       - run: npm ci
-      - run: npm run prettier:list-different
-      - run: npm run eslint
-      - run: npm run tsc:no-emit
+      - run: npm run check
 
   code-test:
     needs: code
