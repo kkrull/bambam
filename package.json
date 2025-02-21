@@ -1,5 +1,12 @@
 {
   "author": "Kyle Krull",
+  "bin": {
+    "bambam-copy-chunks": "bin/copy-chunks",
+    "bambam-copy-tracks": "bin/copy-tracks",
+    "bambam-list-chunks": "bin/list-chunks",
+    "bambam-list-events": "bin/list-events",
+    "bambam-remap-events": "bin/remap-events"
+  },
   "description": "Remaps notes in MIDI tracks",
   "devDependencies": {
     "@cucumber/cucumber": "^11.1.1",
