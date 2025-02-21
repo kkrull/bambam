@@ -2,41 +2,39 @@
 
 This project uses `npm` to automate common development tasks.
 
-## `npm ci`
+## Standard tasks
 
-Install Node.js packages, using the same versions listed in the lock file.
+### `npm run build`
 
-## `npm run build`
+Compile TypeScript and make alterations so it runs plain JavaScript on Node.js without extra
+tooling.
 
-Compile TypeScript code to `dist/`.
+### `npm run check`
 
-## `npm run clean`
+Run all checks, without changing anything.
+
+### `npm run clean`
 
 Remove emitted JavaScript code from the TypeScript compiler.
 
-## `npm run prettier:write`
+### `npm test` or `npm run test`
 
-Re-format files in place.
+Runs `cucumber`.
 
-## `npm run prettier:list-different`
+### `npm run test:ci`
 
-CI-ready script that checks for improperly formatted files.
+Runs `cucumber` in a mode suitable for Continuous Integration (e.g. it produces a test report and
+avoids ANSI escape sequences).
 
-## `npm run eslint`
+## Cucumber tasks
 
-CI-ready script that checks for linting errors.
+### `npm run cucumber`
 
-## `npm run eslint:fix`
-
-Automatically fix linting errors, where possible.
-
-## `npm run test`
-
-### Default: run everything
+#### Default: run everything
 
 Run all Cucumber scenarios.
 
-### Custom run
+#### Custom run
 
 Pass custom options to `cucumber.js`:
 
@@ -44,7 +42,7 @@ Pass custom options to `cucumber.js`:
 npm run test -- --format usage
 ```
 
-### Data sources
+#### Data sources
 
 Cucumber scenarios can be tagged as follows, to change where data is sourced:
 
@@ -53,18 +51,49 @@ Cucumber scenarios can be tagged as follows, to change where data is sourced:
 
 See `MidiSourceHooks.ts` for details.
 
-## `npm run cucumber:format-html`
-
-CI-ready script that runs tests and writes a test report to `output/`.
-
-## `npm run cucumber:focus`
+### `npm run cucumber:focus`
 
 Run scenarios tagged with `@focus`.
 
-## `npm run tsc:no-emit`
+### `npm run cucumber:format-html`
+
+CI-ready script that runs tests and writes a test report to `output/`.
+
+## ESLint tasks
+
+### `npm run eslint`
+
+CI-ready script that checks for linting errors.
+
+### `npm run eslint:fix`
+
+Automatically fix linting errors, where possible.
+
+## `prettier` tasks
+
+### `npm run prettier:list-different`
+
+CI-ready script that checks for improperly formatted files.
+
+### `npm run prettier:write`
+
+Re-format files in place.
+
+## TypeScript tasks
+
+### `npm run tsc`
+
+Compile TypeScript code to `dist/`.
+
+### `npm run tsc:no-emit`
 
 CI-ready script that checks for type safety issues.
 
-## `npm run tsc:watch`
+### `npm run tsc:watch`
 
 Watch known source files, reporting any type issues live.
+
+### `npm run tsc-alias`
+
+Convert path aliases in `require` statements into relative paths that can run on Node.js without
+additional tooling.
