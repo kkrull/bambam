@@ -44,6 +44,7 @@ You can install it for use by:
   Bam (e.g. one that will always be on your system path).
 - Clone this repository.
 - Inside your working copy of this repository:
+  - Install [development tools](./doc/tools.md).
   - `npm install`: Install packages needed to build these sources.
   - `make`: Compile TypeScript sources down to JavaScript, so it runs on Node.js without installing
     separate tooling for TypeScript.
