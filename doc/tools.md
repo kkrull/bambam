@@ -123,6 +123,15 @@ _Formats source files._
 - Node packages:
   - `prettier`: main package
 
+### VS Code Integration
+
+VS Code has an extension for `prettier` and `editorConfig`, as well as built-in formatters for JSON
+files. The latter tends to conflict with prettier's rules, so saving a file in VS Code tends to
+reformat JSON files like `tsconfig.json` in a way that `prettier` will later reject.
+
+To fix this, run the action `Format Document with...` and choose `prettier` as the default
+formatter. For details, see here: <https://stackoverflow.com/q/52586965/112682>.
+
 ## TypeScript
 
 _Adds static typing to JavaScript._
