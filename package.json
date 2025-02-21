@@ -19,6 +19,7 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "rimraf": "^5.0.10",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2"
@@ -42,7 +43,7 @@
     "test:ci": "cucumber-js -c features/cucumber.cjs --format html:output/test-cucumberjs.html",
     "test:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
-    "types:compile": "tsc -p tsconfig.json",
+    "types:compile": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "types:watch": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json --watch"
   },
   "version": "0.0.1"

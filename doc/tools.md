@@ -153,3 +153,9 @@ _Adds static typing to JavaScript._
   - `@types/*`: type definitions for all the other packages we're using
   - [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths#with-ts-node):
     allows TypeScript sources to use path aliases at runtime, using `ts-node -r`.
+
+### Compiling with path aliases
+
+This project uses [`tsc-alias`](https://www.npmjs.com/package/tsc-alias) to convert path aliases in
+`tsconfig.compilerOptions.paths` and `require/import` statements in TypeScript code to relative path
+imports in emitted JavaScript code.
