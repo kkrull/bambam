@@ -1,8 +1,8 @@
 # Usage
 
-This project uses `npm` to run the code, much like other [development tasks](./task-automation.md).
+Make sure you have completed [installation](../README.md#install-as-a-linked-node-module), first.
 
-## `npm run main:copy-chunks <source file> <target file>`
+## `bambam-copy-chunks <source file> <target file>`
 
 _One of the MIDI chunks carries something of great value. Bring them to me alive and...unspoiled._
 
@@ -18,7 +18,7 @@ cat copy.mid | xxd > copy.bin
 diff --side-by-side original.bin copy.bin
 ```
 
-## `npm run main:copy-tracks <source file> <target file>`
+## `bambam-copy-tracks <source file> <target file>`
 
 Well you made it this far without running away. Maybe this code can start parsing MIDI chunks that
 look interesting without messing the data up too badly.
@@ -27,20 +27,20 @@ In other words, copy a MIDI file with the added step of parsing chunks and event
 binary-identical round-trip is really good news here. Go get yourself a cup of coffee. You earned
 it.
 
-## `npm run main:list-chunks <file>`
+## `bambam-list-chunks <file>`
 
 List chunks in a MIDI file.
 
 ```sh
-npm run main:list-chunks features/data/ezd-mapping.mid
+bambam-list-chunks features/data/ezd-mapping.mid
 ```
 
-## `npm run main:list-events <file>`
+## `bambam-list-events <file>`
 
 List events in a MIDI file.
 
 ```sh
-npm run main:list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
+bambam-list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid
 ```
 
 ### Pro-tip: filter and format with `jq`
@@ -49,21 +49,17 @@ Pipe output to `jq` to pretty-print the JSON object, so you have a fighting chan
 read it.
 
 ```sh
-npm run --silent main:list-events \
-  features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
+bambam-list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid | jq
 ```
 
 You can also use `jq` to select the specific events you want:
 
 ```sh
-npm run --silent main:list-events \
-  features/support/midi-source/mapping/modern-original-mix-type-1.mid \
+bambam-list-events features/support/midi-source/mapping/modern-original-mix-type-1.mid \
   | jq '.tracks[1].events[] | { channel: .channel, deltaTime: .deltaTime, note: .note, type: .eventType, subType: .subType, velocity: .velocity }'
 ```
 
-Note how these both pass `--silent` to `npm run`, to avoid confusing `jq`.
-
-## <a name="remap-events"></a> `npm run main:remap-events <source file> <target file>` <!-- markdownlint-disable-line line-length no-inline-html -->
+## <a name="remap-events"></a> `bambam-remap-events <source file> <target file>` <!-- markdownlint-disable-line line-length no-inline-html -->
 
 This might just be the reason you are here.
 
@@ -75,10 +71,8 @@ General MIDI counterparts in the target file. Or at least some reasonable facsim
 though, that General MIDI guy is a such a jobber.
 
 ```sh
-npm run main:remap-events ezdrummer2.mid general-midi.mid
+bambam-remap-events ezdrummer2.mid general-midi.mid
 ```
-
-**NOW GET OUT THERE AND HIT THOSE MIDI DRUMS LIKE YOU MEAN IT!**
 
 ### Step 3: Profit
 
@@ -92,3 +86,5 @@ the last kick hit you just wrote.
 
 Sure those early-90s video games won't sound the same, but this way you'll only hear the vibraslap
 and whistle when you **meant** for it to sound that way.
+
+**NOW GET OUT THERE AND HIT THOSE MIDI DRUMS LIKE YOU MEAN IT!**

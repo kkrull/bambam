@@ -1,11 +1,18 @@
 # Task Automation
 
-This project uses `npm` to automate common development tasks. See [Usage](./usage.md) for how to
-run the project.
+This project uses `npm` to automate common development tasks.
 
 ## `npm ci`
 
 Install Node.js packages, using the same versions listed in the lock file.
+
+## `npm run build`
+
+Compile TypeScript code to `dist/`.
+
+## `npm run clean`
+
+Remove emitted JavaScript code from the TypeScript compiler.
 
 ## `npm run format`
 

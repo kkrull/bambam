@@ -1,5 +1,12 @@
 {
   "author": "Kyle Krull",
+  "bin": {
+    "bambam-copy-chunks": "bin/copy-chunks",
+    "bambam-copy-tracks": "bin/copy-tracks",
+    "bambam-list-chunks": "bin/list-chunks",
+    "bambam-list-events": "bin/list-events",
+    "bambam-remap-events": "bin/remap-events"
+  },
   "description": "Remaps notes in MIDI tracks",
   "devDependencies": {
     "@cucumber/cucumber": "^11.1.1",
@@ -17,15 +24,19 @@
     "markdownlint-cli2": "^0.17.0",
     "prettier": "3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
+    "rimraf": "^5.0.10",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
   "name": "bambam",
   "scripts": {
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "clean": "rimraf dist",
     "format": "prettier --ignore-unknown --write .",
     "format:check": "prettier --ignore-unknown --list-different .",
     "lint:check": "eslint features features/**/*.cjs src",

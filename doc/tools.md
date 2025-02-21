@@ -28,6 +28,8 @@ _Runs BDD tests with Gherkin syntax._
   - `ts-node` adds TypeScript support to `cucumber-js`.
   - `tsconfig-paths` allows TypeScript sources in `features/` to use path aliases to production code
     sources.
+- Interactions:
+  - [TypeScript](#running-with-path-aliases)
 - VS Code Extension:
   <https://marketplace.visualstudio.com/items?itemName=CucumberOpen.cucumber-official>
 
@@ -53,11 +55,17 @@ _Defines basic parameters for formatting source files._
 _Performs static analysis and style checks._
 
 - Files:
-  - `.eslintrc.cjs`: configuration file
+  - `eslint.config.mjs`: configuration file
 - Node packages:
   - `eslint`: main package
   - `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` add
     support for TypeScript.
+
+### VS Code integration
+
+This project uses the flat configuration file (instead of `.eslintrc`) that will be used for ESLint
+9+. VS Code needs to be configured to look for that configuration, instead of assuming its own:
+<https://eslint.org/blog/2023/10/flat-config-rollout-plans/>.
 
 ## GitHub Actions
 
@@ -65,6 +73,17 @@ _Performs Continuous Integration / Continuous Deployment (CI/CD)._
 
 - Files:
   - `.github/workflows`: Workflow definitions
+
+## [GNU Make](https://www.gnu.org/software/make/)
+
+_Automates project-related tasks, such as rendering project audio._
+
+- Documentation:
+  - Makefile Style Guide: <https://style-guides.readthedocs.io/en/latest/makefile.html>
+  - Manual: <https://www.gnu.org/software/make/manual/make.html>
+  - Portable Makefiles: <https://www.oreilly.com/openbook/make3/book/ch07.pdf>
+- Files:
+  - `Makefile`
 
 ## Husky
 
@@ -123,6 +142,15 @@ _Formats source files._
 - Node packages:
   - `prettier`: main package
 
+### VS Code Integration
+
+VS Code has an extension for `prettier` and `editorConfig`, as well as built-in formatters for JSON
+files. The latter tends to conflict with prettier's rules, so saving a file in VS Code tends to
+reformat JSON files like `tsconfig.json` in a way that `prettier` will later reject.
+
+To fix this, run the action `Format Document with...` and choose `prettier` as the default
+formatter. For details, see here: <https://stackoverflow.com/q/52586965/112682>.
+
 ## TypeScript
 
 _Adds static typing to JavaScript._
@@ -138,3 +166,16 @@ _Adds static typing to JavaScript._
   - `@types/*`: type definitions for all the other packages we're using
   - [`tsconfig-paths`](https://www.npmjs.com/package/tsconfig-paths#with-ts-node):
     allows TypeScript sources to use path aliases at runtime, using `ts-node -r`.
+
+### Compiling with path aliases
+
+This project uses [`tsc-alias`](https://www.npmjs.com/package/tsc-alias) to convert path aliases in
+`tsconfig.compilerOptions.paths` and `require/import` statements in TypeScript code to relative path
+imports in emitted JavaScript code.
+
+### Running with path aliases
+
+When running TypeScript directly (e.g. running one of the "main" scripts in `package.json`) or when
+running [Cucumber](#cucumber), it is necessary to convert these path aliases at runtime.
+[`ts-node`](https://www.npmjs.com/package/ts-node) does this, either by replacing the `node`
+executable with `ts-node` or by requiring it when first starting (Cucumber).

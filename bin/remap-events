@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+//https://stackoverflow.com/a/31366216/112682
+require('../dist/main/remap-events');
