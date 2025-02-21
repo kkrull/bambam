@@ -22,6 +22,7 @@ export default tsEslint.config(
   eslint.configs.recommended,
   tsEslint.configs.recommended,
   {
+    ignores: ['dist/'],
     languageOptions: {
       globals: { ...globals.node },
     },

@@ -53,11 +53,17 @@ _Defines basic parameters for formatting source files._
 _Performs static analysis and style checks._
 
 - Files:
-  - `.eslintrc.cjs`: configuration file
+  - `eslint.config.mjs`: configuration file
 - Node packages:
   - `eslint`: main package
   - `@typescript-eslint/eslint-plugin` and `@typescript-eslint/parser` add
     support for TypeScript.
+
+### VS Code integration
+
+This project uses the flat configuration file (instead of `.eslintrc`) that will be used for ESLint
+9+. VS Code needs to be configured to look for that configuration, instead of assuming its own:
+<https://eslint.org/blog/2023/10/flat-config-rollout-plans/>.
 
 ## GitHub Actions
 
