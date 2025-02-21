@@ -28,6 +28,7 @@
   "main": "dist/index.js",
   "name": "bambam",
   "scripts": {
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "clean": "rimraf dist",
     "format": "prettier --ignore-unknown --write .",
     "format:check": "prettier --ignore-unknown --list-different .",
@@ -43,7 +44,6 @@
     "test:ci": "cucumber-js -c features/cucumber.cjs --format html:output/test-cucumberjs.html",
     "test:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
     "types:check": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json",
-    "types:compile": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "types:watch": "tsc --noEmit -p tsconfig.json -p features/tsconfig.json --watch"
   },
   "version": "0.0.1"
