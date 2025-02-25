@@ -34,9 +34,7 @@ jobs:
           node-version-file: .nvmrc
 
       - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint:check
-      - run: npm run types:check
+      - run: npm run check
 
   code-test:
     needs: code
