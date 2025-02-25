@@ -11,7 +11,8 @@ tooling.
 
 ### `npm run check`
 
-Run all checks, without changing anything.
+Run all checks (not tests), such as formatters and linters. Checks do not make any changes to
+source code.
 
 ### `npm run clean`
 

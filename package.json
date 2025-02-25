@@ -37,7 +37,7 @@
   "name": "bambam",
   "scripts": {
     "build": "npm-run-all --sequential tsc tsc-alias",
-    "check": "npm-run-all --parallel cucumber eslint prettier:list-different tsc:no-emit",
+    "check": "npm-run-all --parallel eslint prettier:list-different tsc:no-emit",
     "clean": "rimraf dist",
     "cucumber": "cucumber-js -c features/cucumber.cjs",
     "cucumber:focus": "cucumber-js -c features/cucumber.cjs --tags '@focus'",
